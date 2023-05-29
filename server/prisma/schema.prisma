@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String                  @id @default(auto()) @map("_id") @db.ObjectId
+  firstname             String
+  lastname              String
+  email                 String                  @unique
+  password              String
+  totalDeposit          Int?                    @default(0)
+  totalProfit           Int?                    @default(0)
+  totalBalance          Int?                    @default(0)
+  phoneNumber           String                  @default("+1 (555) 555-5555")
+  picture               String?
+  accountState          AccountState?           @default(PENDING)
+  lastLogin             DateTime?               @default(now())
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+  depositHistory        DepositHistory[]
+  withdrawalHistory     WithdrawalHistory[]
+  supportTicket         SupportTicket[]
+  pendingDepositHistory PendingDepositHistory[]
+  kycVerification       KYCVerification[]
+  InvestmentHistory     InvestmentHistory[]
+  Trades                Trades[]
+}
+
+model Admin {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  username String  @unique
+  password String
+  btc      String?
+  usdt     String?
+  eth      String?
+  phone    String?
+  email    String?
+}
+
+enum AccountState {
+  PENDING
+  VERIFIED
+  BLOCKED
+}
+
+enum TransactionState {
+  PENDING
+  VERIFIED
+  NOT_VERIFIED
+}
+
+model PendingDepositHistory {
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  amount           Int?            @default(0)
+  depositId        String?         @unique @db.ObjectId
+  deposit          DepositHistory? @relation("PendingDepositHistory", fields: [depositId], references: [id])
+  userId           String?         @db.ObjectId
+  user             User?           @relation(fields: [userId], references: [id])
+  DepositHistory   DepositHistory? @relation(fields: [depositHistoryId], references: [id])
+  depositHistoryId String?         @db.ObjectId
+}
+
+model Trades {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  pairs    String
+  amount   Int
+  position String
+  userId   String? @db.ObjectId
+  user     User?   @relation(fields: [userId], references: [id])
+}
+
+model DepositHistory {
+  id               String                  @id @default(auto()) @map("_id") @db.ObjectId
+  asset            String?
+  to               String?
+  pendingDeposit   PendingDepositHistory[]
+  pendingDepositId PendingDepositHistory?  @relation("PendingDepositHistory")
+  amount           Int?
+  userId           String?                 @db.ObjectId
+  user             User?                   @relation(fields: [userId], references: [id])
+  transactionState TransactionState?       @default(PENDING)
+  createdAt        DateTime                @default(now())
+}
+
+model InvestmentHistory {
+  id        String            @id @default(auto()) @map("_id") @db.ObjectId
+  amount    Int?              @default(0)
+  plan      String?
+  userId    String?           @db.ObjectId
+  user      User?             @relation(fields: [userId], references: [id])
+  status    TransactionState? @default(PENDING)
+  createdAt DateTime          @default(now())
+}
+
+model WithdrawalCode {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  withdrawalCode String @unique
+}
+
+model WithdrawalHistory {
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  asset            String?
+  walletAddress    String?
+  amount           Int?
+  userId           String?           @db.ObjectId
+  user             User?             @relation(fields: [userId], references: [id])
+  transactionState TransactionState? @default(PENDING)
+  createdAt        DateTime          @default(now())
+}
+
+model SupportTicket {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+  userId    String   @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+model KYCVerification {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  idDocuments    String?
+  proofOfAddress String?
+  status         TransactionState? @default(PENDING)
+  createdAt      DateTime          @default(now())
+  userId         String            @db.ObjectId
+  user           User              @relation(fields: [userId], references: [id])
+}
+
+model Notifications {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  message   String
+  createdAt DateTime @default(now())
+  userId    String   @db.ObjectId
+}

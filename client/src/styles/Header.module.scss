@@ -1,0 +1,54 @@
+@use "./abstracts/mixins" as *;
+@use "./abstracts/media-query" as *;
+.top_nav {
+	@include flex_row_end;
+	width: 100%;
+	color: #fff;
+	gap: 1rem;
+	position: relative;
+
+	.menu_bar {
+		// @include flex_row_start;
+		font-size: 1.6rem;
+		cursor: pointer;
+		padding: 0.3rem;
+	}
+	.avatar {
+		cursor: pointer;
+		padding: 0.3rem;
+	}
+	.profile {
+		position: absolute;
+		top: 100%;
+		right: 4rem;
+		background: rgba(32, 80, 79, 1);
+		border-radius: 0.4rem;
+		overflow: hidden;
+		display: none;
+		z-index: 4;
+		li {
+			@include flex_row_start;
+			gap: 0.4rem;
+			padding: 0.8rem 1.2rem;
+			font-size: 0.8rem;
+			width: 100%;
+
+			&:hover {
+				background: #759c49;
+			}
+		}
+		&.profile_active {
+			@include flex_col_start;
+		}
+	}
+}
+
+.mobile {
+	display: none;
+}
+
+@include small-screen {
+	.mobile {
+		@include flex_row_start;
+	}
+}

@@ -1,0 +1,118 @@
+@use "../abstracts/mixins" as *;
+@use "../abstracts/media-query" as *;
+.footer {
+	@include flex_col_start;
+	padding: 3rem;
+	width: 100%;
+	gap: 2rem;
+	background: rgb(14, 17, 19);
+
+	.footer_top {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		width: 100%;
+
+		.footer_top_box {
+			padding: 1rem;
+			@include flex_col_start;
+			gap: 2rem;
+			h2 {
+				color: #aeaeae;
+
+				font-size: 1.2rem;
+			}
+
+			&:nth-child(2) {
+				.footer_top_links {
+					background: -webkit-linear-gradient(#84fffd, #cdff94);
+					-webkit-background-clip: text;
+					-webkit-text-fill-color: transparent;
+					li:hover {
+						color: #84fffd;
+						-webkit-background-clip: text;
+						-webkit-text-fill-color: #84fffd;
+					}
+				}
+			}
+			.footer_top_links {
+				@include flex_col_start;
+				gap: 0.4rem;
+				font-size: 0.9rem;
+				color: #fff;
+				transition: 200ms ease;
+
+				li:hover {
+					color: #84fffd;
+				}
+			}
+		}
+	}
+	.footer_line_through {
+		width: 100%;
+		height: 2px;
+		background: linear-gradient(90deg, #40efeb, #9ed163);
+	}
+	.footer_bottom {
+		@include flex_row_space;
+		width: 100%;
+		padding: 1rem;
+		font-size: 0.9rem;
+		color: #fff;
+	}
+}
+
+@include small-screen {
+	.footer {
+		padding: 1rem !important;
+		gap: 1rem !important;
+
+		.footer_top {
+			display: grid;
+			grid-template-columns: 1fr 1fr !important;
+			.footer_top_box {
+				gap: 1rem !important;
+			}
+			h2 {
+				font-size: 1.2rem !important;
+			}
+
+			.footer_top_links {
+				font-size: 0.9rem !important;
+			}
+		}
+
+		.footer_bottom {
+			font-size: 0.7rem !important;
+			@include flex_col_center;
+			text-align: center;
+			gap: 1rem;
+		}
+	}
+}
+@include medium-screen {
+	.footer {
+		padding: 2rem !important;
+
+		.footer_top {
+			h2 {
+				font-size: 1.3rem !important;
+			}
+
+			.footer_top_links {
+				font-size: 1rem !important;
+			}
+		}
+
+		.footer_bottom {
+			font-size: 0.8rem !important;
+			@include flex_col_center;
+			text-align: center;
+			gap: 1rem;
+		}
+	}
+}
+@include huge-screen {
+	.footer {
+		padding: 3rem 10rem !important;
+	}
+}

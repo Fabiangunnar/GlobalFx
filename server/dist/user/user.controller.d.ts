@@ -1,0 +1,32 @@
+import { KYCVerification, User } from '@prisma/client';
+import { AccountStateDto, KycVerifyDto, PhoneNumberDto, UserAccountInfo, UserDto } from './userDto/user.dto';
+import { UserService } from './user.service';
+import { SupportService } from 'src/support/support.service';
+import { NotificationService } from 'src/notification/notification.service';
+import { DepositService } from 'src/deposit/deposit.service';
+import { InvestmentService } from 'src/investment/investment.service';
+import { TradeService } from 'src/trade/trade.service';
+import { WithdrawService } from 'src/withdraw/withdraw.service';
+export declare class UserController {
+    private userService;
+    private supportService;
+    private notificationService;
+    private depositService;
+    private investmentService;
+    private tradesService;
+    private withdrawService;
+    constructor(userService: UserService, supportService: SupportService, notificationService: NotificationService, depositService: DepositService, investmentService: InvestmentService, tradesService: TradeService, withdrawService: WithdrawService);
+    createUser(user: UserDto): Promise<User>;
+    loginUser(user: UserDto): Promise<User>;
+    getAllUsers(): Promise<User[]>;
+    getAllKYCDocuments(): Promise<KYCVerification[]>;
+    getMyKycDocuments(userId: string): Promise<KYCVerification[]>;
+    getUser(id: string): Promise<User>;
+    updateUserAccountInfo(accountInfo: UserAccountInfo, id: string): Promise<User>;
+    updateProfilePicture(profilePictureInfo: UserAccountInfo, id: string): Promise<User>;
+    updatePhoneNumber(phoneNumberInfo: PhoneNumberDto, id: string): Promise<User>;
+    verifyUser(accountState: AccountStateDto, id: string): Promise<User | any>;
+    verifykycDoc(kycStatus: KycVerifyDto, id: string): Promise<KYCVerification>;
+    kycVerify(kycVer: KycVerifyDto, id: string): Promise<KYCVerification>;
+    deleteUser(id: string): Promise<User>;
+}

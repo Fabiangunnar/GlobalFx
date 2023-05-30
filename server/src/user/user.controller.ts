@@ -108,11 +108,18 @@ export class UserController {
   async getMyKycDocuments(
     @Param('userId') userId: string,
   ): Promise<KYCVerification[]> {
-    if (!userId)
-      throw new HttpException("Document Doesn't exist", HttpStatus.NOT_FOUND);
-    return this.userService.getMyKycDocuments({
-      userId,
-    });
+    try {
+      if (!userId)
+        throw new HttpException("Document Doesn't exist", HttpStatus.NOT_FOUND);
+      return this.userService.getMyKycDocuments({
+        userId,
+      });
+    } catch (error) {
+      throw new HttpException(
+        'Something terribly wrong',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Get('/:id')

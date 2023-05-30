@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import styles from "@/styles/pages/User.module.scss";
 import {AiTwotoneEdit} from "react-icons/ai";
 import {HiUser} from "react-icons/hi2";
-import {MdAccountBalance} from "react-icons/md";
+import {MdAccountBalance, MdArrowDropDown} from "react-icons/md";
 import {RiLuggageDepositFill, RiProfileLine} from "react-icons/ri";
 import {IoNotifications} from "react-icons/io5";
 import {
@@ -48,6 +48,7 @@ import {
   sendTransactionState,
   setUserBalanceData,
   updateUser,
+  userDeposit,
 } from "@/redux-actions/AppSlice";
 import SpinnerPage from "./Spinner";
 import Pagination from "../Pagination";
@@ -78,6 +79,10 @@ const ManageUser = (props: Props) => {
   const [balanceFormData, setBalanceFormData] = useState({
     totalBalance: 0,
     totalProfit: 0,
+  });
+
+  const [depositFormData, setDepositFormData] = useState({
+    amount: 0,
   });
   const [postsPerPage, sePostsPerPage] = useState(4);
 
@@ -116,11 +121,14 @@ const ManageUser = (props: Props) => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+    setDepositFormData((prev: any) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
   const handleTransactionStateChange = (e: any) => {
     if (e.target.value === "") return;
     setTransactionState(e.target.value);
-    console.log(e.target.value);
   };
   const handleSendNotifications = (e: any) => {
     e.preventDefault();
@@ -282,6 +290,10 @@ const ManageUser = (props: Props) => {
     e.preventDefault();
     dispatch(updateUser([userManageData.id, balanceFormData]));
   };
+  const handleDeposit = (e: any) => {
+    e.preventDefault();
+    dispatch(userDeposit({userId: userManageData.id, ...depositFormData}));
+  };
 
   return (
     <div className={`${styles.manage_user_block}`}>
@@ -385,6 +397,43 @@ const ManageUser = (props: Props) => {
                   colorScheme="messenger"
                 >
                   Update
+                </Button>
+              </FormControl>
+            </form>
+          </Box>
+        </div>
+      </section>
+      <section className={`${styles.user_block}`}>
+        <div className={`${styles.management_block}`}>
+          <div className={`${styles.management_head}`}>
+            <MdAccountBalance />
+            <p>
+              Create Deposit for{" "}
+              {`${userManageData.firstname} ${userManageData.lastname}`}
+            </p>
+          </div>
+          <Box p={2}>
+            <form action="" onSubmit={handleDeposit}>
+              <FormControl p={2}>
+                <FormLabel fontSize={11}>Amount</FormLabel>
+                <Input
+                  type="number"
+                  fontSize={12}
+                  required
+                  name="amount"
+                  value={depositFormData.amount}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+
+              <FormControl p={2}>
+                <Button
+                  fontSize={14}
+                  type="submit"
+                  w="100%"
+                  colorScheme="messenger"
+                >
+                  Create
                 </Button>
               </FormControl>
             </form>

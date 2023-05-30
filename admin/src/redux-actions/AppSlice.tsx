@@ -14,6 +14,7 @@ import {
   SetTransactionStateApi,
   UpdateAdminInfoApi,
   UpdateUserApi,
+  UserDepositApi,
   VerifyInvestmentApi,
   VerifyUserApi,
   loginAdminApi,
@@ -498,6 +499,16 @@ export const updateUser: any = createAsyncThunk(
     }
   }
 );
+export const userDeposit: any = createAsyncThunk(
+  "put/userDeposit",
+  async (accountInfo: any, thunkApi) => {
+    try {
+      return await UserDepositApi(accountInfo);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const AppSlice = createSlice({
   name: "app-slice",
@@ -714,6 +725,24 @@ export const AppSlice = createSlice({
         state.errorMessage = payload;
       })
       .addCase(updateUser.pending, (state, {payload}) => {
+        state.updateState.isLoading = true;
+        state.updateState.isSuccess = false;
+        state.updateState.isError = false;
+      });
+    builder
+      .addCase(userDeposit.fulfilled, (state, {payload}) => {
+        state.updateState.isLoading = false;
+        state.updateState.isSuccess = true;
+        state.updateState.isError = false;
+        getAllUsers();
+      })
+      .addCase(userDeposit.rejected, (state, {payload}) => {
+        state.updateState.isLoading = false;
+        state.updateState.isSuccess = false;
+        state.updateState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(userDeposit.pending, (state, {payload}) => {
         state.updateState.isLoading = true;
         state.updateState.isSuccess = false;
         state.updateState.isError = false;

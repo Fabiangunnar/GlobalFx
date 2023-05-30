@@ -35,7 +35,7 @@ const DepositFunds = (props: Props) => {
   const {userInfo, adminAccounts, getState, sendState, errorMessage} =
     useSelector((store: RootState) => store.HomeAppSlice);
   const {toast} = createStandaloneToast();
-  const [isLoad, setIsLoad] = React.useState(false);
+  const [isLoad, setIsLoad] = useState(false);
 
   const [selectedAsset, setSelectedAsset] = useState("BTC");
   const [amount, setAmount] = useState(1000);

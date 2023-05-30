@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { Admin, Prisma, WithdrawalCode } from '@prisma/client';
+import { Admin, DepositHistory, Prisma, WithdrawalCode } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -39,6 +39,13 @@ export class AdminAuthService {
   ): Promise<WithdrawalCode> {
     return this.prisma.withdrawalCode.delete({
       where,
+    });
+  }
+  createDeposit(
+    data: Prisma.DepositHistoryUncheckedCreateInput,
+  ): Promise<DepositHistory> {
+    return this.prisma.depositHistory.create({
+      data,
     });
   }
 }

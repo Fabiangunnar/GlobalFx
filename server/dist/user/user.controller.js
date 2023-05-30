@@ -79,11 +79,16 @@ let UserController = class UserController {
         });
     }
     async getMyKycDocuments(userId) {
-        if (!userId)
-            throw new common_1.HttpException("Document Doesn't exist", common_1.HttpStatus.NOT_FOUND);
-        return this.userService.getMyKycDocuments({
-            userId,
-        });
+        try {
+            if (!userId)
+                throw new common_1.HttpException("Document Doesn't exist", common_1.HttpStatus.NOT_FOUND);
+            return this.userService.getMyKycDocuments({
+                userId,
+            });
+        }
+        catch (error) {
+            throw new common_1.HttpException('Something terribly wrong', common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getUser(id) {
         if (!id)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "@/styles/Home.module.scss";
 import {
   Button,
@@ -14,11 +14,11 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux-store/store";
-import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
-import { login, resetAdminState } from "@/redux-actions/AppSlice";
+import {useRouter} from "next/router";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/redux-store/store";
+import {BsEyeFill, BsEyeSlashFill} from "react-icons/bs";
+import {login, resetAdminState} from "@/redux-actions/AppSlice";
 import SpinnerPage from "@/components/Page/Spinner";
 
 type Props = {};
@@ -32,10 +32,10 @@ const Index = (props: Props) => {
   const dispatch = useDispatch();
   const [show, setShow] = React.useState(false);
   const [load, setLoad] = React.useState(false);
-  const { adminState, errorMessage } = useSelector(
+  const {adminState, errorMessage} = useSelector(
     (state: RootState) => state.AppSlice
   );
-  const { toast } = createStandaloneToast();
+  const {toast} = createStandaloneToast();
   const handleShowPassword = () => setShow(!show);
 
   const handleSubmit = (e: any) => {
@@ -44,10 +44,10 @@ const Index = (props: Props) => {
   };
 
   const handleInputChange = (e: any) => {
-    setFormData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev: any) => ({...prev, [e.target.name]: e.target.value}));
   };
   useEffect(() => {
-    if (adminState.isError) {
+    if (adminState?.isError) {
       toast({
         title: errorMessage.statusCode,
         description: errorMessage.message,
@@ -128,7 +128,8 @@ const Index = (props: Props) => {
                       color: "#FFF",
                       background: "#ffffff30",
                     }}
-                    onClick={handleShowPassword}>
+                    onClick={handleShowPassword}
+                  >
                     {show ? (
                       <BsEyeSlashFill fontSize={18} />
                     ) : (
@@ -143,7 +144,8 @@ const Index = (props: Props) => {
                 fontSize={16}
                 type="submit"
                 w="100%"
-                colorScheme="messenger">
+                colorScheme="messenger"
+              >
                 Login
               </Button>
             </FormControl>

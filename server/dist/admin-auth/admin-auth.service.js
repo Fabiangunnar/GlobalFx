@@ -45,6 +45,11 @@ let AdminAuthService = class AdminAuthService {
             where,
         });
     }
+    createDeposit(data) {
+        return this.prisma.depositHistory.create({
+            data,
+        });
+    }
 };
 AdminAuthService = __decorate([
     (0, common_1.Injectable)(),

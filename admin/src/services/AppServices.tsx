@@ -17,6 +17,10 @@ export const GetUserApi = async (id: any) => {
   const {data} = await API.get(`/user/${id}`);
   return data;
 };
+export const UserDepositApi = async (depositData: any) => {
+  const {data} = await API.post(`/admin-auth/user/deposit`, depositData);
+  return data;
+};
 export const UpdateUserApi = async (id: any, accountInfo: any) => {
   console.log(id, accountInfo);
   const {data} = await API.put(`/user/account/${id}`, accountInfo);

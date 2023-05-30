@@ -116,7 +116,6 @@
       transition: 200ms ease;
       padding: 2rem 1rem 6rem;
       gap: 2rem;
-
       z-index: 10;
       @include flex_col_start;
       h1 {
@@ -308,6 +307,7 @@
       transition: 200ms ease;
       padding: 2rem 1rem;
       gap: 2rem;
+      overflow: auto;
       @include flex_col_start;
       z-index: 10;
       h1 {

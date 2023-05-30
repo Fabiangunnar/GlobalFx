@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
-  publish = "out"
-  functions = "out/functions"
+  publish = ".next"
+  functions = ".next/functions"
 
 [build.environment]
   NPM_FLAGS = "--legacy-peer-deps"

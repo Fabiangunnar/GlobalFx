@@ -4,7 +4,7 @@ import {Inter} from "next/font/google";
 import styles from "@/styles/Home.module.scss";
 import pagestyles from "@/styles/home/Main.module.scss";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {closeNav, setNav} from "@/redux-actions/homeNavSlice";
 import Footer from "@/components/home/Footer";
 import Header from "@/components/home/Header";
@@ -15,6 +15,7 @@ import {
   CardBody,
   Flex,
   FormControl,
+  Grid,
   Input,
   InputGroup,
   InputLeftElement,
@@ -29,6 +30,8 @@ import {SiWhatsapp} from "react-icons/si";
 import MainLayout from "../layout/Mainlayout";
 import {RootState} from "@/redux-store/store";
 import {IoMailOutline} from "react-icons/io5";
+import {CiInstagram, CiTwitter} from "react-icons/ci";
+import {MdEmail, MdOutlineWhatsapp} from "react-icons/md";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -37,11 +40,16 @@ export default function Index() {
   const sideNavRef: any = useRef();
   const {adminAccounts} = useSelector((store: RootState) => store.HomeAppSlice);
   const adminAccount = adminAccounts[0];
+  const [emailData, setEmailData] = useState({
+    addressto: "",
+    message: "",
+  });
   const handleClickOutside = (event: any) => {
     if (sideNavRef.current && !sideNavRef.current.contains(event.target)) {
       dispatch(closeNav());
     }
   };
+  const handleEmailSubmit = (e: any) => {};
   useEffect(() => {
     const navState = localStorage.getItem("home-nav");
     let navstate = navState ? JSON.parse(navState) : null;
@@ -49,6 +57,9 @@ export default function Index() {
       dispatch(setNav(navstate));
     }
   }, []);
+  const handleInputChange = (e: any) => {
+    setEmailData((prev: any) => ({...prev, [e.target.name]: e.target.value}));
+  };
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
@@ -133,58 +144,107 @@ export default function Index() {
                   xl: "40rem",
                 }}
               >
-                <Flex
-                  direction={"column"}
-                  gap={2}
-                  p={{base: "1rem", lg: "2rem"}}
-                >
-                  <FormControl p={2} color={"#fff"}>
-                    <Text
-                      mb="8px"
-                      fontSize={[12, 12, 14, 14, 16]}
-                      color={"#fff"}
-                    >
-                      Email:{" "}
-                    </Text>
-                    <InputGroup>
-                      <Input
-                        type="tel"
-                        className={`${styles.input}`}
+                <form action="" onSubmit={handleEmailSubmit}>
+                  <Flex
+                    direction={"column"}
+                    gap={2}
+                    p={{base: "1rem", lg: "2rem"}}
+                  >
+                    <FormControl p={2} color={"#fff"}>
+                      <Text
+                        mb="8px"
+                        fontSize={[12, 12, 14, 14, 16]}
+                        color={"#fff"}
+                      >
+                        Email:{" "}
+                      </Text>
+                      <InputGroup>
+                        <Input
+                          type="tel"
+                          name={"addressto"}
+                          value={emailData.addressto}
+                          onChange={handleInputChange}
+                          className={`${styles.input}`}
+                          fontSize={[12, 12, 14, 16, 18]}
+                          required
+                          placeholder="Email Address"
+                        />
+                      </InputGroup>
+                    </FormControl>
+                    <FormControl p={2} color={"#fff"}>
+                      <Text
+                        mb="8px"
+                        fontSize={[12, 12, 14, 14, 16]}
+                        color={"#fff"}
+                      >
+                        Messages:{" "}
+                      </Text>
+                      <Textarea
+                        name={"message"}
+                        value={emailData.message}
+                        onChange={handleInputChange}
                         fontSize={[12, 12, 14, 16, 18]}
-                        required
-                        placeholder="Email Address"
+                        placeholder="What's the message"
                       />
-                    </InputGroup>
-                  </FormControl>
-                  <FormControl p={2} color={"#fff"}>
-                    <Text
-                      mb="8px"
-                      fontSize={[12, 12, 14, 14, 16]}
-                      color={"#fff"}
-                    >
-                      Messages:{" "}
-                    </Text>
-                    <Textarea
-                      fontSize={[12, 12, 14, 16, 18]}
-                      placeholder="What's the message"
-                    />
-                  </FormControl>
-                  <FormControl>
-                    <Button
-                      fontSize={[12, 13, 14, 15, 16]}
-                      type="submit"
-                      w="100%"
-                      _hover={{
-                        background: "#64d2b1",
-                      }}
-                      color={"#fff"}
-                      background="#55b598"
-                    >
-                      Send
-                    </Button>
-                  </FormControl>
-                </Flex>
+                    </FormControl>
+                    <FormControl>
+                      <Button
+                        fontSize={[12, 13, 14, 15, 16]}
+                        type="submit"
+                        w="100%"
+                        _hover={{
+                          background: "#64d2b1",
+                        }}
+                        color={"#fff"}
+                        background="#55b598"
+                      >
+                        Send
+                      </Button>
+                    </FormControl>
+                  </Flex>
+                </form>
               </Card>
+            </Flex>
+            <Flex
+              justify={"center"}
+              p={2}
+              w={"100%"}
+              align={"center"}
+              gap={4}
+              direction="column"
+            >
+              <Grid
+                templateColumns={"1fr 3fr"}
+                justifyContent={"flex-start"}
+                gap={2}
+                alignItems={"flex-start"}
+                maxW={"26rem"}
+              >
+                <Text fontSize={[14, 15, 16, 17, 18]}>Official address:</Text>
+                <Text fontSize={[12, 13, 14, 15, 16]} color={"gray.400"}>
+                  United Kingdom Level 9, One Canada Square, Canary Wharf, E14
+                  5AA, London, United Kingdom
+                </Text>
+              </Grid>
+              <Flex justify={"space-between"} maxW={"26rem"} w={"100%"}>
+                <CiInstagram fontSize={42} />
+                <CiTwitter fontSize={42} />
+
+                <Link
+                  target="_blank"
+                  //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}
+                  href={`mailto:${adminAccount.email}`}
+                >
+                  <MdEmail fontSize={42} />
+                </Link>
+                <Link
+                  target="_blank"
+                  //   href={`https://api.whatsapp.com/send?phone=17736498501&text=`}
+                  href={`https://api.whatsapp.com/send?phone=${adminAccount.phone}&text=`}
+                >
+                  <MdOutlineWhatsapp fontSize={42} />
+                </Link>
+              </Flex>
             </Flex>
           </Flex>
         </div>

@@ -49,8 +49,8 @@ const Index = (props: Props) => {
   useEffect(() => {
     if (adminState?.isError) {
       toast({
-        title: errorMessage.statusCode,
-        description: errorMessage.message,
+        title: errorMessage?.statusCode,
+        description: errorMessage?.message,
         status: "error",
         duration: 2000,
         isClosable: true,

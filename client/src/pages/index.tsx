@@ -967,13 +967,20 @@ export default function Home() {
                         </Text>
                       </Grid>
                       <Grid
-                        templateColumns={"1fr"}
+                        templateColumns={"1fr 2.4fr"}
                         justifyContent={"flex-start"}
                         gap={2}
                         alignItems={"flex-start"}
                       >
                         <Text fontSize={[14, 15, 16, 17, 18]}>
                           Official address:
+                        </Text>
+                        <Text
+                          fontSize={[12, 13, 14, 15, 16]}
+                          color={"gray.400"}
+                        >
+                          United Kingdom Level 9, One Canada Square, Canary
+                          Wharf, E14 5AA, London, United Kingdom
                         </Text>
                       </Grid>
                     </Flex>

@@ -756,6 +756,7 @@ const ManageUser = (props: Props) => {
                               required
                               size={"sm"}
                               name="amount"
+                              defaultValue={manageUserDeposit.amount}
                               //   value={manageUserDeposit.amount}
                               onChange={handleInputChange}
                             />

@@ -68,24 +68,34 @@ let InvestmentController = class InvestmentController {
         }
     }
     async getAllInvestments() {
-        const investments = await this.investmentService.getAllInvestments();
-        const users = await this.userService.getAllUsers();
-        const newInvestments = investments.map((investment) => {
-            const { firstname, lastname } = users.find((user) => user.id === investment.userId);
-            return Object.assign(Object.assign({}, investment), { firstname,
-                lastname });
-        });
-        return newInvestments;
+        try {
+            const investments = await this.investmentService.getAllInvestments();
+            const users = await this.userService.getAllUsers();
+            const newInvestments = investments.map((investment) => {
+                const { firstname, lastname } = users.find((user) => user.id === investment.userId);
+                return Object.assign(Object.assign({}, investment), { firstname,
+                    lastname });
+            });
+            return newInvestments;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getMyInvestments(userId) {
         return await this.investmentService.getMyInvestments({ userId });
     }
     async updateInvestmentStatus(id, investDto) {
-        if (investDto.status !== 'PENDING' &&
-            investDto.status !== 'VERIFIED' &&
-            investDto.status !== 'NOT_VERIFIED')
-            throw new common_1.HttpException(`Can't set the status to ${investDto.status}`, common_1.HttpStatus.BAD_REQUEST);
-        return this.investmentService.updateInvestmentStatus({ id }, { status: investDto.status });
+        try {
+            if (investDto.status !== 'PENDING' &&
+                investDto.status !== 'VERIFIED' &&
+                investDto.status !== 'NOT_VERIFIED')
+                throw new common_1.HttpException(`Can't set the status to ${investDto.status}`, common_1.HttpStatus.BAD_REQUEST);
+            return this.investmentService.updateInvestmentStatus({ id }, { status: investDto.status });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
 };
 __decorate([

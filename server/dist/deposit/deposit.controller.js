@@ -22,74 +22,117 @@ let DepositController = class DepositController {
         this.userService = userService;
     }
     async createDeposit(deposit) {
-        if (!deposit.asset || !deposit.amount || !deposit.userId || !deposit.to)
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
-        const user = await this.userService.getUser({ id: deposit.userId });
-        if (!user)
-            throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
-        await this.userService.updateUserInfo({ id: deposit.userId }, {});
-        const depositData = await this.depositService.createDeposit({
-            asset: `${deposit.asset}`,
-            amount: Number(deposit.amount),
-            userId: `${deposit.userId}`,
-            to: `${deposit.to}`,
-        });
-        if (depositData) {
-            await this.depositService.addPendingDeposit({
+        try {
+            if (!deposit.asset || !deposit.amount || !deposit.userId || !deposit.to)
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            const user = await this.userService.getUser({ id: deposit.userId });
+            if (!user)
+                throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
+            const depositData = await this.depositService.createDeposit({
+                asset: `${deposit.asset}`,
                 amount: Number(deposit.amount),
                 userId: `${deposit.userId}`,
-                depositId: `${depositData.id}`,
+                to: `${deposit.to}`,
             });
+            if (depositData) {
+                await this.depositService.addPendingDeposit({
+                    amount: Number(deposit.amount),
+                    userId: `${deposit.userId}`,
+                    depositId: `${depositData.id}`,
+                });
+            }
+            return depositData;
         }
-        return depositData;
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getAllDepositHistory() {
-        const allDeposits = await this.depositService.getAllDepositHistory();
-        const users = await this.userService.getAllUsers();
-        const newDeposits = allDeposits.map((depositHistory) => {
-            const { firstname, lastname } = users.find((user) => user.id === depositHistory.userId);
-            return Object.assign(Object.assign({}, depositHistory), { firstname, lastname });
-        });
-        return newDeposits;
+        try {
+            const allDeposits = await this.depositService.getAllDepositHistory();
+            const users = await this.userService.getAllUsers();
+            const newDeposits = allDeposits.map((depositHistory) => {
+                const { firstname, lastname } = users.find((user) => user.id === depositHistory.userId);
+                return Object.assign(Object.assign({}, depositHistory), { firstname, lastname });
+            });
+            return newDeposits;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getMyDepositHistory(userId) {
-        if (!userId)
-            throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
-        return this.depositService.getMyDepositHistory({ userId });
+        try {
+            if (!userId)
+                throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
+            return this.depositService.getMyDepositHistory({ userId });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getMyPendingDeposits(userId) {
-        if (!userId)
-            throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
-        return this.depositService.getMyPendingDeposits({ userId });
+        try {
+            if (!userId)
+                throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
+            return this.depositService.getMyPendingDeposits({ userId });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async verifyTransaction(deposit, id) {
-        const depositState = await this.depositService.getDepositHistory({ id });
-        const user = await this.userService.getUser({ id: depositState.userId });
-        const pendingDeposit = await this.depositService.getPendingDeposit({
-            depositId: depositState.id,
-        });
-        if (depositState.transactionState !== 'PENDING')
-            throw new common_1.HttpException('client required to make a new Deposit', common_1.HttpStatus.FORBIDDEN);
-        if (deposit.transactionState === 'PENDING') {
-            return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
-        }
-        if (deposit.transactionState === 'VERIFIED') {
-            await this.userService.updateUserInfo({ id: depositState.userId }, {
-                totalDeposit: pendingDeposit.amount + user.totalDeposit,
-                totalBalance: pendingDeposit.amount + user.totalBalance,
-            });
-            await this.depositService.deletePendingDeposit({
+        try {
+            const depositState = await this.depositService.getDepositHistory({ id });
+            const user = await this.userService.getUser({ id: depositState.userId });
+            const pendingDeposit = await this.depositService.getPendingDeposit({
                 depositId: depositState.id,
             });
-            return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
+            if (depositState.transactionState !== 'PENDING')
+                throw new common_1.HttpException('client required to make a new Deposit', common_1.HttpStatus.FORBIDDEN);
+            if (deposit.transactionState === 'PENDING') {
+                return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
+            }
+            if (deposit.transactionState === 'VERIFIED') {
+                await this.userService.updateUserInfo({ id: depositState.userId }, {
+                    totalDeposit: pendingDeposit.amount + user.totalDeposit,
+                    totalBalance: pendingDeposit.amount + user.totalBalance,
+                });
+                await this.depositService.deletePendingDeposit({
+                    depositId: depositState.id,
+                });
+                return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
+            }
+            if (deposit.transactionState === 'NOT_VERIFIED') {
+                await this.depositService.deletePendingDeposit({
+                    depositId: depositState.id,
+                });
+                return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
+            }
+            return new common_1.HttpException('cannot change', common_1.HttpStatus.BAD_REQUEST);
         }
-        if (deposit.transactionState === 'NOT_VERIFIED') {
-            await this.depositService.deletePendingDeposit({
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async updateDeposit(deposit, id) {
+        try {
+            const depositState = await this.depositService.getDepositHistory({ id });
+            const pendingDeposit = await this.depositService.getPendingDeposit({
                 depositId: depositState.id,
             });
-            return this.depositService.verifyTransaction({ id }, { transactionState: deposit.transactionState });
+            if (pendingDeposit) {
+                await this.depositService.updatePendingDeposit({
+                    depositId: depositState.id,
+                }, {
+                    amount: Number(deposit.amount),
+                });
+            }
+            return this.depositService.verifyTransaction({ id }, { amount: Number(deposit.amount) });
         }
-        return new common_1.HttpException('cannot change', common_1.HttpStatus.BAD_REQUEST);
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
 };
 __decorate([
@@ -113,7 +156,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "getMyDepositHistory", null);
 __decorate([
-    (0, common_1.Get)('/:userId'),
+    (0, common_1.Get)('/pending/:userId'),
     __param(0, (0, common_1.Param)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -127,6 +170,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, String]),
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "verifyTransaction", null);
+__decorate([
+    (0, common_1.Put)('/mydeposit/:id'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], DepositController.prototype, "updateDeposit", null);
 DepositController = __decorate([
     (0, common_1.Controller)('deposit'),
     __metadata("design:paramtypes", [deposit_service_1.DepositService,

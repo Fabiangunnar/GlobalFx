@@ -10,9 +10,11 @@ import {
   GetAllWithdrawalsApi,
   GetCodeApi,
   GetMyUserApi,
+  GetUserApi,
   SendNotificationApi,
   SetTransactionStateApi,
   UpdateAdminInfoApi,
+  UpdateDepositApi,
   UpdateUserApi,
   UserDepositApi,
   VerifyInvestmentApi,
@@ -203,6 +205,11 @@ interface initialTypes {
     isError: boolean;
     isSuccess: boolean;
   };
+  updateDepositState: {
+    isLoading: boolean;
+    isError: boolean;
+    isSuccess: boolean;
+  };
   adminState: {
     isLoading: boolean;
     isError: boolean;
@@ -282,6 +289,11 @@ const initialState: initialTypes = {
     isError: false,
     isSuccess: false,
   },
+  updateDepositState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+  },
   adminState: {
     isLoading: false,
     isError: false,
@@ -313,6 +325,7 @@ export const getAdmin: any = createAsyncThunk(
     }
   }
 );
+
 export const login: any = createAsyncThunk(
   "auth/login",
   async (userData, thunkApi) => {
@@ -323,6 +336,18 @@ export const login: any = createAsyncThunk(
     }
   }
 );
+
+export const getUser: any = createAsyncThunk(
+  "get/myuser",
+  async (id, thunkApi) => {
+    try {
+      return await GetUserApi(id);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getCode: any = createAsyncThunk(
   "auth/code",
   async (_, thunkApi) => {
@@ -333,6 +358,7 @@ export const getCode: any = createAsyncThunk(
     }
   }
 );
+
 export const updateAdminInfo: any = createAsyncThunk(
   "put/updateAminInfo",
   async ([id, adminInfo]: any, thunkApi) => {
@@ -367,6 +393,7 @@ export const getAllUsers: any = createAsyncThunk(
     }
   }
 );
+
 export const getMyUserDeposits: any = createAsyncThunk(
   "get/user",
   async (id: any, thunkApi) => {
@@ -377,6 +404,17 @@ export const getMyUserDeposits: any = createAsyncThunk(
     }
   }
 );
+export const updateDeposit: any = createAsyncThunk(
+  "update/deposit",
+  async ([id, depositInfo]: any, thunkApi) => {
+    try {
+      return await UpdateDepositApi(id, depositInfo);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getAllSupportTickets: any = createAsyncThunk(
   "get/allSupportTickets",
   async (_, thunkApi) => {
@@ -387,6 +425,7 @@ export const getAllSupportTickets: any = createAsyncThunk(
     }
   }
 );
+
 export const getAllTrades: any = createAsyncThunk(
   "get/trades",
   async (_, thunkApi) => {
@@ -397,6 +436,7 @@ export const getAllTrades: any = createAsyncThunk(
     }
   }
 );
+
 export const getAllDeposits: any = createAsyncThunk(
   "get/allDeposits",
   async (_, thunkApi) => {
@@ -407,6 +447,7 @@ export const getAllDeposits: any = createAsyncThunk(
     }
   }
 );
+
 export const getAllInvestments: any = createAsyncThunk(
   "get/invstments",
   async (_, thunkApi) => {
@@ -417,6 +458,7 @@ export const getAllInvestments: any = createAsyncThunk(
     }
   }
 );
+
 export const getAllWithdrawals: any = createAsyncThunk(
   "get/allWithdrawals",
   async (_, thunkApi) => {
@@ -427,6 +469,7 @@ export const getAllWithdrawals: any = createAsyncThunk(
     }
   }
 );
+
 export const getAllKYCDocuments: any = createAsyncThunk(
   "get/AllKYCDocuments",
   async (_, thunkApi) => {
@@ -437,6 +480,7 @@ export const getAllKYCDocuments: any = createAsyncThunk(
     }
   }
 );
+
 export const sendNotification: any = createAsyncThunk(
   "post/notification",
   async (notificationdata, thunkApi) => {
@@ -447,6 +491,7 @@ export const sendNotification: any = createAsyncThunk(
     }
   }
 );
+
 export const sendTransactionState: any = createAsyncThunk(
   "set/transactionState",
   async ([id, transactionStateData]: any, thunkApi) => {
@@ -479,6 +524,7 @@ export const changeState: any = createAsyncThunk(
     }
   }
 );
+
 export const verifyInvestment: any = createAsyncThunk(
   "verify/investment",
   async ([id, investmentState]: any, thunkApi) => {
@@ -489,6 +535,7 @@ export const verifyInvestment: any = createAsyncThunk(
     }
   }
 );
+
 export const updateUser: any = createAsyncThunk(
   "update/user",
   async ([id, accountInfo]: any, thunkApi) => {
@@ -499,6 +546,7 @@ export const updateUser: any = createAsyncThunk(
     }
   }
 );
+
 export const userDeposit: any = createAsyncThunk(
   "put/userDeposit",
   async (accountInfo: any, thunkApi) => {
@@ -558,6 +606,13 @@ export const AppSlice = createSlice({
     },
     resetAdminState: (state) => {
       state.adminState = {
+        isLoading: false,
+        isError: false,
+        isSuccess: false,
+      };
+    },
+    resetUpdateDepositState: (state) => {
+      state.updateDepositState = {
         isLoading: false,
         isError: false,
         isSuccess: false,
@@ -658,6 +713,24 @@ export const AppSlice = createSlice({
         state.userState.isError = false;
       });
     builder
+      .addCase(getUser.fulfilled, (state, {payload}) => {
+        state.getState.isLoading = false;
+        state.getState.isSuccess = true;
+        state.getState.isError = false;
+        state.userManageData = payload;
+      })
+      .addCase(getUser.rejected, (state, {payload}) => {
+        state.getState.isLoading = false;
+        state.getState.isSuccess = false;
+        state.getState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(getUser.pending, (state, {payload}) => {
+        state.getState.isLoading = true;
+        state.getState.isSuccess = false;
+        state.getState.isError = false;
+      });
+    builder
       .addCase(getMyUserDeposits.fulfilled, (state, {payload}) => {
         state.userState.isLoading = false;
         state.userState.isSuccess = true;
@@ -674,6 +747,23 @@ export const AppSlice = createSlice({
         state.userState.isLoading = true;
         state.userState.isSuccess = false;
         state.userState.isError = false;
+      });
+    builder
+      .addCase(updateDeposit.fulfilled, (state, {payload}) => {
+        state.updateDepositState.isLoading = false;
+        state.updateDepositState.isSuccess = true;
+        state.updateDepositState.isError = false;
+      })
+      .addCase(updateDeposit.rejected, (state, {payload}) => {
+        state.updateDepositState.isLoading = false;
+        state.updateDepositState.isSuccess = false;
+        state.updateDepositState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(updateDeposit.pending, (state, {payload}) => {
+        state.updateDepositState.isLoading = true;
+        state.updateDepositState.isSuccess = false;
+        state.updateDepositState.isError = false;
       });
     builder
       .addCase(getAdmin.fulfilled, (state, {payload}) => {
@@ -937,6 +1027,7 @@ export const {
   setAdminInfo,
   resetUpdateState,
   resetCodeState,
+  resetUpdateDepositState,
   reset,
   setUserManageData,
   removeUser,

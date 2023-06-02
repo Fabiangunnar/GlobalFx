@@ -32,24 +32,29 @@ let UserController = class UserController {
         this.withdrawService = withdrawService;
     }
     async createUser(user) {
-        const { firstname, lastname, email, password, confirmPassword } = user;
-        if (!firstname || !lastname || !email || !password)
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
-        const data = await this.userService.getUser({
-            email: email.toLowerCase(),
-        });
-        if (data)
-            throw new common_1.HttpException('user already registered', common_1.HttpStatus.NOT_FOUND);
-        if (JSON.stringify(password) !== JSON.stringify(confirmPassword)) {
-            throw new common_1.HttpException('Incorrect Password', common_1.HttpStatus.BAD_REQUEST);
+        try {
+            const { firstname, lastname, email, password, confirmPassword } = user;
+            if (!firstname || !lastname || !email || !password)
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            const data = await this.userService.getUser({
+                email: email.toLowerCase(),
+            });
+            if (data)
+                throw new common_1.HttpException('user already registered', common_1.HttpStatus.NOT_FOUND);
+            if (JSON.stringify(password) !== JSON.stringify(confirmPassword)) {
+                throw new common_1.HttpException('Incorrect Password', common_1.HttpStatus.BAD_REQUEST);
+            }
+            delete user.confirmPassword;
+            return await this.userService.createUser({
+                firstname,
+                lastname,
+                email: email.toLowerCase(),
+                password,
+            });
         }
-        delete user.confirmPassword;
-        return await this.userService.createUser({
-            firstname,
-            lastname,
-            email: email.toLowerCase(),
-            password,
-        });
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async loginUser(user) {
         const { email, password } = user;
@@ -96,22 +101,31 @@ let UserController = class UserController {
         return this.userService.getUser({ id });
     }
     async updateUserAccountInfo(accountInfo, id) {
-        const { totalBalance, totalProfit } = accountInfo;
-        if (!totalProfit || (Number(totalProfit) === 0 && totalBalance)) {
-            return this.userService.updateUserInfo({ id }, {
-                totalBalance: Number(totalBalance),
-            });
+        try {
+            const { totalBalance, totalProfit } = accountInfo;
+            if ((!totalProfit || Number(totalProfit) === 0) &&
+                (!totalBalance || Number(totalBalance) === 0)) {
+                throw new common_1.HttpException(`Input not right`, common_1.HttpStatus.BAD_REQUEST);
+            }
+            if (!totalProfit || (Number(totalProfit) === 0 && totalBalance)) {
+                return await this.userService.updateUserInfo({ id }, {
+                    totalBalance: Number(totalBalance),
+                });
+            }
+            else if (!totalBalance || (Number(totalBalance) === 0 && totalProfit)) {
+                return await this.userService.updateUserInfo({ id }, {
+                    totalProfit: Number(totalProfit),
+                });
+            }
+            else {
+                return await this.userService.updateUserInfo({ id }, {
+                    totalBalance: Number(totalBalance),
+                    totalProfit: Number(totalProfit),
+                });
+            }
         }
-        else if (!totalBalance || (Number(totalBalance) === 0 && totalProfit)) {
-            return this.userService.updateUserInfo({ id }, {
-                totalProfit: Number(totalProfit),
-            });
-        }
-        else {
-            return this.userService.updateUserInfo({ id }, {
-                totalBalance: Number(totalBalance),
-                totalProfit: Number(totalProfit),
-            });
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async updateProfilePicture(profilePictureInfo, id) {
@@ -131,50 +145,70 @@ let UserController = class UserController {
         });
     }
     async verifyUser(accountState, id) {
-        if (accountState.accountState === 'PENDING') {
-            return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
+        try {
+            if (accountState.accountState === 'PENDING') {
+                return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
+            }
+            if (accountState.accountState === 'VERIFIED') {
+                return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
+            }
+            if (accountState.accountState === 'BLOCKED') {
+                return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
+            }
+            return new common_1.HttpException('cannot change', common_1.HttpStatus.BAD_REQUEST);
         }
-        if (accountState.accountState === 'VERIFIED') {
-            return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
         }
-        if (accountState.accountState === 'BLOCKED') {
-            return this.userService.updateUserInfo({ id }, { accountState: accountState.accountState });
-        }
-        return new common_1.HttpException('cannot change', common_1.HttpStatus.BAD_REQUEST);
     }
     async verifykycDoc(kycStatus, id) {
-        if (kycStatus.status !== 'VERIFIED' ||
-            kycStatus.status !== 'PENDING' ||
-            kycStatus.status !== 'NOT_VERIFIED')
-            throw new common_1.HttpException('Wrong Data', common_1.HttpStatus.BAD_REQUEST);
-        return this.userService.updateKycStatus({ id }, { status: kycStatus.status });
+        try {
+            if (kycStatus.status !== 'VERIFIED' ||
+                kycStatus.status !== 'PENDING' ||
+                kycStatus.status !== 'NOT_VERIFIED')
+                throw new common_1.HttpException('Wrong Data', common_1.HttpStatus.BAD_REQUEST);
+            return this.userService.updateKycStatus({ id }, { status: kycStatus.status });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async kycVerify(kycVer, id) {
-        if (!kycVer.idDocuments || !kycVer.proofOfAddress) {
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+        try {
+            if (!kycVer.idDocuments || !kycVer.proofOfAddress) {
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const kyc = this.userService.getMyKycDocuments({
+                userId: id,
+            });
+            if (kyc.length > 0)
+                throw new common_1.HttpException(`You have already given your documents, `, common_1.HttpStatus.NOT_ACCEPTABLE);
+            return this.userService.verifyKyc({
+                userId: id,
+                idDocuments: `${kycVer.idDocuments}`,
+                proofOfAddress: `${kycVer.proofOfAddress}`,
+            });
         }
-        const kyc = this.userService.getMyKycDocuments({
-            userId: id,
-        });
-        if (kyc.length > 0)
-            throw new common_1.HttpException(`You have already given your documents, `, common_1.HttpStatus.NOT_ACCEPTABLE);
-        return this.userService.verifyKyc({
-            userId: id,
-            idDocuments: `${kycVer.idDocuments}`,
-            proofOfAddress: `${kycVer.proofOfAddress}`,
-        });
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async deleteUser(id) {
-        const user = await this.userService.getUser({ id });
-        await this.depositService.deleteAllWhereUserId({ userId: user.id });
-        await this.depositService.deleteMyPendingDeposits({ userId: user.id });
-        await this.notificationService.deleteAllWhereUserId({ userId: user.id });
-        await this.supportService.deleteAllWhereUserId({ userId: user.id });
-        await this.withdrawService.deleteMyWithdrawals({ userId: user.id });
-        await this.investmentService.deleteInvestmentHistory({ userId: id });
-        await this.tradesService.deleteMyTrades({ userId: id });
-        await this.userService.deleteKycStatus({ userId: id });
-        return this.userService.deleteUser({ id });
+        try {
+            const user = await this.userService.getUser({ id });
+            await this.depositService.deleteAllWhereUserId({ userId: user.id });
+            await this.depositService.deleteMyPendingDeposits({ userId: user.id });
+            await this.notificationService.deleteAllWhereUserId({ userId: user.id });
+            await this.supportService.deleteAllWhereUserId({ userId: user.id });
+            await this.withdrawService.deleteMyWithdrawals({ userId: user.id });
+            await this.investmentService.deleteInvestmentHistory({ userId: id });
+            await this.tradesService.deleteMyTrades({ userId: id });
+            await this.userService.deleteKycStatus({ userId: id });
+            return this.userService.deleteUser({ id });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
 };
 __decorate([

@@ -23,38 +23,53 @@ let AdminAuthController = class AdminAuthController {
         this.userService = userService;
     }
     async createUser(user) {
-        const { username, password } = user;
-        if (!username || !password)
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
-        const data = await this.adminAuthService.createAdmin({
-            username: user.username,
-            password: user.password,
-        });
-        return data;
+        try {
+            const { username, password } = user;
+            if (!username || !password)
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            const data = await this.adminAuthService.createAdmin({
+                username: user.username,
+                password: user.password,
+            });
+            return data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async loginUser(user) {
-        const data = await this.adminAuthService.getUser({
-            username: user.username,
-        });
-        if (!data)
-            throw new common_1.HttpException('user not found', common_1.HttpStatus.NOT_FOUND);
-        const isMatch = user.password === data.password;
-        if (!isMatch)
-            throw new common_1.HttpException('Invalid credentials', common_1.HttpStatus.BAD_REQUEST);
-        return data;
+        try {
+            const data = await this.adminAuthService.getUser({
+                username: user.username,
+            });
+            if (!data)
+                throw new common_1.HttpException('user not found', common_1.HttpStatus.NOT_FOUND);
+            const isMatch = user.password === data.password;
+            if (!isMatch)
+                throw new common_1.HttpException('Invalid credentials', common_1.HttpStatus.BAD_REQUEST);
+            return data;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async createCode() {
-        const uuid = (0, uuid_1.v4)();
-        const timeoutDuration = 3 * 60 * 60 * 1000 + 1 * 60 * 1000;
-        const code = await this.adminAuthService.createCode({
-            withdrawalCode: uuid,
-        });
-        setTimeout(async () => {
-            await this.adminAuthService.deleteCode({
+        try {
+            const uuid = (0, uuid_1.v4)();
+            const timeoutDuration = 3 * 60 * 60 * 1000 + 1 * 60 * 1000;
+            const code = await this.adminAuthService.createCode({
                 withdrawalCode: uuid,
             });
-        }, timeoutDuration);
-        return code;
+            setTimeout(async () => {
+                await this.adminAuthService.deleteCode({
+                    withdrawalCode: uuid,
+                });
+            }, timeoutDuration);
+            return code;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getUser(id) {
         try {
@@ -88,34 +103,44 @@ let AdminAuthController = class AdminAuthController {
             return app;
         }
         catch (error) {
-            throw new common_1.HttpException('Something terribly wrong', common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException(`Something terribly wrong \n ${error.message}`, common_1.HttpStatus.BAD_REQUEST);
         }
     }
     async getAdminArray() {
-        const data = await this.adminAuthService.getAdminArray();
-        const newData = await data.map((admin) => {
-            delete admin.password;
-            delete admin.username, delete admin.id;
-            return admin;
-        });
-        return newData;
+        try {
+            const data = await this.adminAuthService.getAdminArray();
+            const newData = await data.map((admin) => {
+                delete admin.password;
+                delete admin.username, delete admin.id;
+                return admin;
+            });
+            return newData;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async createDeposit(deposit) {
-        if (!deposit.amount || !deposit.userId || deposit.amount === 0)
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
-        const user = await this.userService.getUser({ id: deposit.userId });
-        const depo = await this.adminAuthService.createDeposit({
-            asset: `BTC`,
-            amount: Number(deposit.amount),
-            userId: `${deposit.userId}`,
-            to: 'admin',
-            transactionState: 'VERIFIED',
-        });
-        await this.userService.updateUserInfo({ id: deposit.userId }, {
-            totalDeposit: depo.amount + user.totalDeposit,
-            totalBalance: depo.amount + user.totalBalance,
-        });
-        return depo;
+        try {
+            if (!deposit.amount || !deposit.userId || deposit.amount === 0)
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            const user = await this.userService.getUser({ id: deposit.userId });
+            const depo = await this.adminAuthService.createDeposit({
+                asset: `BTC`,
+                amount: Number(deposit.amount),
+                userId: `${deposit.userId}`,
+                to: 'admin',
+                transactionState: 'VERIFIED',
+            });
+            await this.userService.updateUserInfo({ id: deposit.userId }, {
+                totalDeposit: depo.amount + user.totalDeposit,
+                totalBalance: depo.amount + user.totalBalance,
+            });
+            return depo;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
 };
 __decorate([

@@ -95,7 +95,7 @@ export const GetMyInvestments = async (id: string) => {
   return data;
 };
 export const GetAllPendingDeposits = async (id: string) => {
-  const {data} = await API.get(`/deposit/${id}`);
+  const {data} = await API.get(`/deposit/pending/${id}`);
 
   return data;
 };

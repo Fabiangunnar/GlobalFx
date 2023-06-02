@@ -40,13 +40,16 @@ import {
   getAllDeposits,
   getAllUsers,
   getMyUserDeposits,
+  getUser,
   reset,
   resetSendState,
+  resetUpdateDepositState,
   resetUpdateState,
   resetUsersState,
   sendNotification,
   sendTransactionState,
   setUserBalanceData,
+  updateDeposit,
   updateUser,
   userDeposit,
 } from "@/redux-actions/AppSlice";
@@ -59,6 +62,7 @@ const ManageUser = (props: Props) => {
   const {
     userManageData,
     manageUserDeposits,
+    updateDepositState,
     sendState,
     usersState,
     errorMessage,
@@ -67,12 +71,7 @@ const ManageUser = (props: Props) => {
   const stateBoxRef: any = useRef();
   const [accountBox, setAccountBox] = useState(false);
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
+    amount: 0,
   });
   const [isLoading, setisLoading] = useState(false);
   const [isLoading2, setisLoading2] = useState(false);
@@ -173,6 +172,7 @@ const ManageUser = (props: Props) => {
         position: "top-right",
       });
       setisLoading2(false);
+      dispatch(getUser());
     }
     if (usersState.isError) {
       toast({
@@ -214,11 +214,14 @@ const ManageUser = (props: Props) => {
         position: "top-right",
       });
       const x = async () => {
-        await dispatch(setUserBalanceData(balanceFormData.totalBalance));
-        await setisLoading(false);
+        dispatch(getAllDeposits());
+
+        dispatch(getUser(userManageData?.id));
+        setisLoading(false);
         setNotifFormData({message: ""});
       };
       x();
+      setBalanceFormData({totalBalance: 0, totalProfit: 0});
     }
     if (updateState.isError) {
       toast({
@@ -269,6 +272,41 @@ const ManageUser = (props: Props) => {
 
     dispatch(resetSendState());
   }, [sendState.isSuccess, sendState.isError, sendState.isLoading, dispatch]);
+  useEffect(() => {
+    if (updateDepositState.isSuccess) {
+      toast({
+        title: "Success",
+        description: "Sent Successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+      });
+      dispatch(getMyUserDeposits(userManageData?.id));
+      setisLoading(false);
+    }
+    if (updateDepositState.isError) {
+      toast({
+        title: errorMessage?.statusCode,
+        description: errorMessage?.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+      });
+      setisLoading(false);
+    }
+    if (updateDepositState.isLoading) {
+      setisLoading(true);
+    }
+
+    dispatch(resetUpdateDepositState());
+  }, [
+    updateDepositState.isSuccess,
+    updateDepositState.isError,
+    updateDepositState.isLoading,
+    dispatch,
+  ]);
 
   async function convertDollarToBTC(amountInUSD: number) {
     try {
@@ -286,9 +324,9 @@ const ManageUser = (props: Props) => {
     }
   }
 
-  const handleUpdateBalance = (e: any) => {
+  const handleUpdateBalance = async (e: any) => {
     e.preventDefault();
-    dispatch(updateUser([userManageData.id, balanceFormData]));
+    await dispatch(updateUser([userManageData.id, balanceFormData]));
   };
   const handleDeposit = (e: any) => {
     e.preventDefault();
@@ -371,7 +409,6 @@ const ManageUser = (props: Props) => {
                 <Input
                   type="text"
                   fontSize={12}
-                  required
                   name="totalBalance"
                   value={balanceFormData.totalBalance}
                   onChange={handleInputChange}
@@ -382,7 +419,6 @@ const ManageUser = (props: Props) => {
                 <Input
                   type="text"
                   fontSize={12}
-                  required
                   name="totalProfit"
                   value={balanceFormData.totalProfit}
                   onChange={handleInputChange}
@@ -616,94 +652,7 @@ const ManageUser = (props: Props) => {
           </Flex>
         </div>
       </section>
-      {/* `<section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <AiTwotoneEdit />
-            <p>Edit Accounts</p>
-          </div>
-          <Box p={2}>
-            <form action="">
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Firstname</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  required
-                  name="firstname"
-                  value={formData.firstname}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Lastname</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  required
-                  name="lastname"
-                  value={formData.lastname}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={12}>Username</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  required
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={12}>Email</FormLabel>
-                <Input
-                  type="email"
-                  fontSize={12}
-                  required
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={12}>Phone</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  required
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={12}>Password</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  required
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
 
-              <FormControl p={2}>
-                <Button
-                  fontSize={14}
-                  type="submit"
-                  w="100%"
-                  colorScheme="messenger">
-                  Update
-                </Button>
-              </FormControl>
-            </form>
-          </Box>
-        </div>
-      </section>` */}
       <section id="notifications" className={`${styles.user_block}`}>
         <div className={`${styles.management_block}`}>
           <div className={`${styles.management_head}`}>
@@ -751,7 +700,9 @@ const ManageUser = (props: Props) => {
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th fontSize={11}>S/N</Th>
+                  {/* <Th fontSize={11}>S/N</Th> */}
+                  <Th fontSize={11}>Amount</Th>
+                  <Th fontSize={11}>Amt change</Th>
                   <Th fontSize={11}>Method</Th>
                   <Th fontSize={11}>Wallet</Th>
                   <Th fontSize={11}>Status</Th>
@@ -779,7 +730,53 @@ const ManageUser = (props: Props) => {
                   )}`;
                   return (
                     <Tr key={manageUserDeposit.id}>
-                      <Td fontSize={11}>{index + 1}</Td>
+                      {/* <Td fontSize={11}>{index + 1}</Td> */}
+                      <Td fontSize={11}>${manageUserDeposit.amount}</Td>
+                      <Td fontSize={11}>
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            dispatch(
+                              updateDeposit([manageUserDeposit.id, formData])
+                            );
+                          }}
+                        >
+                          <Flex
+                            direction={"column"}
+                            gap={1}
+                            justify={"center"}
+                            align={"center"}
+                            maxW={20}
+                            minW={"6rem"}
+                          >
+                            <Input
+                              type="number"
+                              fontSize={12}
+                              maxW={16}
+                              required
+                              size={"sm"}
+                              name="amount"
+                              //   value={manageUserDeposit.amount}
+                              onChange={handleInputChange}
+                            />
+                            <Button
+                              fontSize={11}
+                              w="100%"
+                              size={"sm"}
+                              maxW={16}
+                              type="submit"
+                              // onClick={() =>
+                              //   makeTransactionStateChange(manageUserDeposit.id, {
+                              //     transactionState,
+                              //   })
+                              // }
+                              colorScheme="whatsapp"
+                            >
+                              Update
+                            </Button>
+                          </Flex>
+                        </form>
+                      </Td>
                       <Td fontSize={11}>{manageUserDeposit.asset}</Td>
                       <Td fontSize={11}>{manageUserDeposit.to}</Td>
                       <Td fontSize={11}>
@@ -846,6 +843,7 @@ const ManageUser = (props: Props) => {
                           <Button
                             fontSize={11}
                             maxW={24}
+                            size={"sm"}
                             w="100%"
                             onClick={() =>
                               makeTransactionStateChange(manageUserDeposit.id, {
@@ -864,10 +862,16 @@ const ManageUser = (props: Props) => {
               </Tbody>
               <Tfoot>
                 <Tr>
-                  <Th fontSize={11} isNumeric>
+                  {/* <Th fontSize={11} isNumeric>
                     S/N
+                  </Th> */}
+                  <Th fontSize={11} isNumeric>
+                    Amount
                   </Th>
+                  <Th fontSize={11}>Amt change</Th>
+
                   <Th fontSize={11}>Method</Th>
+
                   <Th fontSize={11}>Wallet</Th>
                   <Th fontSize={11}>Status</Th>
 

@@ -975,13 +975,19 @@ export default function Home() {
                         <Text fontSize={[14, 15, 16, 17, 18]}>
                           Official address:
                         </Text>
-                        <Text
-                          fontSize={[12, 13, 14, 15, 16]}
-                          color={"gray.400"}
+                        <Link
+                          target="_blank"
+                          //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}
+                          href={`https://www.google.com/maps/search/United+Kingdom+Level+9,+One+Canada+Square,+Canary+Wharf,+E14+5AA,+London,+United+Kingdom/@51.5049697,-0.0221382,17z/data=!3m1!4b1?entry=ttu`}
                         >
-                          United Kingdom Level 9, One Canada Square, Canary
-                          Wharf, E14 5AA, London, United Kingdom
-                        </Text>
+                          <Text
+                            fontSize={[12, 13, 14, 15, 16]}
+                            color={"gray.400"}
+                          >
+                            United Kingdom Level 9, One Canada Square, Canary
+                            Wharf, E14 5AA, London, United Kingdom
+                          </Text>
+                        </Link>
                       </Grid>
                     </Flex>
                   </Flex>

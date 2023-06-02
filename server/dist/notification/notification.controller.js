@@ -22,23 +22,33 @@ let NotificationController = class NotificationController {
         this.userService = userService;
     }
     async createNotification(notification) {
-        if (!notification.message || !notification.userId)
-            throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
-        const data = await this.userService.getUser({ id: notification.userId });
-        if (!data)
-            throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
-        return this.notificationService.createNotification({
-            message: `${notification.message}`,
-            userId: `${notification.userId}`,
-        });
+        try {
+            if (!notification.message || !notification.userId)
+                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
+            const data = await this.userService.getUser({ id: notification.userId });
+            if (!data)
+                throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
+            return this.notificationService.createNotification({
+                message: `${notification.message}`,
+                userId: `${notification.userId}`,
+            });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
     async getNotification() {
         return this.notificationService.getNotifications();
     }
     async getMyNotifications(userId) {
-        if (!userId)
-            throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
-        return this.notificationService.getMyNotifications({ userId });
+        try {
+            if (!userId)
+                throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
+            return this.notificationService.getMyNotifications({ userId });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
     }
 };
 __decorate([

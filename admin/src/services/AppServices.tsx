@@ -22,8 +22,11 @@ export const UserDepositApi = async (depositData: any) => {
   return data;
 };
 export const UpdateUserApi = async (id: any, accountInfo: any) => {
-  console.log(id, accountInfo);
   const {data} = await API.put(`/user/account/${id}`, accountInfo);
+  return data;
+};
+export const UpdateDepositApi = async (id: any, depositInfo: any) => {
+  const {data} = await API.put(`/deposit/mydeposit/${id}`, depositInfo);
   return data;
 };
 export const GetCodeApi = async () => {

@@ -60,8 +60,8 @@ const DepositFunds = (props: Props) => {
     }
     if (sendState.isError) {
       toast({
-        title: errorMessage.statusCode,
-        description: errorMessage.message,
+        title: errorMessage?.statusCode,
+        description: errorMessage?.message,
         status: "error",
         duration: 2000,
         isClosable: true,

@@ -68,6 +68,15 @@ export class DepositService {
       where,
     });
   }
+  updatePendingDeposit(
+    where: Prisma.PendingDepositHistoryWhereUniqueInput,
+    data: Prisma.PendingDepositHistoryUncheckedCreateInput,
+  ): Promise<PendingDepositHistory> {
+    return this.prisma.pendingDepositHistory.update({
+      where,
+      data,
+    });
+  }
 
   getAllPendingDeposits(): Promise<PendingDepositHistory[]> {
     return this.prisma.pendingDepositHistory.findMany();

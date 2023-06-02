@@ -24,51 +24,64 @@ export class AdminAuthController {
   ) {}
   @Post('/register')
   async createUser(@Body() user: adminAuthDto): Promise<Admin> {
-    const { username, password } = user;
-    if (!username || !password)
-      throw new HttpException(
-        'Input field not complete',
-        HttpStatus.BAD_REQUEST,
-      );
-    // const salt = 10;
-    // const hashedPassword = await bcrypt.hash(user.password, salt);
-    const data = await this.adminAuthService.createAdmin({
-      username: user.username,
-      password: user.password,
-    });
-    // delete data.password;
-    return data;
+    try {
+      const { username, password } = user;
+      if (!username || !password)
+        throw new HttpException(
+          'Input field not complete',
+          HttpStatus.BAD_REQUEST,
+        );
+      // const salt = 10;
+      // const hashedPassword = await bcrypt.hash(user.password, salt);
+      const data = await this.adminAuthService.createAdmin({
+        username: user.username,
+        password: user.password,
+      });
+      // delete data.password;
+      return data;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Post('/login')
   async loginUser(@Body() user: adminAuthDto): Promise<Admin> {
-    const data = await this.adminAuthService.getUser({
-      username: user.username,
-    });
+    try {
+      const data = await this.adminAuthService.getUser({
+        username: user.username,
+      });
 
-    if (!data) throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+      if (!data)
+        throw new HttpException('user not found', HttpStatus.NOT_FOUND);
 
-    const isMatch = user.password === data.password;
-    if (!isMatch)
-      throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
+      const isMatch = user.password === data.password;
+      if (!isMatch)
+        throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
 
-    return data;
+      return data;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
   @Get('/code')
   async createCode(): Promise<WithdrawalCode> {
-    const uuid = uuidv4();
-    const timeoutDuration = 3 * 60 * 60 * 1000 + 1 * 60 * 1000;
-    const code = await this.adminAuthService.createCode({
-      withdrawalCode: uuid,
-    });
-
-    setTimeout(async () => {
-      await this.adminAuthService.deleteCode({
+    try {
+      const uuid = uuidv4();
+      const timeoutDuration = 3 * 60 * 60 * 1000 + 1 * 60 * 1000;
+      const code = await this.adminAuthService.createCode({
         withdrawalCode: uuid,
       });
-    }, timeoutDuration);
 
-    return code;
+      setTimeout(async () => {
+        await this.adminAuthService.deleteCode({
+          withdrawalCode: uuid,
+        });
+      }, timeoutDuration);
+
+      return code;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
   @Get('/my/:id')
   async getUser(@Param('id') id: string): Promise<Admin> {
@@ -112,46 +125,54 @@ export class AdminAuthController {
       return app;
     } catch (error) {
       throw new HttpException(
-        'Something terribly wrong',
+        `Something terribly wrong \n ${error.message}`,
         HttpStatus.BAD_REQUEST,
       );
     }
   }
   @Get('/')
   async getAdminArray(): Promise<Admin[]> {
-    const data = await this.adminAuthService.getAdminArray();
+    try {
+      const data = await this.adminAuthService.getAdminArray();
 
-    const newData = await data.map((admin) => {
-      delete admin.password;
-      delete admin.username, delete admin.id;
-      return admin;
-    });
+      const newData = await data.map((admin) => {
+        delete admin.password;
+        delete admin.username, delete admin.id;
+        return admin;
+      });
 
-    return newData;
+      return newData;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
   @Post('/user/deposit')
   async createDeposit(@Body() deposit: DepositDto): Promise<DepositHistory> {
-    if (!deposit.amount || !deposit.userId || deposit.amount === 0)
-      throw new HttpException(
-        'Input field not complete',
-        HttpStatus.BAD_REQUEST,
-      );
-    const user = await this.userService.getUser({ id: deposit.userId });
+    try {
+      if (!deposit.amount || !deposit.userId || deposit.amount === 0)
+        throw new HttpException(
+          'Input field not complete',
+          HttpStatus.BAD_REQUEST,
+        );
+      const user = await this.userService.getUser({ id: deposit.userId });
 
-    const depo = await this.adminAuthService.createDeposit({
-      asset: `BTC`,
-      amount: Number(deposit.amount),
-      userId: `${deposit.userId}`,
-      to: 'admin',
-      transactionState: 'VERIFIED',
-    });
-    await this.userService.updateUserInfo(
-      { id: deposit.userId },
-      {
-        totalDeposit: depo.amount + user.totalDeposit,
-        totalBalance: depo.amount + user.totalBalance,
-      },
-    );
-    return depo;
+      const depo = await this.adminAuthService.createDeposit({
+        asset: `BTC`,
+        amount: Number(deposit.amount),
+        userId: `${deposit.userId}`,
+        to: 'admin',
+        transactionState: 'VERIFIED',
+      });
+      await this.userService.updateUserInfo(
+        { id: deposit.userId },
+        {
+          totalDeposit: depo.amount + user.totalDeposit,
+          totalBalance: depo.amount + user.totalBalance,
+        },
+      );
+      return depo;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -46,45 +46,49 @@ export class WithdrawController {
 
   @Post('/')
   async makeWithdrawal(@Body() withdraw: WithdrawDto) {
-    if (
-      !withdraw.asset ||
-      !withdraw.amount ||
-      !withdraw.userId ||
-      !withdraw.walletAddress ||
-      !withdraw.walletCode
-    )
-      throw new HttpException(
-        'Input field not complete',
-        HttpStatus.BAD_REQUEST,
+    try {
+      if (
+        !withdraw.asset ||
+        !withdraw.amount ||
+        !withdraw.userId ||
+        !withdraw.walletAddress ||
+        !withdraw.walletCode
+      )
+        throw new HttpException(
+          'Input field not complete',
+          HttpStatus.BAD_REQUEST,
+        );
+      const user = await this.userService.getUser({ id: withdraw.userId });
+      const isWithdrawCode = await this.withdrawService.getWalletCode({
+        withdrawalCode: withdraw.walletCode,
+      });
+      if (!isWithdrawCode)
+        throw new HttpException(
+          'Provide a valid withdraw code',
+          HttpStatus.FORBIDDEN,
+        );
+      if (!user)
+        throw new HttpException("User Doesn't exist", HttpStatus.BAD_REQUEST);
+      if (Number(user.totalBalance) < Number(withdraw.amount))
+        throw new HttpException('Insufficient funds', HttpStatus.FORBIDDEN);
+      await this.withdrawService.deleteCode({
+        withdrawalCode: withdraw.walletCode,
+      });
+      const withdrawal = await this.withdrawService.makeWithdrawal({
+        asset: `${withdraw.asset}`,
+        amount: Number(withdraw.amount),
+        userId: `${withdraw.userId}`,
+        walletAddress: `${withdraw.walletAddress}`,
+      });
+      await this.userService.updateUserInfo(
+        { id: withdraw.userId },
+        {
+          totalBalance: user.totalBalance - withdraw.amount,
+        },
       );
-    const user = await this.userService.getUser({ id: withdraw.userId });
-    const isWithdrawCode = await this.withdrawService.getWalletCode({
-      withdrawalCode: withdraw.walletCode,
-    });
-    if (!isWithdrawCode)
-      throw new HttpException(
-        'Provide a valid withdraw code',
-        HttpStatus.FORBIDDEN,
-      );
-    if (!user)
-      throw new HttpException("User Doesn't exist", HttpStatus.BAD_REQUEST);
-    if (Number(user.totalBalance) < Number(withdraw.amount))
-      throw new HttpException('Insufficient funds', HttpStatus.FORBIDDEN);
-    await this.withdrawService.deleteCode({
-      withdrawalCode: withdraw.walletCode,
-    });
-    const withdrawal = await this.withdrawService.makeWithdrawal({
-      asset: `${withdraw.asset}`,
-      amount: Number(withdraw.amount),
-      userId: `${withdraw.userId}`,
-      walletAddress: `${withdraw.walletAddress}`,
-    });
-    await this.userService.updateUserInfo(
-      { id: withdraw.userId },
-      {
-        totalBalance: user.totalBalance - withdraw.amount,
-      },
-    );
-    return withdrawal;
+      return withdrawal;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 }

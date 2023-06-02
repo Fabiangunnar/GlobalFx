@@ -12,6 +12,7 @@ export declare class DepositService {
     addPendingDeposit(data: Prisma.PendingDepositHistoryUncheckedCreateInput): Promise<PendingDepositHistory>;
     deletePendingDeposit(where: Prisma.PendingDepositHistoryWhereUniqueInput): Promise<PendingDepositHistory>;
     deleteMyPendingDeposits(where: Prisma.PendingDepositHistoryWhereInput): Promise<any>;
+    updatePendingDeposit(where: Prisma.PendingDepositHistoryWhereUniqueInput, data: Prisma.PendingDepositHistoryUncheckedCreateInput): Promise<PendingDepositHistory>;
     getAllPendingDeposits(): Promise<PendingDepositHistory[]>;
     getMyPendingDeposits(where: Prisma.PendingDepositHistoryWhereInput): Promise<PendingDepositHistory[]>;
     getPendingDeposit(where: Prisma.PendingDepositHistoryWhereUniqueInput): Promise<PendingDepositHistory>;

@@ -104,20 +104,24 @@ export class InvestmentController {
 
   @Get('/all')
   async getAllInvestments(): Promise<InvestmentHistory[]> {
-    const investments = await this.investmentService.getAllInvestments();
-    const users = await this.userService.getAllUsers();
+    try {
+      const investments = await this.investmentService.getAllInvestments();
+      const users = await this.userService.getAllUsers();
 
-    const newInvestments = investments.map((investment) => {
-      const { firstname, lastname } = users.find(
-        (user) => user.id === investment.userId,
-      );
-      return {
-        ...investment,
-        firstname,
-        lastname,
-      };
-    });
-    return newInvestments;
+      const newInvestments = investments.map((investment) => {
+        const { firstname, lastname } = users.find(
+          (user) => user.id === investment.userId,
+        );
+        return {
+          ...investment,
+          firstname,
+          lastname,
+        };
+      });
+      return newInvestments;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get('/my/:userId')
@@ -132,19 +136,23 @@ export class InvestmentController {
     @Param('id') id: string,
     @Body() investDto: InvestDto,
   ): Promise<InvestmentHistory> {
-    if (
-      investDto.status !== 'PENDING' &&
-      investDto.status !== 'VERIFIED' &&
-      investDto.status !== 'NOT_VERIFIED'
-    )
-      throw new HttpException(
-        `Can't set the status to ${investDto.status}`,
-        HttpStatus.BAD_REQUEST,
-      );
+    try {
+      if (
+        investDto.status !== 'PENDING' &&
+        investDto.status !== 'VERIFIED' &&
+        investDto.status !== 'NOT_VERIFIED'
+      )
+        throw new HttpException(
+          `Can't set the status to ${investDto.status}`,
+          HttpStatus.BAD_REQUEST,
+        );
 
-    return this.investmentService.updateInvestmentStatus(
-      { id },
-      { status: investDto.status },
-    );
+      return this.investmentService.updateInvestmentStatus(
+        { id },
+        { status: investDto.status },
+      );
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 }

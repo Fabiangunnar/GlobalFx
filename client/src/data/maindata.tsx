@@ -308,7 +308,7 @@ export const faqData = [
         id: "KLP59J",
         state: false,
         head: "DO YOU HAVE ANY COUNTRY RESTRICTIONS?",
-        desc: "Our company doesn't work and doesn't accept deposits from US residents. During the registration process you need to check the box that you are not a US citizen.",
+        desc: "Our company doesn't work and doesn't accept deposits from Russian residents. During the registration process you need to check the box that you are not a Russian citizen.",
       },
     ],
   },

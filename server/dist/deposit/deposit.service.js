@@ -60,6 +60,12 @@ let DepositService = class DepositService {
             where,
         });
     }
+    updatePendingDeposit(where, data) {
+        return this.prisma.pendingDepositHistory.update({
+            where,
+            data,
+        });
+    }
     getAllPendingDeposits() {
         return this.prisma.pendingDepositHistory.findMany();
     }

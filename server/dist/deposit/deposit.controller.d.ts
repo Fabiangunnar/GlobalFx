@@ -11,4 +11,5 @@ export declare class DepositController {
     getMyDepositHistory(userId: string): Promise<DepositHistory[]>;
     getMyPendingDeposits(userId: string): Promise<PendingDepositHistory[]>;
     verifyTransaction(deposit: DepositDto, id: string): Promise<DepositHistory | any>;
+    updateDeposit(deposit: DepositDto, id: string): Promise<DepositHistory | any>;
 }

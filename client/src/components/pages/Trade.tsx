@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "@/styles/pages/User.module.scss";
 import {
   Box,
@@ -16,25 +16,25 @@ import {
   Select,
   createStandaloneToast,
 } from "@chakra-ui/react";
-import { BiMoneyWithdraw } from "react-icons/bi";
-import { MdArrowDropDown } from "react-icons/md";
-import { GiTrade } from "react-icons/gi";
-import { SiCoinmarketcap } from "react-icons/si";
-import { useDispatch, useSelector } from "react-redux";
-import { setCurrentPage, setNavLink } from "@/redux-actions/homeNavSlice";
-import { RootState } from "@/redux-store/store";
-import { makeTrade, resetWithdrawalState } from "@/redux-actions/HomeAppSlice";
+import {BiMoneyWithdraw} from "react-icons/bi";
+import {MdArrowDropDown} from "react-icons/md";
+import {GiTrade} from "react-icons/gi";
+import {SiCoinmarketcap} from "react-icons/si";
+import {useDispatch, useSelector} from "react-redux";
+import {setCurrentPage, setNavLink} from "@/redux-actions/homeNavSlice";
+import {RootState} from "@/redux-store/store";
+import {makeTrade, resetWithdrawalState} from "@/redux-actions/HomeAppSlice";
 
 type Props = {};
 
 const Trade = (props: Props) => {
-  const { userInfo, withdrawalState, errorMessage } = useSelector(
+  const {userInfo, withdrawalState, errorMessage} = useSelector(
     (store: RootState) => store.HomeAppSlice
   );
   const [selectedAsset, setSelectedAsset] = useState("EUR/USD");
   const dispatch = useDispatch();
   const [isLoading, setisLoading] = useState(false);
-  const { toast } = createStandaloneToast();
+  const {toast} = createStandaloneToast();
   const [amount, setAmount] = useState(1000);
   const handleMakeTrade = (position: string) => {
     if (Number(userInfo?.totalBalance) < Number(amount)) {
@@ -122,7 +122,8 @@ const Trade = (props: Props) => {
                   width: "100%",
                 }}
                 src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_348fb&symbol=COINBASE%3ABTCUSD&interval=1&hidelegend=1&symboledit=1&saveimage=0&toolbarbg=f1f3f6&studies=%5B%5D&theme=dark&style=2&timezone=Etc%2FUTC&studies_overrides=%7B%7D&overrides=%7B%7D&enabled_features=%5B%5D&disabled_features=%5B%5D&locale=en&utm_source=pfi-my.com&utm_medium=widget&utm_campaign=chart&utm_term=COINBASE%3ABTCUSD#%7B%22page-uri%22%3A%22pfi-my.com%2Fdashboard%2F%3Floggin_success%22%7D"
-                frameBorder={4}></iframe>
+                frameBorder={4}
+              ></iframe>
             </Box>
           </Box>
         </div>
@@ -141,7 +142,8 @@ const Trade = (props: Props) => {
                 top={0}
                 left={0}
                 width={"100%"}
-                height={"100%"}>
+                height={"100%"}
+              >
                 {isLoading && (
                   <Progress
                     size="xs"
@@ -156,7 +158,8 @@ const Trade = (props: Props) => {
             <form
               action=""
               onSubmit={(e) => e.preventDefault()}
-              className={`${styles.form}`}>
+              className={`${styles.form}`}
+            >
               <FormControl p={2}>
                 <FormLabel fontSize={11}>Enter Trade Amount *</FormLabel>
                 <NumberInput value={amount} min={200}>
@@ -177,46 +180,104 @@ const Trade = (props: Props) => {
                   className={`${styles.input}`}
                   fontSize={14}
                   onChange={handleAssetChange}
-                  icon={<MdArrowDropDown />}>
+                  icon={<MdArrowDropDown />}
+                >
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="EUR/USD">
-                    EUR/USD
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/USD"
+                  >
+                    BTC/USD
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="GBP/JPY">
-                    GBP/JPY
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/USDT"
+                  >
+                    BTC/USDT
+                  </option>
+
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/ADA"
+                  >
+                    BTC/ADA
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="AUD/USD">
-                    AUD/USD
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/ETH"
+                  >
+                    BTC/ETH
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="USD/CAD">
-                    USD/CAD
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/DOGE"
+                  >
+                    BTC/DOGE
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="USD/JPY">
-                    USD/JPY
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="BTC/XLM"
+                  >
+                    BTC/XLM
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="EUR/GBP">
-                    EUR/GBP
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="ETH/BTC"
+                  >
+                    ETH/BTC
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="EUR/JPY">
-                    EUR/JPY
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="ETH/BCH"
+                  >
+                    ETH/BCH
                   </option>
                   <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="USD/NZD">
-                    USD/NZD
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="ETH/USDT"
+                  >
+                    ETH/USDT
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="ETH/LINK"
+                  >
+                    ETH/LINK
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="ETH/DOGE"
+                  >
+                    ETH/DOGE
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="USDT/BTC"
+                  >
+                    USDT/BTC
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="USDT/ETH"
+                  >
+                    USDT/ETH
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="USDT/DOGE"
+                  >
+                    USDT/DOGE
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="USDT/BCH"
+                  >
+                    USDT/BCH
+                  </option>
+                  <option
+                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    value="USDT/LTC"
+                  >
+                    USDT/LTC
                   </option>
                 </Select>
               </FormControl>
@@ -233,7 +294,8 @@ const Trade = (props: Props) => {
                     handleMakeTrade("SELL");
                   }}
                   color={"#fff"}
-                  background="tomato">
+                  background="tomato"
+                >
                   SELL
                 </Button>
                 <Button
@@ -247,7 +309,8 @@ const Trade = (props: Props) => {
                   onClick={() => {
                     handleMakeTrade("BUY");
                   }}
-                  colorScheme="whatsapp">
+                  colorScheme="whatsapp"
+                >
                   BUY
                 </Button>
               </Flex>
@@ -256,7 +319,7 @@ const Trade = (props: Props) => {
         </div>
         <Flex gap={4} p={0} paddingBlock={6} w="100%">
           <Button
-            onClick={() => handleClick("deposit-funds", { id: "YHB84Z" })}
+            onClick={() => handleClick("deposit-funds", {id: "YHB84Z"})}
             fontSize={14}
             type="submit"
             maxW={"20rem"}
@@ -265,11 +328,12 @@ const Trade = (props: Props) => {
               background: "#64d2b1",
             }}
             color={"#fff"}
-            background="#55b598">
+            background="#55b598"
+          >
             Deposits
           </Button>
           <Button
-            onClick={() => handleClick("withdrawals", { id: "RST48H" })}
+            onClick={() => handleClick("withdrawals", {id: "RST48H"})}
             fontSize={14}
             type="submit"
             maxW={"20rem"}
@@ -278,7 +342,8 @@ const Trade = (props: Props) => {
               background: "#64d2b1",
             }}
             color={"#fff"}
-            background="#759c49">
+            background="#759c49"
+          >
             Withdrawals
           </Button>
         </Flex>

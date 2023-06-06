@@ -372,7 +372,7 @@ export const updateAdminInfo: any = createAsyncThunk(
 
 export const logout: any = createAsyncThunk(
   "auth/logout",
-  async (userData, thunkApi) => {
+  async (_, thunkApi) => {
     try {
       if (window !== undefined) {
         localStorage.removeItem("admin");

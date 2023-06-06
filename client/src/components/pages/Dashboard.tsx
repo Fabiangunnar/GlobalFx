@@ -18,9 +18,10 @@ import {
   CardBody,
   Grid,
   Divider,
+  createStandaloneToast,
 } from "@chakra-ui/react";
 import {MdArrowDropDown} from "react-icons/md";
-import {AiOutlineToTop} from "react-icons/ai";
+import {AiOutlineSelect, AiOutlineToTop} from "react-icons/ai";
 import {IoCashSharp} from "react-icons/io5";
 import {GiProfit, GiTakeMyMoney, GiTrade} from "react-icons/gi";
 import {RiLuggageDepositFill} from "react-icons/ri";
@@ -30,15 +31,26 @@ import {SiCoinmarketcap} from "react-icons/si";
 import {
   getAllPendingDeposits,
   getUser,
+  makeInvestment,
   reset,
+  resetWithdrawalState,
 } from "@/redux-actions/HomeAppSlice";
 import {setCurrentPage, setNavLink} from "@/redux-actions/navSlice";
 type Props = {};
 
 const Dashboard = (props: Props) => {
-  const {userInfo, pendingDeposits, tradeHistory} = useSelector(
-    (store: RootState) => store.HomeAppSlice
-  );
+  const {
+    userInfo,
+    withdrawalState,
+    errorMessage,
+    pendingDeposits,
+    tradeHistory,
+  } = useSelector((store: RootState) => store.HomeAppSlice);
+  const [isLoad, setIsLoad] = React.useState(false);
+
+  const [amount, setAmount] = useState(1000);
+  const {toast} = createStandaloneToast();
+
   const sumofPendingDeposits = pendingDeposits.reduce((accumulator, obj) => {
     return accumulator + obj.amount;
   }, 0);
@@ -50,6 +62,7 @@ const Dashboard = (props: Props) => {
     dispatch(setNavLink(id));
     dispatch(setCurrentPage(link));
   };
+
   const [btcEq, setBtcEq] = useState(0);
   useEffect(() => {
     convertDollarToBTC(Number(userInfo?.totalBalance));
@@ -71,7 +84,68 @@ const Dashboard = (props: Props) => {
       return null;
     }
   }
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (Number(userInfo?.totalBalance) < Number(amount)) {
+      toast({
+        title: "Insufficient Funds",
+        description: "Make a deposit to continue your investment",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top-right",
+        variant: "subtle",
+      });
+      return;
+    }
+    dispatch(
+      makeInvestment({
+        userId: userInfo?.id,
+        amount,
+        plan: "PROMO",
+      })
+    );
+  };
 
+  const handleAmountChange = (e: any) => {
+    setAmount(e.target.value);
+  };
+  useEffect(() => {
+    if (withdrawalState.isSuccess) {
+      toast({
+        title: "Success.",
+        description: "Investment made successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+        variant: "subtle",
+      });
+      setIsLoad(false);
+      dispatch(getUser(userInfo?.id));
+    }
+    if (withdrawalState.isError) {
+      toast({
+        title: errorMessage?.statusCode,
+        description: errorMessage?.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        variant: "subtle",
+        position: "top-right",
+      });
+      setIsLoad(false);
+    }
+    if (withdrawalState.isLoading) {
+      setIsLoad(true);
+    }
+
+    dispatch(resetWithdrawalState());
+  }, [
+    withdrawalState.isError,
+    withdrawalState.isLoading,
+    withdrawalState.isSuccess,
+  ]);
   return (
     <div className={`${styles.manage_user_block} ${styles.manage_user_grid}`}>
       <section>
@@ -275,7 +349,7 @@ const Dashboard = (props: Props) => {
             <SiCoinmarketcap />
             <p>Market</p>
           </div>
-          <Box p={0} background={"#759c4930"}>
+          <Box p={0} h={"100%"} background={"#759c4930"}>
             <Box h={"100%"} minH={"25rem"} w={"100%"}>
               <iframe
                 style={{
@@ -322,103 +396,106 @@ const Dashboard = (props: Props) => {
           Withdrawals
         </Button>
       </Flex>
-      {/* <section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <AiOutlineToTop />
-            <p>Deposit Funds</p>
-          </div>
-          <Box p={2} background={"#759c4930"}>
-            <form action="" className={`${styles.form}`}>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Enter Trade Amount *</FormLabel>
-                <NumberInput defaultValue={1000} min={200}>
-                  <NumberInputField
-                    fontSize={16}
-                    className={`${styles.input}`}
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper color={"#fff"} />
-                    <NumberDecrementStepper color={"#fff"} />
-                  </NumberInputStepper>
-                </NumberInput>
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Select Asset *</FormLabel>
-                <Select
-                  className={`${styles.input}`}
-                  fontSize={14}
-                  icon={<MdArrowDropDown />}>
-                  <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="option1">
-                    Bitcoin
-                  </option>
-                  <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="option2">
-                    USDT
-                  </option>
-                  <option
-                    style={{ background: "rgba(32, 80, 79, 1)" }}
-                    value="option3">
-                    Ethereum
-                  </option>
-                </Select>
-              </FormControl>
-
-              <Box p={2} w="100%">
-                <Text fontSize={12}>
-                  You are provided with a very convenient method of depositing
-                  using Bitcoin, Ethereum and USDT
-                </Text>
-              </Box>
-            </form>
-          </Box>
-        </div>
-      </section>
       <section className={`${styles.user_block}`}>
         <div className={`${styles.management_block}`}>
           <div className={`${styles.management_head}`}>
-            <GiTrade />
-            <p>Promo Plan</p>
+            <AiOutlineSelect />
+            <p>Promo</p>
           </div>
           <Box p={2} background={"#759c4930"}>
-            <form action="" className={`${styles.form}`}>
-              <Flex justify={"center"} w={"100%"}>
-                <Text fontSize={12}>Ysfvw7dt6e7fefc763cge3cg98cy</Text>
-              </Flex>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Enter Amount *</FormLabel>
-                <NumberInput>
-                  <NumberInputField
-                    fontSize={16}
-                    className={`${styles.input}`}
-                    placeholder={`What's your plan`}
-                  />
-                  <NumberInputStepper>
-                    <NumberIncrementStepper color={"#fff"} />
-                    <NumberDecrementStepper color={"#fff"} />
-                  </NumberInputStepper>
-                </NumberInput>
-              </FormControl>
-              <FormControl p={2}>
-                <Button
-                  fontSize={14}
-                  type="submit"
-                  w="100%"
-                  _hover={{
-                    background: "#64d2b1",
-                  }}
-                  color={"#fff"}
-                  background="#55b598">
-                  Activate Promo
-                </Button>
-              </FormControl>
-            </form>
+            <Box p={2} w="100%">
+              <Text fontSize={{base: 12, sm: 14, md: 16}}>
+                Hey dear Big Investor! Wouldn't you like to come in our
+                extremely Accurate AI driven trade strategy? we promise 86.70%
+                yields if you enter at a minimum of $2000.00. THIS IS A TIME
+                LIMITED OFFER!
+              </Text>
+            </Box>
+
+            <Box p={2} background={""}>
+              <div className={`${styles.form}`}>
+                <Flex
+                  justify={"flex-start"}
+                  gap={2}
+                  w={"100%"}
+                  align={"center"}
+                >
+                  <Text fontSize={18}>Time:</Text>{" "}
+                  <Text fontSize={16}>72 Hours</Text>
+                </Flex>
+                <Flex
+                  justify={"flex-start"}
+                  gap={2}
+                  w={"100%"}
+                  align={"center"}
+                >
+                  <Text fontSize={18}>Profit:</Text>
+                  <Text fontSize={16}>85%</Text>
+                </Flex>
+                <Flex
+                  justify={"flex-start"}
+                  gap={2}
+                  w={"100%"}
+                  align={"center"}
+                >
+                  <Text fontSize={18}>Min:</Text>
+                  <Text fontSize={16}>$2000</Text>
+                </Flex>
+                <Flex
+                  justify={"flex-start"}
+                  gap={2}
+                  w={"100%"}
+                  align={"center"}
+                >
+                  <Text fontSize={18}>Max:</Text>
+                  <Text fontSize={16}>$20000</Text>
+                </Flex>
+                <Flex
+                  justify={"flex-start"}
+                  gap={2}
+                  w={"100%"}
+                  align={"center"}
+                >
+                  <Text fontSize={18}>Current Balance:</Text>
+                  <Text fontSize={16}>$0</Text>
+                </Flex>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <Flex direction={"column"} gap={4} py={2}>
+                  <FormControl>
+                    <FormLabel fontSize={11}>Enter Amount *</FormLabel>
+                    <NumberInput defaultValue={amount} min={100}>
+                      <NumberInputField
+                        onChange={handleAmountChange}
+                        fontSize={16}
+                        className={`${styles.input}`}
+                      />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper color={"#fff"} />
+                        <NumberDecrementStepper color={"#fff"} />
+                      </NumberInputStepper>
+                    </NumberInput>
+                  </FormControl>
+                  <FormControl>
+                    <Button
+                      fontSize={14}
+                      type="submit"
+                      w="100%"
+                      _hover={{
+                        background: "#64d2b1",
+                      }}
+                      color={"#fff"}
+                      background="#55b598"
+                    >
+                      Start Investment
+                    </Button>
+                  </FormControl>
+                </Flex>
+              </form>
+            </Box>
           </Box>
         </div>
-      </section> */}
+      </section>
     </div>
   );
 };

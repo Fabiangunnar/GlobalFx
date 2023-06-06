@@ -33,6 +33,7 @@ export class InvestmentController {
       if (
         investDto.plan !== 'BASIC' &&
         investDto.plan !== 'STANDARD' &&
+        investDto.plan !== 'PROMO' &&
         investDto.plan !== 'LUXURY'
       )
         throw new HttpException(
@@ -41,6 +42,17 @@ export class InvestmentController {
         );
       if (investDto.plan === 'BASIC') {
         if (Number(investDto.amount) < 500 || Number(investDto.amount) > 4500) {
+          throw new HttpException(
+            'Select within the required amount for this plan',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+      }
+      if (investDto.plan === 'PROMO') {
+        if (
+          Number(investDto.amount) < 2000 ||
+          Number(investDto.amount) > 20000
+        ) {
           throw new HttpException(
             'Select within the required amount for this plan',
             HttpStatus.BAD_REQUEST,

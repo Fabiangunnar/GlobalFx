@@ -45,7 +45,7 @@ const NewInvestments = (props: Props) => {
     if (Number(userInfo?.totalBalance) < Number(amount)) {
       toast({
         title: "Insufficient Funds",
-        description: "Make a Deposit to continue your investment",
+        description: "Make a deposit to continue your investment",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -189,7 +189,7 @@ const NewInvestments = (props: Props) => {
             <div className={`${styles.form}`}>
               <Flex
                 justify={"center"}
-                w={"40%"}
+                w={"50%"}
                 p={4}
                 paddingInline={6}
                 gap={2}
@@ -203,7 +203,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Duration :</Text>{" "}
+                      <Text fontSize={18}>Duration:</Text>{" "}
                       <Text fontSize={14} fontWeight={600}>
                         7 Days
                       </Text>
@@ -214,7 +214,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Profit :</Text>
+                      <Text fontSize={18}>Profit:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         450%
                       </Text>
@@ -225,7 +225,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Min :</Text>
+                      <Text fontSize={18}>Min:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         $500
                       </Text>
@@ -236,7 +236,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Max :</Text>
+                      <Text fontSize={18}>Max:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         $4500
                       </Text>
@@ -250,7 +250,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Duration :</Text>{" "}
+                      <Text fontSize={18}>Duration:</Text>{" "}
                       <Text fontSize={14} fontWeight={600}>
                         7 Days
                       </Text>
@@ -261,7 +261,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Profit :</Text>
+                      <Text fontSize={18}>Profit:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         450%
                       </Text>
@@ -272,7 +272,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Min :</Text>
+                      <Text fontSize={18}>Min:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         $5000
                       </Text>
@@ -283,7 +283,7 @@ const NewInvestments = (props: Props) => {
                       w={"100%"}
                       align={"center"}
                     >
-                      <Text fontSize={18}>Max :</Text>
+                      <Text fontSize={18}>Max:</Text>
                       <Text fontSize={14} fontWeight={600}>
                         $14000
                       </Text>

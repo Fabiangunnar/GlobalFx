@@ -131,8 +131,9 @@ export function WithdrawMessageModal({overlay, isOpen, onClose}: any) {
 
           <ModalBody textAlign={"center"} pb={8}>
             <Text fontSize={14}>
-              Kindly Wait for 72 hours for your withdrawal to be processed and
-              confirmed
+              Your withdrawal is pending! your active robotic signal your trade
+              section exceeded limit. Contact your account manager for
+              further information.
             </Text>
           </ModalBody>
         </ModalContent>

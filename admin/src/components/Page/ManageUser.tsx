@@ -104,7 +104,9 @@ const ManageUser = (props: Props) => {
     second: "numeric",
     timeZoneName: "short",
   };
-
+  const sumofDeposits = manageUserDeposits.reduce((accumulator, obj) => {
+    return accumulator + obj.amount;
+  }, 0);
   const formattedDate = `${date.toLocaleDateString("en-US", options)}`;
   const formattedDate2 = `${date2.toLocaleDateString("en-US", options)}`;
   const handleChangeAccountState = () => {
@@ -172,7 +174,7 @@ const ManageUser = (props: Props) => {
         position: "top-right",
       });
       setisLoading2(false);
-      dispatch(getUser());
+      dispatch(getUser(userManageData?.id));
     }
     if (usersState.isError) {
       toast({
@@ -214,8 +216,7 @@ const ManageUser = (props: Props) => {
         position: "top-right",
       });
       const x = async () => {
-        dispatch(getAllDeposits());
-
+        dispatch(getMyUserDeposits(userManageData?.id));
         dispatch(getUser(userManageData?.id));
         setisLoading(false);
         setNotifFormData({message: ""});
@@ -250,8 +251,8 @@ const ManageUser = (props: Props) => {
         isClosable: true,
         position: "top-right",
       });
-      dispatch(getAllDeposits());
-
+      dispatch(getUser(userManageData?.id));
+      dispatch(getMyUserDeposits(userManageData?.id));
       setisLoading(false);
       setNotifFormData({message: ""});
     }
@@ -283,6 +284,7 @@ const ManageUser = (props: Props) => {
         position: "top-right",
       });
       dispatch(getMyUserDeposits(userManageData?.id));
+      dispatch(getUser(userManageData?.id));
       setisLoading(false);
     }
     if (updateDepositState.isError) {
@@ -372,9 +374,7 @@ const ManageUser = (props: Props) => {
               <Text fontSize="sm">
                 Available Balance: ${userManageData.totalBalance}
               </Text>
-              <Text fontSize="sm">
-                Total Deposit: ${userManageData.totalDeposit}{" "}
-              </Text>
+              <Text fontSize="sm">Total Deposit: ${sumofDeposits} </Text>
               <Text fontSize="sm">
                 Total Profit: ${userManageData.totalProfit}{" "}
               </Text>

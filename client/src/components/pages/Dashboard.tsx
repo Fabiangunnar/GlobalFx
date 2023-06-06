@@ -29,6 +29,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/redux-store/store";
 import {SiCoinmarketcap} from "react-icons/si";
 import {
+  getAllDeposits,
   getAllPendingDeposits,
   getUser,
   makeInvestment,
@@ -45,6 +46,7 @@ const Dashboard = (props: Props) => {
     errorMessage,
     pendingDeposits,
     tradeHistory,
+    depositHistory,
   } = useSelector((store: RootState) => store.HomeAppSlice);
   const [isLoad, setIsLoad] = React.useState(false);
 
@@ -52,6 +54,9 @@ const Dashboard = (props: Props) => {
   const {toast} = createStandaloneToast();
 
   const sumofPendingDeposits = pendingDeposits.reduce((accumulator, obj) => {
+    return accumulator + obj.amount;
+  }, 0);
+  const sumofDeposits = depositHistory.reduce((accumulator, obj) => {
     return accumulator + obj.amount;
   }, 0);
   const sumofAllTrades = tradeHistory.reduce((accumulator, obj) => {
@@ -66,7 +71,7 @@ const Dashboard = (props: Props) => {
   const [btcEq, setBtcEq] = useState(0);
   useEffect(() => {
     convertDollarToBTC(Number(userInfo?.totalBalance));
-
+    dispatch(getAllDeposits(userInfo?.id));
     // dispatch(reset());
   }, []);
 
@@ -280,7 +285,7 @@ const Dashboard = (props: Props) => {
               />
               <Text color={"#ffd700"} fontSize={[12, 13, 14]}>
                 $
-                {userInfo?.totalDeposit?.toLocaleString("en-US", {
+                {sumofDeposits.toLocaleString("en-US", {
                   style: "decimal",
                 })}
               </Text>

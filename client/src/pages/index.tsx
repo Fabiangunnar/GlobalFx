@@ -126,7 +126,11 @@ export default function Home() {
         <title>GLOBAL TYCOON FX</title>
         <meta
           name="description"
-          content="the landing page of premim financial investment"
+          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+        />
+        <meta
+          name="keywords"
+          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
         />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />

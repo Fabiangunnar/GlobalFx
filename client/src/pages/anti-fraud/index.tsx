@@ -92,8 +92,14 @@ export default function Home() {
     <>
       <Head>
         <title>ANTI-FRAUD | GLOBAL TYCOON FX</title>
-        <meta name="description" content="My page is here" />
-
+        <meta
+          name="description"
+          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+        />
+        <meta
+          name="keywords"
+          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx anti-fraud, anti-fraud globaltycoonfx, antifraud anti fraud, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
       </Head>

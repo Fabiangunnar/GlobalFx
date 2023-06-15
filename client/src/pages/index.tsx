@@ -130,7 +130,7 @@ export default function Home() {
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx.com,global fx, fx global, tycoon fx , tycoon global, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
         />
 
         <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -22,6 +22,7 @@ import {
   Link,
   Text,
   Textarea,
+  createStandaloneToast,
 } from "@chakra-ui/react";
 import TopWidget from "@/components/pages/TopWidget";
 import BottomWidget from "@/components/pages/BottomWidget";
@@ -40,6 +41,7 @@ const inter = Inter({subsets: ["latin"]});
 export default function Index() {
   const dispatch = useDispatch();
   const sideNavRef: any = useRef();
+  const {toast} = createStandaloneToast();
   const [isLoad, setIsLoad] = useState(false);
   const {adminAccounts} = useSelector((store: RootState) => store.HomeAppSlice);
   const adminAccount = adminAccounts[0];
@@ -55,10 +57,21 @@ export default function Index() {
   const handleEmailSubmit = async (e: any) => {
     e.preventDefault();
     setIsLoad(true);
-    console.log("jksdj");
-    const res = await sendContactForm(emailData);
-    console.log(res);
-    res.success && setIsLoad(false);
+    await sendContactForm(emailData);
+    setIsLoad(false);
+    toast({
+      title: "Success.",
+      description: "Mail Sent Successfully",
+      status: "success",
+      duration: 2000,
+      isClosable: true,
+      position: "top-right",
+      variant: "subtle",
+    });
+    setEmailData({
+      addressto: "",
+      message: "",
+    });
   };
   useEffect(() => {
     const navState = localStorage.getItem("home-nav");
@@ -94,10 +107,9 @@ export default function Index() {
         <link rel="icon" href="/logo2-transparent.png" />
       </Head>
       <MainLayout>
+        {isLoad && <SpinnerPage />}
         <div>
           <main className={` ${pagestyles.body}`}>
-            {isLoad && <SpinnerPage />}
-
             <div
               className={` ${pagestyles.contacts_top_head} ${pagestyles.top_head}`}
             >

@@ -54,7 +54,6 @@ import MainLayout from "../layout/Mainlayout";
 
 // import "swiper/css/pagination";
 // import "swiper/css/bundle";
-const inter = Inter({subsets: ["latin"]});
 
 export default function Home() {
   const dispatch = useDispatch();

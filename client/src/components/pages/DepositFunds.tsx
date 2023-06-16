@@ -168,21 +168,21 @@ const DepositFunds = (props: Props) => {
                     {selectedAsset === "BTC" ? (
                       <QRCode
                         value={account.btc}
-                        size={240}
+                        size={260}
                         fgColor="#000000"
                         bgColor="transparent"
                       />
                     ) : selectedAsset === "USDT" ? (
                       <QRCode
                         value={account.usdt}
-                        size={240}
+                        size={260}
                         fgColor="#000000"
                         bgColor="transparent"
                       />
                     ) : (
                       <QRCode
                         value={account.eth}
-                        size={300}
+                        size={260}
                         fgColor="#000000"
                         bgColor="transparent"
                       />

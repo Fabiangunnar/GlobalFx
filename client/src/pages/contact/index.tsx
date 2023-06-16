@@ -32,12 +32,15 @@ import {RootState} from "@/redux-store/store";
 import {IoMailOutline} from "react-icons/io5";
 import {CiInstagram, CiTwitter} from "react-icons/ci";
 import {MdEmail, MdOutlineWhatsapp} from "react-icons/md";
+import {sendContactForm} from "@/lib/api";
+import SpinnerPage from "@/components/home/Spinner";
 
 const inter = Inter({subsets: ["latin"]});
 
 export default function Index() {
   const dispatch = useDispatch();
   const sideNavRef: any = useRef();
+  const [isLoad, setIsLoad] = useState(false);
   const {adminAccounts} = useSelector((store: RootState) => store.HomeAppSlice);
   const adminAccount = adminAccounts[0];
   const [emailData, setEmailData] = useState({
@@ -49,7 +52,14 @@ export default function Index() {
       dispatch(closeNav());
     }
   };
-  const handleEmailSubmit = (e: any) => {};
+  const handleEmailSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsLoad(true);
+    console.log("jksdj");
+    const res = await sendContactForm(emailData);
+    console.log(res);
+    res.success && setIsLoad(false);
+  };
   useEffect(() => {
     const navState = localStorage.getItem("home-nav");
     let navstate = navState ? JSON.parse(navState) : null;
@@ -86,6 +96,8 @@ export default function Index() {
       <MainLayout>
         <div>
           <main className={` ${pagestyles.body}`}>
+            {isLoad && <SpinnerPage />}
+
             <div
               className={` ${pagestyles.contacts_top_head} ${pagestyles.top_head}`}
             >

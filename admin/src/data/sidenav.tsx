@@ -3,9 +3,10 @@ import {AiOutlineBarChart, AiFillCodeSandboxSquare} from "react-icons/ai";
 import {RiLuggageDepositFill} from "react-icons/ri";
 import {GiTrade} from "react-icons/gi";
 import {BiMoneyWithdraw} from "react-icons/bi";
-import {TfiTicket} from "react-icons/tfi";
+import {TfiEmail, TfiTicket} from "react-icons/tfi";
 import {IoSettings} from "react-icons/io5";
 import {CiLogout} from "react-icons/ci";
+import {BsSendCheck} from "react-icons/bs";
 export interface NavTypes {
   id: string;
   icon: string;
@@ -24,10 +25,17 @@ export const navData: NavTypes[] = [
   },
   {
     id: "PDQ30F",
-    icon: "HiUsers",
+    icon: "TfiEmail",
     desc: "Mail",
     state: false,
     livelink: "https://outlook.office.com/mail/",
+  },
+  {
+    id: "PDQM0F",
+    icon: "BsSendCheck",
+    desc: "Send Mail",
+    state: false,
+    link: "send-mail",
   },
   {
     id: "YHB84Z",
@@ -99,10 +107,14 @@ export const getIconComponent = (iconName: string) => {
       return <AiOutlineBarChart fontSize={18} />;
     case "GiTrade":
       return <GiTrade fontSize={18} />;
+    case "BsSendCheck":
+      return <BsSendCheck fontSize={18} />;
     case "BiMoneyWithdraw":
       return <BiMoneyWithdraw fontSize={18} />;
     case "TfiTicket":
       return <TfiTicket fontSize={18} />;
+    case "TfiEmail":
+      return <TfiEmail fontSize={18} />;
     case "AiFillCodeSandboxSquare":
       return <AiFillCodeSandboxSquare fontSize={18} />;
     case "IoSettings":

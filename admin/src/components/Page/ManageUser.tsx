@@ -661,7 +661,7 @@ const ManageUser = (props: Props) => {
           </div>
 
           <Box p={2}>
-            <form action="" onClick={handleSendNotifications}>
+            <form action="" onSubmit={handleSendNotifications}>
               <FormControl p={2}>
                 <Text mb="8px" fontSize={11}>
                   Message:{" "}

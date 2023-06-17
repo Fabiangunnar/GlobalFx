@@ -27,6 +27,7 @@ const SideNav = (props: Props) => {
             if (item.livelink) {
               return (
                 <Link
+                  key={item.id}
                   href={`${item.livelink}`}
                   target="_blank"
                   style={{

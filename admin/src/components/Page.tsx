@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import User from "./Page/User";
 import Investments from "./Page/Investments";
 import Deposits from "./Page/Deposits";
@@ -10,35 +10,38 @@ import Kyc from "./Page/Kyc";
 import Settings from "./Page/Settings";
 import Logout from "./Page/Logout";
 import ManageUser from "./Page/ManageUser";
+import SendMail from "./Page/SendMail";
 
 type Props = {};
 
 const Page = () => {
-	const { currentPage } = useSelector((state: any) => state.nav);
+  const {currentPage} = useSelector((state: any) => state.nav);
 
-	switch (currentPage) {
-		case "user":
-			return <User />;
-		case "investments":
-			return <Investments />;
-		case "deposits":
-			return <Deposits />;
-		case "trades":
-			return <Trades />;
-		case "withdrawals":
-			return <Withdrawals />;
-		case "support":
-			return <Support />;
-		case "kyc":
-			return <Kyc />;
-		case "settings":
-			return <Settings />;
-		case "logout":
-			return <Logout />;
-		case "manage-user":
-			return <ManageUser />;
-	}
-	return <div>ghfg</div>;
+  switch (currentPage) {
+    case "user":
+      return <User />;
+    case "investments":
+      return <Investments />;
+    case "deposits":
+      return <Deposits />;
+    case "trades":
+      return <Trades />;
+    case "withdrawals":
+      return <Withdrawals />;
+    case "support":
+      return <Support />;
+    case "kyc":
+      return <Kyc />;
+    case "settings":
+      return <Settings />;
+    case "logout":
+      return <Logout />;
+    case "manage-user":
+      return <ManageUser />;
+    case "send-mail":
+      return <SendMail />;
+  }
+  return <div>ghfg</div>;
 };
 
 export default Page;

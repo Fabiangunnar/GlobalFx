@@ -9,7 +9,7 @@
 ::-webkit-scrollbar-track {
   border-radius: 1px;
   background: rgba(0, 0, 0, 0.15) !important;
-  display: none;
+  display: none !important;
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -17,13 +17,12 @@
   border-radius: 2px !important;
 
   cursor: pointer;
-  display: none;
+  display: none !important;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
   background: #203650;
-  display: none;
 }
 
 header {

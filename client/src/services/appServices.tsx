@@ -82,7 +82,7 @@ export const GetAllNotifications = async (id: string) => {
   return data;
 };
 export const GetAllDeposits = async (id: string) => {
-  const {data} = await API.get(`/deposit/all/${id}`);
+  const {data} = await API.get(`/deposit/allmy/${id}`);
 
   return data;
 };

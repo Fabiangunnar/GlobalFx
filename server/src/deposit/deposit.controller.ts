@@ -70,7 +70,7 @@ export class DepositController {
       throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
-  @Get('/all/:userId')
+  @Get('/allmy/:userId')
   async getMyDepositHistory(
     @Param('userId') userId: string,
   ): Promise<DepositHistory[]> {

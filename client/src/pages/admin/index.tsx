@@ -11,6 +11,7 @@ import Header from "@/components/pages/Header";
 import {useRouter} from "next/router";
 import {
   getAdminAccounts,
+  getAllDeposits,
   getAllNotifications,
   getAllPendingDeposits,
   getMyInvestments,
@@ -65,6 +66,7 @@ const Index = (props: Props) => {
         await dispatch(getAllPendingDeposits(user?.id));
         await dispatch(getMyTrades(user?.id));
         await dispatch(getMyInvestments(user?.id));
+        dispatch(getAllDeposits(user?.id));
       };
       run();
     }

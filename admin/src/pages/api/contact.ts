@@ -50,6 +50,7 @@ export default async function handler(
                 min-height: 100%;
                 overflow-x: hidden;
                 text-align: center;
+                width: 100%;
               }
               .section_one {
                 background: #0e1113;
@@ -82,7 +83,7 @@ export default async function handler(
                   font-size: 1.2rem !important;
                 }
                 .top_head {
-                  height: 5rem !important;
+                  min-height: 4rem !important;
                 }
                 p {
                   font-size: 0.8rem;
@@ -93,7 +94,7 @@ export default async function handler(
                   font-size: 1.2rem !important;
                 }
                 .top_head {
-                  height: 6rem !important;
+                  min-height: 4rem !important;
                 }
                 p {
                   font-size: 1rem;
@@ -136,7 +137,7 @@ export default async function handler(
               }
               .top_head {
                 width: 100%;
-                height: 6rem;
+                min-height: 4rem !important;
                 position: relative;
                 display: flex;
                 flex-direction: column;

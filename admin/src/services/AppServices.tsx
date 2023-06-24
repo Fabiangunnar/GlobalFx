@@ -58,7 +58,7 @@ export const GetAllUsersApi = async () => {
   return data;
 };
 export const GetMyUserApi = async (id: string) => {
-  const {data} = await API.get(`/deposit/all/${id}`);
+  const {data} = await API.get(`/deposit/allmy/${id}`);
 
   return data;
 };

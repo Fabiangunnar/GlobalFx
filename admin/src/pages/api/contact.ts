@@ -283,7 +283,7 @@ export default async function handler(
       });
       await transporter.sendMail({
         ...mailOptions,
-        to: process.env.EMAIL,
+        to: "support@globaltycoonfx.com",
         subject: `Copy of mail sent to ${formData.addressto}`,
         text: `${formData.message}`,
         html: `

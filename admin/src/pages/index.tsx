@@ -9,7 +9,12 @@ import {useSelector, useDispatch} from "react-redux";
 import {useEffect, useRef} from "react";
 import {closeNav} from "@/redux-actions/navSlice";
 import {useRouter} from "next/router";
-import {getAdmin, setAdminInfo} from "@/redux-actions/AppSlice";
+import {
+  getAdmin,
+  getAllDeposits,
+  getAllUsers,
+  setAdminInfo,
+} from "@/redux-actions/AppSlice";
 
 const inter = Inter({subsets: ["latin"]});
 
@@ -38,6 +43,10 @@ export default function Home() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+  useEffect(() => {
+    dispatch(getAllUsers());
+    dispatch(getAllDeposits());
+  });
 
   useEffect(() => {
     const storedUser = localStorage.getItem("admin");

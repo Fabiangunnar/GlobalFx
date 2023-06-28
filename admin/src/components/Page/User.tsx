@@ -47,18 +47,19 @@ const User = () => {
   const dispatch = useDispatch();
   const indexOfLastPost = currentPostPage * postsPerPage;
   const indexofFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = users.slice(indexofFirstPost, indexOfLastPost);
+  const allUsers = [...users].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+
+    return dateB.getTime() - dateA.getTime();
+  });
+  const currentPosts = allUsers.slice(indexofFirstPost, indexOfLastPost);
   const handlePostsPerPage = (page: number) => {};
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const paginate = (number: any) => {
     // setCurrentPage(number);
   };
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-    dispatch(getAllDeposits());
-  }, [dispatch]);
 
   const handleUserManageData = (manageUser: string, user: UserTypes) => {
     dispatch(setCurrentPage(manageUser));

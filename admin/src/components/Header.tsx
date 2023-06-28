@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { HiOutlineBars3BottomRight } from "react-icons/hi2";
+import React, {useEffect, useState} from "react";
+import {HiOutlineBars3BottomRight} from "react-icons/hi2";
 import styles from "@/styles/Header.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { setOpenNav } from "@/redux-actions/navSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {setOpenNav, setPrevPage} from "@/redux-actions/navSlice";
 import {
   Button,
   Flex,
   createStandaloneToast,
   useDisclosure,
 } from "@chakra-ui/react";
-import { RootState } from "@/redux-store/store";
-import { getCode, resetCodeState } from "@/redux-actions/AppSlice";
+import {RootState} from "@/redux-store/store";
+import {getCode, resetCodeState} from "@/redux-actions/AppSlice";
 import SpinnerPage from "./Page/Spinner";
 import ModalPage from "./Page/ModalPage";
+import {AiOutlineRollback} from "react-icons/ai";
 type Props = {};
 
 const Header = (props: Props) => {
-  const { getCodeState, withdrawalCode, errorMessage } = useSelector(
+  const {getCodeState, withdrawalCode, errorMessage} = useSelector(
     (state: RootState) => state.AppSlice
   );
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const { toast } = createStandaloneToast();
+  const {prevPage} = useSelector((state: RootState) => state.nav);
+  const {isOpen, onOpen, onClose} = useDisclosure();
+  const {toast} = createStandaloneToast();
   const [isLoading, setisLoading] = useState(false);
   const dispatch = useDispatch();
   const [code, setCode] = useState();
@@ -66,14 +67,25 @@ const Header = (props: Props) => {
       {isLoading && <SpinnerPage />}
       <ModalPage isOpen={isOpen} onClose={onClose} />
       <div className={`${styles.top_nav}`}>
-        <Flex w={"100%"} justify={"center"}>
+        <Flex w={"100%"} justify={"flex-start"}>
+          <Button
+            onClick={() => dispatch(setPrevPage())}
+            isDisabled={prevPage.length <= 1}
+            color={"#000"}
+            size={"sm"}
+          >
+            <AiOutlineRollback />
+          </Button>
+        </Flex>
+        <Flex w={"100%"} justify={"flex-start"}>
           <Button color={"#000"} onClick={handleGetCode}>
             CODE
           </Button>
         </Flex>
         <span
           className={`${styles.menu_bar} ${styles.mobile}`}
-          onClick={handleOpenNav}>
+          onClick={handleOpenNav}
+        >
           <HiOutlineBars3BottomRight />
         </span>
       </div>

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import styles from "@/styles/pages/User.module.scss";
 import {
   Box,
@@ -22,9 +22,9 @@ import {
   createStandaloneToast,
 } from "@chakra-ui/react";
 import Pagination from "../Pagination";
-import { useDispatch, useSelector } from "react-redux";
-import { RiLuggageDepositFill } from "react-icons/ri";
-import { RootState } from "@/redux-store/store";
+import {useDispatch, useSelector} from "react-redux";
+import {RiLuggageDepositFill} from "react-icons/ri";
+import {RootState} from "@/redux-store/store";
 import {
   getAllDeposits,
   resetSendState,
@@ -35,19 +35,25 @@ import SpinnerPage from "./Spinner";
 type Props = {};
 
 const Deposits = (props: Props) => {
-  const { deposits, users, sendState, errorMessage } = useSelector(
+  const {deposits, users, sendState, errorMessage} = useSelector(
     (state: RootState) => state.AppSlice
   );
 
   const dispatch = useDispatch();
-  const { toast } = createStandaloneToast();
+  const {toast} = createStandaloneToast();
   const [isLoading, setisLoading] = useState(false);
   const [transactionState, setTransactionState] = useState("PENDING");
   const [postsPerPage, sePostsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexofFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = deposits.slice(indexofFirstPost, indexOfLastPost);
+  const allDeposits = [...deposits].sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+
+    return dateB.getTime() - dateA.getTime();
+  });
+  const currentPosts = allDeposits.slice(indexofFirstPost, indexOfLastPost);
 
   const handleTransactionStateChange = (e: any) => {
     if (e.target.value === "") return;
@@ -155,7 +161,8 @@ const Deposits = (props: Props) => {
                             <Text
                               fontSize={14}
                               fontWeight={"bold"}
-                              color="#3a7ae0">
+                              color="#3a7ae0"
+                            >
                               PENDING
                             </Text>
                           ) : deposit.transactionState === "NOT_VERIFIED" ? (
@@ -163,7 +170,8 @@ const Deposits = (props: Props) => {
                               size={"sm"}
                               fontSize={14}
                               fontWeight={"bold"}
-                              color="red">
+                              color="red"
+                            >
                               REJECTED
                             </Text>
                           ) : (
@@ -171,7 +179,8 @@ const Deposits = (props: Props) => {
                               size={"sm"}
                               fontSize={14}
                               fontWeight={"bold"}
-                              color="#248724">
+                              color="#248724"
+                            >
                               VERIFIED
                             </Text>
                           )}
@@ -182,7 +191,8 @@ const Deposits = (props: Props) => {
                             direction={"column"}
                             gap={1}
                             align={"center"}
-                            minW={"6rem"}>
+                            minW={"6rem"}
+                          >
                             <Select
                               cursor={"pointer"}
                               fontSize={11}
@@ -193,7 +203,8 @@ const Deposits = (props: Props) => {
                                   ? "REJECTED"
                                   : deposit.transactionState
                               }
-                              size="sm">
+                              size="sm"
+                            >
                               {deposit.transactionState !== "PENDING" && (
                                 <option>PENDING</option>
                               )}
@@ -214,7 +225,8 @@ const Deposits = (props: Props) => {
                                   transactionState,
                                 })
                               }
-                              colorScheme="whatsapp">
+                              colorScheme="whatsapp"
+                            >
                               Update
                             </Button>
                           </Flex>

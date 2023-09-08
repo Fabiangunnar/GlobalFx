@@ -13,6 +13,7 @@ import {RootState} from "@/redux-store/store";
 import styles from "@/styles/home/Header.module.scss";
 import {Box, Card, CardBody, Divider, Flex, Text} from "@chakra-ui/react";
 import {useRouter} from "next/router";
+import {usePathname} from "next/navigation";
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import {RxHamburgerMenu} from "react-icons/rx";
 import {useDispatch, useSelector} from "react-redux";
@@ -21,6 +22,7 @@ type Props = {};
 const Header = (props: Props) => {
   const {openNav, navData} = useSelector((state: RootState) => state.homenav);
   const dispatch = useDispatch();
+  const pathname = usePathname();
   const [subNav, setSubNav] = useState(false);
   const [mobileSubNav, setMobileSubNav] = useState(false);
   const subnavref: any = useRef();
@@ -80,7 +82,7 @@ const Header = (props: Props) => {
             return (
               <li
                 onMouseOver={() => setSubNav(false)}
-                className={item.state ? styles.active : ""}
+                className={item.link === pathname ? styles.active : ""}
                 key={item.id}
                 onClick={() => handleChangeNav(`${item.link}`, item)}
               >
@@ -131,7 +133,7 @@ const Header = (props: Props) => {
               return (
                 <li key={item.id} ref={subnavref}>
                   <span
-                    className={item.state ? styles.active : ""}
+                    className={item.link === pathname ? styles.active : ""}
                     onMouseOver={() => setSubNav(true)}
                   >
                     <span>{item.head}</span>
@@ -185,7 +187,7 @@ const Header = (props: Props) => {
             } else {
               return (
                 <li
-                  className={item.state ? styles.active : ""}
+                  className={item.link === pathname ? styles.active : ""}
                   key={item.id}
                   onMouseOver={() => setSubNav(false)}
                   onClick={() => handleChangeNav(`${item.link}`, item)}
@@ -270,7 +272,9 @@ const Header = (props: Props) => {
                       return (
                         <li
                           key={sub.id}
-                          className={sub.state ? styles.active : ""}
+                          className={
+                            item.link === pathname ? styles.active : ""
+                          }
                           onClick={() => {
                             setMobileSubNav((prev) => !prev);
                             handleChangeNav(`${sub.link}`, item, "", true, sub);
@@ -287,7 +291,7 @@ const Header = (props: Props) => {
                 return (
                   <Fragment key={item.id}>
                     <li
-                      className={item.state ? styles.active : ""}
+                      className={item.link === pathname ? styles.active : ""}
                       key={item.id}
                       onClick={() => handleChangeNav(`${item.link}`, item)}
                       style={{gap: "0.4rem", display: "flex"}}

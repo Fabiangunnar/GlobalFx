@@ -563,7 +563,7 @@ export default function Home() {
                                     whiteSpace={"nowrap"}
                                     fontSize={[12, 14, 14, 18, 20]}
                                   >
-                                    {investmentPlan.prop2}
+                                    {investmentPlan?.prop2}
                                   </Box>
                                 </Flex>
                                 <Flex
@@ -572,7 +572,7 @@ export default function Home() {
                                   align={"center"}
                                 >
                                   <Text fontSize={[12, 14, 16, 18]}>
-                                    {investmentPlan.prop3}
+                                    {investmentPlan?.prop3}
                                   </Text>
                                 </Flex>
                                 <Flex

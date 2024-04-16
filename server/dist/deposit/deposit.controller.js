@@ -16,15 +16,39 @@ exports.DepositController = void 0;
 const common_1 = require("@nestjs/common");
 const deposit_service_1 = require("./deposit.service");
 const user_service_1 = require("../user/user.service");
+const create_deposit_dto_1 = require("./dto/create-deposit.dto");
+const update_deposit_dto_1 = require("./dto/update-deposit.dto");
 let DepositController = class DepositController {
     constructor(depositService, userService) {
         this.depositService = depositService;
         this.userService = userService;
     }
+    async createUserDeposit(deposit, userId) {
+        try {
+            const user = await this.userService.getUser({ id: userId });
+            if (!user)
+                throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
+            const depositData = await this.depositService.createDeposit({
+                asset: `${deposit.asset ? deposit.asset : 'BTC'}`,
+                amount: Number(deposit.amount),
+                userId: `${userId}`,
+                to: `${deposit.to}`,
+            });
+            if (depositData) {
+                await this.depositService.addPendingDeposit({
+                    amount: Number(deposit.amount),
+                    userId: `${deposit.userId}`,
+                    depositId: `${depositData.id}`,
+                });
+            }
+            return depositData;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
     async createDeposit(deposit) {
         try {
-            if (!deposit.asset || !deposit.amount || !deposit.userId || !deposit.to)
-                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
             const user = await this.userService.getUser({ id: deposit.userId });
             if (!user)
                 throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
@@ -53,9 +77,19 @@ let DepositController = class DepositController {
             const users = await this.userService.getAllUsers();
             const newDeposits = allDeposits.map((depositHistory) => {
                 const { firstname, lastname } = users.find((user) => user.id === depositHistory.userId);
-                return Object.assign(Object.assign({}, depositHistory), { firstname, lastname });
+                return { ...depositHistory, firstname, lastname };
             });
             return newDeposits;
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
+    async getMyVerifiedDepositHistory(userId) {
+        try {
+            if (!userId)
+                throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
+            return this.depositService.getMyVerifiedDepositHistory({ userId });
         }
         catch (error) {
             throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
@@ -134,12 +168,49 @@ let DepositController = class DepositController {
             throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
         }
     }
+    async deleteMyDeposit(id) {
+        try {
+            const depositState = await this.depositService.getDepositHistory({ id });
+            const pendingDeposit = await this.depositService.getPendingDeposit({
+                depositId: depositState.id,
+            });
+            const user = await this.userService.getUser({ id: depositState.userId });
+            if (pendingDeposit) {
+                await this.userService.updateUserInfo({ id: user.id }, {
+                    totalBalance: user.totalBalance - depositState.amount,
+                });
+                await this.depositService.deletePendingDeposit({
+                    depositId: depositState.id,
+                });
+                await this.depositService.deleteMyDeposit({ id });
+                return this.depositService.getMyDepositHistory({ id: user.id });
+            }
+            await this.userService.updateUserInfo({ id: user.id }, {
+                totalDeposit: user.totalDeposit - depositState.amount,
+                totalBalance: user.totalBalance - depositState.amount,
+            });
+            await this.depositService.deleteMyDeposit({ id });
+            return this.depositService.getMyDepositHistory({ id: user.id });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
 };
+exports.DepositController = DepositController;
+__decorate([
+    (0, common_1.Post)('/user/:userId/'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [update_deposit_dto_1.UpdateDepositDto, String]),
+    __metadata("design:returntype", Promise)
+], DepositController.prototype, "createUserDeposit", null);
 __decorate([
     (0, common_1.Post)('/'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_deposit_dto_1.CreateDepositDto]),
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "createDeposit", null);
 __decorate([
@@ -149,7 +220,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "getAllDepositHistory", null);
 __decorate([
-    (0, common_1.Get)('/all/:userId'),
+    (0, common_1.Get)('/user/verified/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], DepositController.prototype, "getMyVerifiedDepositHistory", null);
+__decorate([
+    (0, common_1.Get)('/user/:userId'),
     __param(0, (0, common_1.Param)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -167,7 +245,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [update_deposit_dto_1.UpdateDepositDto, String]),
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "verifyTransaction", null);
 __decorate([
@@ -175,13 +253,19 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [update_deposit_dto_1.UpdateDepositDto, String]),
     __metadata("design:returntype", Promise)
 ], DepositController.prototype, "updateDeposit", null);
-DepositController = __decorate([
+__decorate([
+    (0, common_1.Delete)('/mydeposit/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], DepositController.prototype, "deleteMyDeposit", null);
+exports.DepositController = DepositController = __decorate([
     (0, common_1.Controller)('deposit'),
     __metadata("design:paramtypes", [deposit_service_1.DepositService,
         user_service_1.UserService])
 ], DepositController);
-exports.DepositController = DepositController;
 //# sourceMappingURL=deposit.controller.js.map

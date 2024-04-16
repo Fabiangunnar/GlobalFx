@@ -16,6 +16,7 @@ exports.TradeController = void 0;
 const common_1 = require("@nestjs/common");
 const trade_service_1 = require("./trade.service");
 const user_service_1 = require("../user/user.service");
+const create_trade_dto_1 = require("./dto/create-trade.dto");
 let TradeController = class TradeController {
     constructor(tradeService, userService) {
         this.tradeService = tradeService;
@@ -53,16 +54,17 @@ let TradeController = class TradeController {
         const users = await this.userService.getAllUsers();
         const newTrades = allTrades.map((trades) => {
             const { lastname, firstname } = users.find((user) => user.id === trades.userId);
-            return Object.assign(Object.assign({}, trades), { username: `${firstname} ${lastname}` });
+            return { ...trades, username: `${firstname} ${lastname}` };
         });
         return newTrades;
     }
 };
+exports.TradeController = TradeController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_trade_dto_1.CreateTradeDto]),
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "createTrade", null);
 __decorate([
@@ -78,10 +80,9 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "getAllTrades", null);
-TradeController = __decorate([
+exports.TradeController = TradeController = __decorate([
     (0, common_1.Controller)('trade'),
     __metadata("design:paramtypes", [trade_service_1.TradeService,
         user_service_1.UserService])
 ], TradeController);
-exports.TradeController = TradeController;
 //# sourceMappingURL=trade.controller.js.map

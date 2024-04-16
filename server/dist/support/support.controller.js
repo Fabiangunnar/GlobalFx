@@ -16,6 +16,7 @@ exports.SupportController = void 0;
 const common_1 = require("@nestjs/common");
 const support_service_1 = require("./support.service");
 const user_service_1 = require("../user/user.service");
+const create_support_dto_1 = require("./dto/create-support.dto");
 let SupportController = class SupportController {
     constructor(supportTicketService, userService) {
         this.supportTicketService = supportTicketService;
@@ -42,11 +43,12 @@ let SupportController = class SupportController {
         return this.supportTicketService.getMySupportTickets({ userId });
     }
 };
+exports.SupportController = SupportController;
 __decorate([
     (0, common_1.Post)('/'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_support_dto_1.CreateSupportDto]),
     __metadata("design:returntype", Promise)
 ], SupportController.prototype, "supportTicket", null);
 __decorate([
@@ -62,10 +64,9 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], SupportController.prototype, "getMySupportTickets", null);
-SupportController = __decorate([
+exports.SupportController = SupportController = __decorate([
     (0, common_1.Controller)('support'),
     __metadata("design:paramtypes", [support_service_1.SupportService,
         user_service_1.UserService])
 ], SupportController);
-exports.SupportController = SupportController;
 //# sourceMappingURL=support.controller.js.map

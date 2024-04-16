@@ -16,6 +16,7 @@ exports.NotificationController = void 0;
 const common_1 = require("@nestjs/common");
 const notification_service_1 = require("./notification.service");
 const user_service_1 = require("../user/user.service");
+const create_notification_dto_1 = require("./dto/create-notification.dto");
 let NotificationController = class NotificationController {
     constructor(notificationService, userService) {
         this.notificationService = notificationService;
@@ -51,11 +52,12 @@ let NotificationController = class NotificationController {
         }
     }
 };
+exports.NotificationController = NotificationController;
 __decorate([
     (0, common_1.Post)('/'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_notification_dto_1.CreateNotificationDto]),
     __metadata("design:returntype", Promise)
 ], NotificationController.prototype, "createNotification", null);
 __decorate([
@@ -71,10 +73,9 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], NotificationController.prototype, "getMyNotifications", null);
-NotificationController = __decorate([
+exports.NotificationController = NotificationController = __decorate([
     (0, common_1.Controller)('notification'),
     __metadata("design:paramtypes", [notification_service_1.NotificationService,
         user_service_1.UserService])
 ], NotificationController);
-exports.NotificationController = NotificationController;
 //# sourceMappingURL=notification.controller.js.map

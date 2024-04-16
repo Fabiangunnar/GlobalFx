@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let InvestmentModule = class InvestmentModule {
 };
-InvestmentModule = __decorate([
+exports.InvestmentModule = InvestmentModule;
+exports.InvestmentModule = InvestmentModule = __decorate([
     (0, common_1.Module)({
         controllers: [investment_controller_1.InvestmentController],
         providers: [investment_service_1.InvestmentService, prisma_service_1.PrismaService, user_service_1.UserService],
     })
 ], InvestmentModule);
-exports.InvestmentModule = InvestmentModule;
 //# sourceMappingURL=investment.module.js.map

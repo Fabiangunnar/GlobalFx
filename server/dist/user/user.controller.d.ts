@@ -1,5 +1,4 @@
 import { KYCVerification, User } from '@prisma/client';
-import { AccountStateDto, KycVerifyDto, PhoneNumberDto, UserAccountInfo, UserDto } from './userDto/user.dto';
 import { UserService } from './user.service';
 import { SupportService } from 'src/support/support.service';
 import { NotificationService } from 'src/notification/notification.service';
@@ -7,6 +6,7 @@ import { DepositService } from 'src/deposit/deposit.service';
 import { InvestmentService } from 'src/investment/investment.service';
 import { TradeService } from 'src/trade/trade.service';
 import { WithdrawService } from 'src/withdraw/withdraw.service';
+import { CreateUserDto, UserAccountInfo, PhoneNumberDto, AccountStateDto, KycVerifyDto } from './dto/create-user.dto';
 export declare class UserController {
     private userService;
     private supportService;
@@ -16,17 +16,47 @@ export declare class UserController {
     private tradesService;
     private withdrawService;
     constructor(userService: UserService, supportService: SupportService, notificationService: NotificationService, depositService: DepositService, investmentService: InvestmentService, tradesService: TradeService, withdrawService: WithdrawService);
-    createUser(user: UserDto): Promise<User>;
-    loginUser(user: UserDto): Promise<User>;
+    createUser(user: CreateUserDto): Promise<User>;
+    loginUser(user: CreateUserDto): Promise<User>;
     getAllUsers(): Promise<User[]>;
     getAllKYCDocuments(): Promise<KYCVerification[]>;
     getMyKycDocuments(userId: string): Promise<KYCVerification[]>;
     getUser(id: string): Promise<User>;
-    updateUserAccountInfo(accountInfo: UserAccountInfo, id: string): Promise<User>;
+    updateUserAccountInfo(accountInfo: UserAccountInfo, id: string): Promise<{
+        id: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        password: string;
+        totalDeposit: number;
+        totalProfit: number;
+        totalBalance: number;
+        phoneNumber: string;
+        picture: string;
+        accountState: import(".prisma/client").$Enums.AccountState;
+        lastLogin: Date;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
     updateProfilePicture(profilePictureInfo: UserAccountInfo, id: string): Promise<User>;
     updatePhoneNumber(phoneNumberInfo: PhoneNumberDto, id: string): Promise<User>;
     verifyUser(accountState: AccountStateDto, id: string): Promise<User | any>;
     verifykycDoc(kycStatus: KycVerifyDto, id: string): Promise<KYCVerification>;
     kycVerify(kycVer: KycVerifyDto, id: string): Promise<KYCVerification>;
-    deleteUser(id: string): Promise<User>;
+    deleteUser(id: string): Promise<{
+        id: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        password: string;
+        totalDeposit: number;
+        totalProfit: number;
+        totalBalance: number;
+        phoneNumber: string;
+        picture: string;
+        accountState: import(".prisma/client").$Enums.AccountState;
+        lastLogin: Date;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
 }

@@ -9,9 +9,9 @@ import {
   Put,
 } from '@nestjs/common';
 import { InvestmentService } from './investment.service';
-import { InvestDto } from './investmentdto/investment.dto';
 import { UserService } from 'src/user/user.service';
 import { InvestmentHistory } from '@prisma/client';
+import { CreateInvestmentDto } from './dto/create-investment.dto';
 
 @Controller('investment')
 export class InvestmentController {
@@ -22,7 +22,7 @@ export class InvestmentController {
 
   @Post()
   async makeInvestment(
-    @Body() investDto: InvestDto,
+    @Body() investDto: CreateInvestmentDto,
   ): Promise<InvestmentHistory> {
     try {
       if (!investDto.amount || !investDto.plan || !investDto.userId)
@@ -146,7 +146,7 @@ export class InvestmentController {
   @Put('/admin/:id')
   async updateInvestmentStatus(
     @Param('id') id: string,
-    @Body() investDto: InvestDto,
+    @Body() investDto: CreateInvestmentDto,
   ): Promise<InvestmentHistory> {
     try {
       if (

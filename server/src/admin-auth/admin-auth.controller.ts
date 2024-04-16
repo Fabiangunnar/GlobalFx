@@ -2,6 +2,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -9,12 +10,14 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { adminAuthDto } from './admin-auth-dto/adminAuth.dto';
 import { Admin, DepositHistory, WithdrawalCode } from '@prisma/client';
 import { AdminAuthService } from './admin-auth.service';
 import { v4 as uuidv4 } from 'uuid';
-import { DepositDto } from 'src/deposit/depositDto/deposit.dto';
 import { UserService } from 'src/user/user.service';
+import { CreateAdminAuthDto } from './dto/create-admin-auth.dto';
+import { CreateDepositDto } from 'src/deposit/dto/create-deposit.dto';
+import { UpdateAdminAuthDto } from './dto/update-admin-auth.dto';
+import { UpdateDepositDto } from 'src/deposit/dto/update-deposit.dto';
 
 @Controller('admin-auth')
 export class AdminAuthController {
@@ -23,19 +26,15 @@ export class AdminAuthController {
     private userService: UserService,
   ) {}
   @Post('/register')
-  async createUser(@Body() user: adminAuthDto): Promise<Admin> {
+  async createUser(@Body() user: CreateAdminAuthDto): Promise<Admin> {
     try {
       const { username, password } = user;
-      if (!username || !password)
-        throw new HttpException(
-          'Input field not complete',
-          HttpStatus.BAD_REQUEST,
-        );
+
       // const salt = 10;
       // const hashedPassword = await bcrypt.hash(user.password, salt);
       const data = await this.adminAuthService.createAdmin({
-        username: user.username,
-        password: user.password,
+        username: username,
+        password: password,
       });
       // delete data.password;
       return data;
@@ -45,7 +44,7 @@ export class AdminAuthController {
   }
 
   @Post('/login')
-  async loginUser(@Body() user: adminAuthDto): Promise<Admin> {
+  async loginUser(@Body() user: CreateAdminAuthDto): Promise<Admin> {
     try {
       const data = await this.adminAuthService.getUser({
         username: user.username,
@@ -99,27 +98,26 @@ export class AdminAuthController {
   }
   @Put('/info/:id')
   async updateAdmin(
-    @Body() user: adminAuthDto,
+    @Body() user: UpdateAdminAuthDto,
     @Param('id') id: string,
   ): Promise<Admin> {
-    if (!id)
-      throw new HttpException('Logout and login again', HttpStatus.FORBIDDEN);
     try {
+      if (!id) throw new HttpException('login again', HttpStatus.FORBIDDEN);
       const data = await this.adminAuthService.getUser({
-        username: user.username,
+        id,
       });
       if (!data)
         throw new HttpException('Your Username is wrong', HttpStatus.NOT_FOUND);
       const app = await this.adminAuthService.updateAdmin(
         { id },
         {
-          username: user.username,
-          password: user.password,
-          btc: user.btc,
-          eth: user.eth,
-          usdt: user.usdt,
-          email: user.email,
-          phone: user.phone,
+          username: user.username ? user.username : data.username,
+          password: user.password ? user.password : data.password,
+          btc: user.btc ? user.btc : data.btc,
+          eth: user.eth ? user.eth : data.eth,
+          usdt: user.usdt ? user.usdt : data.usdt,
+          email: user.email ? user.email : data.email,
+          phone: user.phone ? user.phone : data.phone,
         },
       );
       return app;
@@ -130,6 +128,14 @@ export class AdminAuthController {
       );
     }
   }
+  // @Delete('/')
+  // async deleteAdmin() {
+  //   try {
+  //     return await this.adminAuthService.deleteAdmin();
+  //   } catch (error) {
+  //     throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+  //   }
+  // }
   @Get('/')
   async getAdminArray(): Promise<Admin[]> {
     try {
@@ -137,7 +143,7 @@ export class AdminAuthController {
 
       const newData = await data.map((admin) => {
         delete admin.password;
-        delete admin.username, delete admin.id;
+        // delete admin.username;
         return admin;
       });
 
@@ -147,13 +153,10 @@ export class AdminAuthController {
     }
   }
   @Post('/user/deposit')
-  async createDeposit(@Body() deposit: DepositDto): Promise<DepositHistory> {
+  async createDeposit(
+    @Body() deposit: UpdateDepositDto,
+  ): Promise<DepositHistory> {
     try {
-      if (!deposit.amount || !deposit.userId || deposit.amount === 0)
-        throw new HttpException(
-          'Input field not complete',
-          HttpStatus.BAD_REQUEST,
-        );
       const user = await this.userService.getUser({ id: deposit.userId });
 
       const depo = await this.adminAuthService.createDeposit({

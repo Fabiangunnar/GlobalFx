@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DepositService = void 0;
 const common_1 = require("@nestjs/common");
+const client_1 = require("@prisma/client");
 const prisma_service_1 = require("../prisma/prisma.service");
 let DepositService = class DepositService {
     constructor(prisma) {
@@ -40,6 +41,14 @@ let DepositService = class DepositService {
             where,
         });
     }
+    getMyVerifiedDepositHistory(where) {
+        return this.prisma.depositHistory.findMany({
+            where: {
+                id: where.id,
+                transactionState: client_1.TransactionState.VERIFIED,
+            },
+        });
+    }
     deleteAllWhereUserId(where) {
         return this.prisma.depositHistory.deleteMany({
             where,
@@ -52,6 +61,11 @@ let DepositService = class DepositService {
     }
     deletePendingDeposit(where) {
         return this.prisma.pendingDepositHistory.delete({
+            where,
+        });
+    }
+    deleteMyDeposit(where) {
+        return this.prisma.depositHistory.delete({
             where,
         });
     }
@@ -80,9 +94,9 @@ let DepositService = class DepositService {
         });
     }
 };
-DepositService = __decorate([
+exports.DepositService = DepositService;
+exports.DepositService = DepositService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], DepositService);
-exports.DepositService = DepositService;
 //# sourceMappingURL=deposit.service.js.map

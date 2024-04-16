@@ -10,38 +10,23 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
-const prisma_service_1 = require("./prisma/prisma.service");
-const user_module_1 = require("./user/user.module");
 const admin_auth_module_1 = require("./admin-auth/admin-auth.module");
-const serve_static_1 = require("@nestjs/serve-static");
-const path_1 = require("path");
-const support_module_1 = require("./support/support.module");
-const notification_module_1 = require("./notification/notification.module");
 const deposit_module_1 = require("./deposit/deposit.module");
-const withdraw_module_1 = require("./withdraw/withdraw.module");
 const investment_module_1 = require("./investment/investment.module");
+const notification_module_1 = require("./notification/notification.module");
+const support_module_1 = require("./support/support.module");
 const trade_module_1 = require("./trade/trade.module");
+const user_module_1 = require("./user/user.module");
+const withdraw_module_1 = require("./withdraw/withdraw.module");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppModule = class AppModule {
 };
-AppModule = __decorate([
+exports.AppModule = AppModule;
+exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            user_module_1.UserModule,
-            admin_auth_module_1.AdminAuthModule,
-            serve_static_1.ServeStaticModule.forRoot({
-                rootPath: (0, path_1.join)(__dirname, '..', 'public'),
-                exclude: ['/api*'],
-            }),
-            support_module_1.SupportModule,
-            notification_module_1.NotificationModule,
-            deposit_module_1.DepositModule,
-            withdraw_module_1.WithdrawModule,
-            investment_module_1.InvestmentModule,
-            trade_module_1.TradeModule,
-        ],
+        imports: [admin_auth_module_1.AdminAuthModule, deposit_module_1.DepositModule, investment_module_1.InvestmentModule, notification_module_1.NotificationModule, support_module_1.SupportModule, trade_module_1.TradeModule, user_module_1.UserModule, withdraw_module_1.WithdrawModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService, prisma_service_1.PrismaService],
     })
 ], AppModule);
-exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

@@ -11,13 +11,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { KYCVerification, User } from '@prisma/client';
-import {
-  AccountStateDto,
-  KycVerifyDto,
-  PhoneNumberDto,
-  UserAccountInfo,
-  UserDto,
-} from './userDto/user.dto';
+
 import { UserService } from './user.service';
 import { SupportService } from 'src/support/support.service';
 import { NotificationService } from 'src/notification/notification.service';
@@ -25,6 +19,13 @@ import { DepositService } from 'src/deposit/deposit.service';
 import { InvestmentService } from 'src/investment/investment.service';
 import { TradeService } from 'src/trade/trade.service';
 import { WithdrawService } from 'src/withdraw/withdraw.service';
+import {
+  CreateUserDto,
+  UserAccountInfo,
+  PhoneNumberDto,
+  AccountStateDto,
+  KycVerifyDto,
+} from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -38,7 +39,7 @@ export class UserController {
     private withdrawService: WithdrawService,
   ) {}
   @Post('/register')
-  async createUser(@Body() user: UserDto): Promise<User> {
+  async createUser(@Body() user: CreateUserDto): Promise<User> {
     try {
       const { firstname, lastname, email, password, confirmPassword } = user;
       if (!firstname || !lastname || !email || !password)
@@ -71,7 +72,7 @@ export class UserController {
     }
   }
   @Post('/login')
-  async loginUser(@Body() user: UserDto): Promise<User> {
+  async loginUser(@Body() user: CreateUserDto): Promise<User> {
     const { email, password } = user;
     if (!email || !password)
       throw new HttpException(

@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let NotificationModule = class NotificationModule {
 };
-NotificationModule = __decorate([
+exports.NotificationModule = NotificationModule;
+exports.NotificationModule = NotificationModule = __decorate([
     (0, common_1.Module)({
         controllers: [notification_controller_1.NotificationController],
         providers: [notification_service_1.NotificationService, prisma_service_1.PrismaService, user_service_1.UserService],
     })
 ], NotificationModule);
-exports.NotificationModule = NotificationModule;
 //# sourceMappingURL=notification.module.js.map

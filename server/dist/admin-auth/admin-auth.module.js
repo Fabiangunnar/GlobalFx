@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let AdminAuthModule = class AdminAuthModule {
 };
-AdminAuthModule = __decorate([
+exports.AdminAuthModule = AdminAuthModule;
+exports.AdminAuthModule = AdminAuthModule = __decorate([
     (0, common_1.Module)({
         providers: [admin_auth_service_1.AdminAuthService, prisma_service_1.PrismaService, user_service_1.UserService],
         controllers: [admin_auth_controller_1.AdminAuthController],
     })
 ], AdminAuthModule);
-exports.AdminAuthModule = AdminAuthModule;
 //# sourceMappingURL=admin-auth.module.js.map

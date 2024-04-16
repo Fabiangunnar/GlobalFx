@@ -17,6 +17,9 @@ const common_1 = require("@nestjs/common");
 const admin_auth_service_1 = require("./admin-auth.service");
 const uuid_1 = require("uuid");
 const user_service_1 = require("../user/user.service");
+const create_admin_auth_dto_1 = require("./dto/create-admin-auth.dto");
+const update_admin_auth_dto_1 = require("./dto/update-admin-auth.dto");
+const update_deposit_dto_1 = require("../deposit/dto/update-deposit.dto");
 let AdminAuthController = class AdminAuthController {
     constructor(adminAuthService, userService) {
         this.adminAuthService = adminAuthService;
@@ -25,11 +28,9 @@ let AdminAuthController = class AdminAuthController {
     async createUser(user) {
         try {
             const { username, password } = user;
-            if (!username || !password)
-                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
             const data = await this.adminAuthService.createAdmin({
-                username: user.username,
-                password: user.password,
+                username: username,
+                password: password,
             });
             return data;
         }
@@ -83,22 +84,22 @@ let AdminAuthController = class AdminAuthController {
         }
     }
     async updateAdmin(user, id) {
-        if (!id)
-            throw new common_1.HttpException('Logout and login again', common_1.HttpStatus.FORBIDDEN);
         try {
+            if (!id)
+                throw new common_1.HttpException('login again', common_1.HttpStatus.FORBIDDEN);
             const data = await this.adminAuthService.getUser({
-                username: user.username,
+                id,
             });
             if (!data)
                 throw new common_1.HttpException('Your Username is wrong', common_1.HttpStatus.NOT_FOUND);
             const app = await this.adminAuthService.updateAdmin({ id }, {
-                username: user.username,
-                password: user.password,
-                btc: user.btc,
-                eth: user.eth,
-                usdt: user.usdt,
-                email: user.email,
-                phone: user.phone,
+                username: user.username ? user.username : data.username,
+                password: user.password ? user.password : data.password,
+                btc: user.btc ? user.btc : data.btc,
+                eth: user.eth ? user.eth : data.eth,
+                usdt: user.usdt ? user.usdt : data.usdt,
+                email: user.email ? user.email : data.email,
+                phone: user.phone ? user.phone : data.phone,
             });
             return app;
         }
@@ -111,7 +112,6 @@ let AdminAuthController = class AdminAuthController {
             const data = await this.adminAuthService.getAdminArray();
             const newData = await data.map((admin) => {
                 delete admin.password;
-                delete admin.username, delete admin.id;
                 return admin;
             });
             return newData;
@@ -122,8 +122,6 @@ let AdminAuthController = class AdminAuthController {
     }
     async createDeposit(deposit) {
         try {
-            if (!deposit.amount || !deposit.userId || deposit.amount === 0)
-                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
             const user = await this.userService.getUser({ id: deposit.userId });
             const depo = await this.adminAuthService.createDeposit({
                 asset: `BTC`,
@@ -143,18 +141,19 @@ let AdminAuthController = class AdminAuthController {
         }
     }
 };
+exports.AdminAuthController = AdminAuthController;
 __decorate([
     (0, common_1.Post)('/register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_admin_auth_dto_1.CreateAdminAuthDto]),
     __metadata("design:returntype", Promise)
 ], AdminAuthController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_admin_auth_dto_1.CreateAdminAuthDto]),
     __metadata("design:returntype", Promise)
 ], AdminAuthController.prototype, "loginUser", null);
 __decorate([
@@ -175,7 +174,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [update_admin_auth_dto_1.UpdateAdminAuthDto, String]),
     __metadata("design:returntype", Promise)
 ], AdminAuthController.prototype, "updateAdmin", null);
 __decorate([
@@ -188,13 +187,12 @@ __decorate([
     (0, common_1.Post)('/user/deposit'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [update_deposit_dto_1.UpdateDepositDto]),
     __metadata("design:returntype", Promise)
 ], AdminAuthController.prototype, "createDeposit", null);
-AdminAuthController = __decorate([
+exports.AdminAuthController = AdminAuthController = __decorate([
     (0, common_1.Controller)('admin-auth'),
     __metadata("design:paramtypes", [admin_auth_service_1.AdminAuthService,
         user_service_1.UserService])
 ], AdminAuthController);
-exports.AdminAuthController = AdminAuthController;
 //# sourceMappingURL=admin-auth.controller.js.map

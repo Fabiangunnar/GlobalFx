@@ -41,9 +41,9 @@ let InvestmentService = class InvestmentService {
         });
     }
 };
-InvestmentService = __decorate([
+exports.InvestmentService = InvestmentService;
+exports.InvestmentService = InvestmentService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], InvestmentService);
-exports.InvestmentService = InvestmentService;
 //# sourceMappingURL=investment.service.js.map

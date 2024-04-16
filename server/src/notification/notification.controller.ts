@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { Notifications } from '@prisma/client';
-import { NotificationDto } from './notificationsDto/notification.dto';
 import { UserService } from 'src/user/user.service';
+import { CreateNotificationDto } from './dto/create-notification.dto';
 
 @Controller('notification')
 export class NotificationController {
@@ -20,7 +20,7 @@ export class NotificationController {
   ) {}
   @Post('/')
   async createNotification(
-    @Body() notification: NotificationDto,
+    @Body() notification: CreateNotificationDto,
   ): Promise<Notifications> {
     try {
       if (!notification.message || !notification.userId)

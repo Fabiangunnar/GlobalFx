@@ -8,9 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { TradeService } from './trade.service';
-import { TradeDto } from './tradeDto/trade.dto';
 import { Trades } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
+import { CreateTradeDto } from './dto/create-trade.dto';
 
 @Controller('trade')
 export class TradeController {
@@ -20,7 +20,7 @@ export class TradeController {
   ) {}
 
   @Post()
-  async createTrade(@Body() tradeDto: TradeDto): Promise<Trades> {
+  async createTrade(@Body() tradeDto: CreateTradeDto): Promise<Trades> {
     if (
       !tradeDto.amount ||
       !tradeDto.pairs ||

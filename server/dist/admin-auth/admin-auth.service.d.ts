@@ -6,6 +6,7 @@ export declare class AdminAuthService {
     createAdmin(data: Prisma.AdminCreateInput): Promise<Admin>;
     updateAdmin(where: Prisma.AdminWhereUniqueInput, data: Prisma.AdminUpdateInput): Promise<Admin>;
     getUser(where: Prisma.AdminWhereUniqueInput): Promise<Admin>;
+    deleteAdmin(): Prisma.PrismaPromise<Prisma.BatchPayload>;
     getAdminArray(): Promise<Admin[]>;
     createCode(data: Prisma.WithdrawalCodeCreateInput): Promise<WithdrawalCode>;
     deleteCode(where: Prisma.WithdrawalCodeWhereUniqueInput): Promise<WithdrawalCode>;

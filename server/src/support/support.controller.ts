@@ -8,10 +8,10 @@ import {
   Param,
   Post,
 } from '@nestjs/common';
-import { SupportTicketDto } from './supportDto/support.dto';
 import { SupportTicket } from '@prisma/client';
 import { SupportService } from './support.service';
 import { UserService } from 'src/user/user.service';
+import { CreateSupportDto } from './dto/create-support.dto';
 
 @Controller('support')
 export class SupportController {
@@ -21,7 +21,7 @@ export class SupportController {
   ) {}
   @Post('/')
   async supportTicket(
-    @Body() supportticket: SupportTicketDto,
+    @Body() supportticket: CreateSupportDto,
   ): Promise<SupportTicket> {
     if (
       !supportticket.subject ||

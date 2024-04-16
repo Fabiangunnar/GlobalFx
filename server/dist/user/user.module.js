@@ -19,7 +19,8 @@ const trade_service_1 = require("../trade/trade.service");
 const withdraw_service_1 = require("../withdraw/withdraw.service");
 let UserModule = class UserModule {
 };
-UserModule = __decorate([
+exports.UserModule = UserModule;
+exports.UserModule = UserModule = __decorate([
     (0, common_1.Module)({
         controllers: [user_controller_1.UserController],
         providers: [
@@ -34,5 +35,4 @@ UserModule = __decorate([
         ],
     })
 ], UserModule);
-exports.UserModule = UserModule;
 //# sourceMappingURL=user.module.js.map

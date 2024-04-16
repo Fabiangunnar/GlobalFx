@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { DepositHistory, PendingDepositHistory, Prisma } from '@prisma/client';
+import {
+  DepositHistory,
+  PendingDepositHistory,
+  Prisma,
+  TransactionState,
+} from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -41,6 +46,16 @@ export class DepositService {
       where,
     });
   }
+  getMyVerifiedDepositHistory(
+    where: Prisma.DepositHistoryWhereInput,
+  ): Promise<DepositHistory[]> {
+    return this.prisma.depositHistory.findMany({
+      where: {
+        id: where.id,
+        transactionState: TransactionState.VERIFIED,
+      },
+    });
+  }
   deleteAllWhereUserId(where: Prisma.DepositHistoryWhereInput) {
     return this.prisma.depositHistory.deleteMany({
       where,
@@ -58,6 +73,11 @@ export class DepositService {
     where: Prisma.PendingDepositHistoryWhereUniqueInput,
   ): Promise<PendingDepositHistory> {
     return this.prisma.pendingDepositHistory.delete({
+      where,
+    });
+  }
+  deleteMyDeposit(where: Prisma.DepositHistoryWhereUniqueInput): Promise<any> {
+    return this.prisma.depositHistory.delete({
       where,
     });
   }

@@ -16,6 +16,7 @@ exports.InvestmentController = void 0;
 const common_1 = require("@nestjs/common");
 const investment_service_1 = require("./investment.service");
 const user_service_1 = require("../user/user.service");
+const create_investment_dto_1 = require("./dto/create-investment.dto");
 let InvestmentController = class InvestmentController {
     constructor(investmentService, userService) {
         this.investmentService = investmentService;
@@ -27,10 +28,17 @@ let InvestmentController = class InvestmentController {
                 throw new common_1.HttpException('Input fields incomplete', common_1.HttpStatus.BAD_REQUEST);
             if (investDto.plan !== 'BASIC' &&
                 investDto.plan !== 'STANDARD' &&
+                investDto.plan !== 'PROMO' &&
                 investDto.plan !== 'LUXURY')
                 throw new common_1.HttpException('Wrong investment plan', common_1.HttpStatus.BAD_REQUEST);
             if (investDto.plan === 'BASIC') {
                 if (Number(investDto.amount) < 500 || Number(investDto.amount) > 4500) {
+                    throw new common_1.HttpException('Select within the required amount for this plan', common_1.HttpStatus.BAD_REQUEST);
+                }
+            }
+            if (investDto.plan === 'PROMO') {
+                if (Number(investDto.amount) < 2000 ||
+                    Number(investDto.amount) > 20000) {
                     throw new common_1.HttpException('Select within the required amount for this plan', common_1.HttpStatus.BAD_REQUEST);
                 }
             }
@@ -73,8 +81,11 @@ let InvestmentController = class InvestmentController {
             const users = await this.userService.getAllUsers();
             const newInvestments = investments.map((investment) => {
                 const { firstname, lastname } = users.find((user) => user.id === investment.userId);
-                return Object.assign(Object.assign({}, investment), { firstname,
-                    lastname });
+                return {
+                    ...investment,
+                    firstname,
+                    lastname,
+                };
             });
             return newInvestments;
         }
@@ -98,11 +109,12 @@ let InvestmentController = class InvestmentController {
         }
     }
 };
+exports.InvestmentController = InvestmentController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_investment_dto_1.CreateInvestmentDto]),
     __metadata("design:returntype", Promise)
 ], InvestmentController.prototype, "makeInvestment", null);
 __decorate([
@@ -123,13 +135,12 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, create_investment_dto_1.CreateInvestmentDto]),
     __metadata("design:returntype", Promise)
 ], InvestmentController.prototype, "updateInvestmentStatus", null);
-InvestmentController = __decorate([
+exports.InvestmentController = InvestmentController = __decorate([
     (0, common_1.Controller)('investment'),
     __metadata("design:paramtypes", [investment_service_1.InvestmentService,
         user_service_1.UserService])
 ], InvestmentController);
-exports.InvestmentController = InvestmentController;
 //# sourceMappingURL=investment.controller.js.map

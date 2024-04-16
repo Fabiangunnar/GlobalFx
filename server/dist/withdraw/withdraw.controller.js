@@ -16,6 +16,7 @@ exports.WithdrawController = void 0;
 const common_1 = require("@nestjs/common");
 const withdraw_service_1 = require("./withdraw.service");
 const user_service_1 = require("../user/user.service");
+const create_deposit_dto_1 = require("../deposit/dto/create-deposit.dto");
 let WithdrawController = class WithdrawController {
     constructor(withdrawService, userService) {
         this.withdrawService = withdrawService;
@@ -27,7 +28,7 @@ let WithdrawController = class WithdrawController {
             const users = await this.userService.getAllUsers();
             const newWithdrawData = withdrawData.map((withdraw) => {
                 const { firstname, lastname } = users.find((user) => user.id === withdraw.userId);
-                return Object.assign(Object.assign({}, withdraw), { firstname, lastname });
+                return { ...withdraw, firstname, lastname };
             });
             return newWithdrawData;
         }
@@ -77,6 +78,7 @@ let WithdrawController = class WithdrawController {
         }
     }
 };
+exports.WithdrawController = WithdrawController;
 __decorate([
     (0, common_1.Get)('/all'),
     __metadata("design:type", Function),
@@ -94,13 +96,12 @@ __decorate([
     (0, common_1.Post)('/'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_deposit_dto_1.CreateDepositDto]),
     __metadata("design:returntype", Promise)
 ], WithdrawController.prototype, "makeWithdrawal", null);
-WithdrawController = __decorate([
+exports.WithdrawController = WithdrawController = __decorate([
     (0, common_1.Controller)('withdraw'),
     __metadata("design:paramtypes", [withdraw_service_1.WithdrawService,
         user_service_1.UserService])
 ], WithdrawController);
-exports.WithdrawController = WithdrawController;
 //# sourceMappingURL=withdraw.controller.js.map

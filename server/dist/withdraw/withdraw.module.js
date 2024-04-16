@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let WithdrawModule = class WithdrawModule {
 };
-WithdrawModule = __decorate([
+exports.WithdrawModule = WithdrawModule;
+exports.WithdrawModule = WithdrawModule = __decorate([
     (0, common_1.Module)({
         controllers: [withdraw_controller_1.WithdrawController],
         providers: [withdraw_service_1.WithdrawService, prisma_service_1.PrismaService, user_service_1.UserService],
     })
 ], WithdrawModule);
-exports.WithdrawModule = WithdrawModule;
 //# sourceMappingURL=withdraw.module.js.map

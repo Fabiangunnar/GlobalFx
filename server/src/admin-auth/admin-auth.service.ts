@@ -26,6 +26,9 @@ export class AdminAuthService {
       where,
     });
   }
+  deleteAdmin() {
+    return this.prisma.admin.deleteMany();
+  }
   getAdminArray(): Promise<Admin[]> {
     return this.prisma.admin.findMany();
   }

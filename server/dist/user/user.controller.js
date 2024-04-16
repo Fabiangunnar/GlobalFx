@@ -21,6 +21,7 @@ const deposit_service_1 = require("../deposit/deposit.service");
 const investment_service_1 = require("../investment/investment.service");
 const trade_service_1 = require("../trade/trade.service");
 const withdraw_service_1 = require("../withdraw/withdraw.service");
+const create_user_dto_1 = require("./dto/create-user.dto");
 let UserController = class UserController {
     constructor(userService, supportService, notificationService, depositService, investmentService, tradesService, withdrawService) {
         this.userService = userService;
@@ -80,7 +81,7 @@ let UserController = class UserController {
         return kycDocuments.map((item) => {
             const match = users.find((user) => user.id === item.userId);
             const { firstname, lastname } = match;
-            return match ? Object.assign(Object.assign({}, item), { firstname, lastname }) : null;
+            return match ? { ...item, firstname, lastname } : null;
         });
     }
     async getMyKycDocuments(userId) {
@@ -211,18 +212,19 @@ let UserController = class UserController {
         }
     }
 };
+exports.UserController = UserController;
 __decorate([
     (0, common_1.Post)('/register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Post)('/login'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "loginUser", null);
 __decorate([
@@ -256,7 +258,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.UserAccountInfo, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUserAccountInfo", null);
 __decorate([
@@ -264,7 +266,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.UserAccountInfo, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateProfilePicture", null);
 __decorate([
@@ -272,7 +274,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.PhoneNumberDto, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updatePhoneNumber", null);
 __decorate([
@@ -280,7 +282,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.AccountStateDto, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifyUser", null);
 __decorate([
@@ -288,7 +290,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.KycVerifyDto, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "verifykycDoc", null);
 __decorate([
@@ -296,7 +298,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [create_user_dto_1.KycVerifyDto, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "kycVerify", null);
 __decorate([
@@ -306,7 +308,7 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "deleteUser", null);
-UserController = __decorate([
+exports.UserController = UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [user_service_1.UserService,
         support_service_1.SupportService,
@@ -316,5 +318,4 @@ UserController = __decorate([
         trade_service_1.TradeService,
         withdraw_service_1.WithdrawService])
 ], UserController);
-exports.UserController = UserController;
 //# sourceMappingURL=user.controller.js.map

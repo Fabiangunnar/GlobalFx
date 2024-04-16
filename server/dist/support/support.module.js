@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let SupportModule = class SupportModule {
 };
-SupportModule = __decorate([
+exports.SupportModule = SupportModule;
+exports.SupportModule = SupportModule = __decorate([
     (0, common_1.Module)({
         controllers: [support_controller_1.SupportController],
         providers: [support_service_1.SupportService, prisma_service_1.PrismaService, user_service_1.UserService],
     })
 ], SupportModule);
-exports.SupportModule = SupportModule;
 //# sourceMappingURL=support.module.js.map

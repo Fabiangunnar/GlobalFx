@@ -35,9 +35,9 @@ let NotificationService = class NotificationService {
         });
     }
 };
-NotificationService = __decorate([
+exports.NotificationService = NotificationService;
+exports.NotificationService = NotificationService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], NotificationService);
-exports.NotificationService = NotificationService;
 //# sourceMappingURL=notification.service.js.map

@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { WithdrawService } from './withdraw.service';
 import { WithdrawalHistory } from '@prisma/client';
-import { DepositDto as WithdrawDto } from 'src/deposit/depositDto/deposit.dto';
 import { UserService } from 'src/user/user.service';
+import { CreateDepositDto } from 'src/deposit/dto/create-deposit.dto';
 
 @Controller('withdraw')
 export class WithdrawController {
@@ -45,7 +45,7 @@ export class WithdrawController {
   }
 
   @Post('/')
-  async makeWithdrawal(@Body() withdraw: WithdrawDto) {
+  async makeWithdrawal(@Body() withdraw: CreateDepositDto) {
     try {
       if (
         !withdraw.asset ||

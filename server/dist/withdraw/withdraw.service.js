@@ -45,9 +45,9 @@ let WithdrawService = class WithdrawService {
         });
     }
 };
-WithdrawService = __decorate([
+exports.WithdrawService = WithdrawService;
+exports.WithdrawService = WithdrawService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], WithdrawService);
-exports.WithdrawService = WithdrawService;
 //# sourceMappingURL=withdraw.service.js.map

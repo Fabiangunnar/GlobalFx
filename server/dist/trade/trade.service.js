@@ -29,9 +29,9 @@ let TradeService = class TradeService {
         return this.prisma.trades.deleteMany({ where });
     }
 };
-TradeService = __decorate([
+exports.TradeService = TradeService;
+exports.TradeService = TradeService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], TradeService);
-exports.TradeService = TradeService;
 //# sourceMappingURL=trade.service.js.map

@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let DepositModule = class DepositModule {
 };
-DepositModule = __decorate([
+exports.DepositModule = DepositModule;
+exports.DepositModule = DepositModule = __decorate([
     (0, common_1.Module)({
         controllers: [deposit_controller_1.DepositController],
         providers: [deposit_service_1.DepositService, prisma_service_1.PrismaService, user_service_1.UserService],
     })
 ], DepositModule);
-exports.DepositModule = DepositModule;
 //# sourceMappingURL=deposit.module.js.map

@@ -32,6 +32,9 @@ let AdminAuthService = class AdminAuthService {
             where,
         });
     }
+    deleteAdmin() {
+        return this.prisma.admin.deleteMany();
+    }
     getAdminArray() {
         return this.prisma.admin.findMany();
     }
@@ -51,9 +54,9 @@ let AdminAuthService = class AdminAuthService {
         });
     }
 };
-AdminAuthService = __decorate([
+exports.AdminAuthService = AdminAuthService;
+exports.AdminAuthService = AdminAuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], AdminAuthService);
-exports.AdminAuthService = AdminAuthService;
 //# sourceMappingURL=admin-auth.service.js.map

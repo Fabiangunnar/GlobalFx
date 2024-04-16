@@ -40,9 +40,9 @@ let SupportService = class SupportService {
         });
     }
 };
-SupportService = __decorate([
+exports.SupportService = SupportService;
+exports.SupportService = SupportService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], SupportService);
-exports.SupportService = SupportService;
 //# sourceMappingURL=support.service.js.map

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
@@ -10,8 +11,9 @@ import {
 } from '@nestjs/common';
 import { DepositService } from './deposit.service';
 import { UserService } from 'src/user/user.service';
-import { DepositDto } from './depositDto/deposit.dto';
 import { DepositHistory, PendingDepositHistory } from '@prisma/client';
+import { CreateDepositDto } from './dto/create-deposit.dto';
+import { UpdateDepositDto } from './dto/update-deposit.dto';
 
 @Controller('deposit')
 export class DepositController {
@@ -20,14 +22,41 @@ export class DepositController {
     private userService: UserService,
   ) {}
 
-  @Post('/')
-  async createDeposit(@Body() deposit: DepositDto): Promise<DepositHistory> {
+  @Post('/user/:userId/')
+  async createUserDeposit(
+    @Body() deposit: UpdateDepositDto,
+    @Param('userId') userId: string,
+  ): Promise<DepositHistory> {
     try {
-      if (!deposit.asset || !deposit.amount || !deposit.userId || !deposit.to)
-        throw new HttpException(
-          'Input field not complete',
-          HttpStatus.BAD_REQUEST,
-        );
+      const user = await this.userService.getUser({ id: userId });
+
+      if (!user)
+        throw new HttpException("User Doesn't exist", HttpStatus.BAD_REQUEST);
+      const depositData = await this.depositService.createDeposit({
+        asset: `${deposit.asset ? deposit.asset : 'BTC'}`,
+        amount: Number(deposit.amount),
+        userId: `${userId}`,
+        to: `${deposit.to}`,
+      });
+
+      if (depositData) {
+        await this.depositService.addPendingDeposit({
+          amount: Number(deposit.amount),
+          userId: `${deposit.userId}`,
+          depositId: `${depositData.id}`,
+        });
+      }
+
+      return depositData;
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+  @Post('/')
+  async createDeposit(
+    @Body() deposit: CreateDepositDto,
+  ): Promise<DepositHistory> {
+    try {
       const user = await this.userService.getUser({ id: deposit.userId });
 
       if (!user)
@@ -52,6 +81,7 @@ export class DepositController {
       throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
+
   @Get('/all')
   async getAllDepositHistory(): Promise<DepositHistory[]> {
     try {
@@ -70,7 +100,19 @@ export class DepositController {
       throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
     }
   }
-  @Get('/allmy/:userId')
+  @Get('/user/verified/:userId')
+  async getMyVerifiedDepositHistory(
+    @Param('userId') userId: string,
+  ): Promise<DepositHistory[]> {
+    try {
+      if (!userId)
+        throw new HttpException('No User Specified', HttpStatus.BAD_REQUEST);
+      return this.depositService.getMyVerifiedDepositHistory({ userId });
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+  @Get('/user/:userId')
   async getMyDepositHistory(
     @Param('userId') userId: string,
   ): Promise<DepositHistory[]> {
@@ -97,7 +139,7 @@ export class DepositController {
 
   @Put('/verifytransaction/:id')
   async verifyTransaction(
-    @Body() deposit: DepositDto,
+    @Body() deposit: UpdateDepositDto,
     @Param('id') id: string,
   ): Promise<DepositHistory | any> {
     try {
@@ -152,7 +194,7 @@ export class DepositController {
 
   @Put('/mydeposit/:id')
   async updateDeposit(
-    @Body() deposit: DepositDto,
+    @Body() deposit: UpdateDepositDto,
     @Param('id') id: string,
   ): Promise<DepositHistory | any> {
     try {
@@ -176,6 +218,47 @@ export class DepositController {
         { id },
         { amount: Number(deposit.amount) },
       );
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Delete('/mydeposit/:id')
+  async deleteMyDeposit(
+    @Param('id') id: string,
+  ): Promise<DepositHistory | any> {
+    try {
+      const depositState = await this.depositService.getDepositHistory({ id });
+      const pendingDeposit = await this.depositService.getPendingDeposit({
+        depositId: depositState.id,
+      });
+      const user = await this.userService.getUser({ id: depositState.userId });
+
+      if (pendingDeposit) {
+        await this.userService.updateUserInfo(
+          { id: user.id },
+          {
+            totalBalance: user.totalBalance - depositState.amount,
+          },
+        );
+        await this.depositService.deletePendingDeposit({
+          depositId: depositState.id,
+        });
+        await this.depositService.deleteMyDeposit({ id });
+        return this.depositService.getMyDepositHistory({ id: user.id });
+      }
+
+      await this.userService.updateUserInfo(
+        { id: user.id },
+        {
+          totalDeposit: user.totalDeposit - depositState.amount,
+          totalBalance: user.totalBalance - depositState.amount,
+        },
+      );
+
+      await this.depositService.deleteMyDeposit({ id });
+
+      return this.depositService.getMyDepositHistory({ id: user.id });
     } catch (error) {
       throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
     }

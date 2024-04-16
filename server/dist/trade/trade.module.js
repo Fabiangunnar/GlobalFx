@@ -14,11 +14,11 @@ const prisma_service_1 = require("../prisma/prisma.service");
 const user_service_1 = require("../user/user.service");
 let TradeModule = class TradeModule {
 };
-TradeModule = __decorate([
+exports.TradeModule = TradeModule;
+exports.TradeModule = TradeModule = __decorate([
     (0, common_1.Module)({
         providers: [trade_service_1.TradeService, prisma_service_1.PrismaService, user_service_1.UserService],
         controllers: [trade_controller_1.TradeController],
     })
 ], TradeModule);
-exports.TradeModule = TradeModule;
 //# sourceMappingURL=trade.module.js.map

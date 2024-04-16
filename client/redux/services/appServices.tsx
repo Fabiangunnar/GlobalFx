@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: `http://localhost:5000`,
-  // baseURL: `https://globaltycoonfxapi.onrender.com`,
+  // baseURL: `http://localhost:5000`,
+  baseURL: `https://globaltycoonfxapi.onrender.com`,
 });
 const timeoutInHours = 24;
 const timeoutInMilliseconds = timeoutInHours * 60 * 60 * 1000;

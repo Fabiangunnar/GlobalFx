@@ -819,7 +819,7 @@ export default function Home() {
                         gap={1}
                         fontSize={[20, 22, 24, 26, 28]}
                       >
-                        {appname} - USA LEGAL REGISTRATION {"- "}
+                        {appname} - UK LEGAL REGISTRATION {"- "}
                         <Text
                           cursor={"pointer"}
                           fontSize={[16, 18, 20, 22, 24]}
@@ -881,11 +881,11 @@ export default function Home() {
                                 bgGradient=" linear-gradient(90deg, #40efeb, #9ed163)"
                                 fontWeight={800}
                               >
-                                {/* <NumberCountThree
-                                  targetNumber={746109}
+                                <NumberCountThree
+                                  targetNumber={338400989}
                                   isInView={isInView}
-                                />{" "} */}
-                                746109 USD
+                                />{" "}
+                                USD
                               </Text>
                             </Box>
                             <Box>
@@ -902,11 +902,11 @@ export default function Home() {
                                 bgGradient=" linear-gradient(90deg, #40efeb, #9ed163)"
                                 fontWeight={800}
                               >
-                                {/* <NumberCount
-                                  targetNumber={3379086}
+                                <NumberCount
+                                  targetNumber={101689885}
                                   isInView={isInView}
-                                />{" "} */}
-                                3379086 USD
+                                />{" "}
+                                USD
                               </Text>
                             </Box>
                           </Grid>
@@ -980,7 +980,8 @@ export default function Home() {
                             fontSize={[12, 13, 14, 15, 16]}
                             color={"gray.400"}
                           >
-                            New York, NY 10036, United States
+                            United Kingdom Level 9, One Canada Square, Canary
+                            Wharf, E14 5AA, London, United Kingdom
                           </Text>
                         </Link>
                       </Grid>

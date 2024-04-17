@@ -1,3 +1,4 @@
+"use client";
 import SpinnerPage from "@/components/Spinner";
 import { sendContactForm } from "@/lib/api";
 import styles from "@/app/styles/pages/User.module.scss";

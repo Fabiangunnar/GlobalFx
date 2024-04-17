@@ -47,8 +47,9 @@ const PaymentSystems = (props: Props) => {
               </Text>
             </Flex>
             <Text fontSize={[12, 13, 14, 15, 16]}>
-              Our company does not charge commissions for opening a deposit, as
-              well as withdrawing funds from the platform
+              Our company does not charge a fee to open an account. Only a
+              commission fee to your account manager must be paid when you
+              receive your profits not before withdrawing
             </Text>
             <Button
               fontSize={[14, 16, 18, 20, 22]}

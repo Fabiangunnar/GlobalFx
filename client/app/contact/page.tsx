@@ -159,6 +159,26 @@ export default function Index() {
               </Link>
             </Flex>
             <Flex justify={"center"} w={"100%"}>
+              <Link
+                color={"#bdbdbd"}
+                target="_blank"
+                href={`mailto:gtfxcustomerservice@outlook.com?subject=${appname}%20HelpME`}
+              >
+                <Flex
+                  justify={"center"}
+                  bg={"#000"}
+                  p={1}
+                  px={4}
+                  borderRadius={18}
+                  align={"center"}
+                  gap={2}
+                >
+                  <IoMailOutline fontSize={20} />
+                  <Box>gtfxcustomerservice@outlook.com</Box>
+                </Flex>
+              </Link>
+            </Flex>
+            <Flex justify={"center"} w={"100%"}>
               <Card
                 background={"rgb(37, 44, 49)"}
                 minW={{
@@ -257,9 +277,13 @@ export default function Index() {
                 </Link>
               </Grid>
               <Flex justify={"space-between"} maxW={"26rem"} w={"100%"}>
-                <CiInstagram fontSize={42} />
+                <Link
+                  target="_blank"
+                  href={`https://www.instagram.com/globaltycoonfx/`}
+                >
+                  <CiInstagram fontSize={42} />
+                </Link>
                 <CiTwitter fontSize={42} />
-
                 <Link
                   target="_blank"
                   //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}

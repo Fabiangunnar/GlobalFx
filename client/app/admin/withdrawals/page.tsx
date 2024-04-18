@@ -32,15 +32,33 @@ import {
   makeWithdrawal,
   getUser,
   resetWithdrawalState,
+  getAllDeposits,
+  UserTypes,
 } from "@/redux/features/HomeAppSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 
 type Props = {};
 
 const WithdrawFunds = (props: Props) => {
-  const { userInfo, withdrawalState, errorMessage } = useAppSelector(
+  const { withdrawalState, errorMessage } = useAppSelector(
     (store) => store.HomeAppSlice
   );
+  const [userData, setUserData] = useState<UserTypes>({
+    id: "",
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    totalProfit: 0,
+    pendingDeposit: 0,
+    earnings: 0,
+    totalDeposit: 0,
+    totalWithdrawal: 0,
+    totalBalance: 0,
+    picture: "",
+    pictureInfo: "",
+    phoneNumber: "",
+  });
   const modal1 = useDisclosure();
   const { toast } = createStandaloneToast();
 
@@ -59,9 +77,19 @@ const WithdrawFunds = (props: Props) => {
   const handleInputChange = (e: any) => {
     setWalletInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    let user = storedUser ? JSON.parse(storedUser) : null;
+    setUserData(user);
+    if (user) {
+      dispatch(getAllDeposits(user.id));
+    }
+  }, []);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (Number(userInfo?.totalBalance) < Number(amount)) {
+    if (Number(userData.totalBalance) < Number(amount)) {
       toast({
         title: "Insufficient Funds",
         description: "Insufficient Funds",
@@ -76,9 +104,10 @@ const WithdrawFunds = (props: Props) => {
 
     dispatch(
       makeWithdrawal({
-        userId: userInfo?.id,
+        userId: userData.id,
         asset: selectedAsset,
         amount: amount,
+        to: walletInfo.walletAddress,
         ...walletInfo,
       })
     );
@@ -101,7 +130,7 @@ const WithdrawFunds = (props: Props) => {
         walletCode: "",
         walletAddress: "",
       });
-      dispatch(getUser(userInfo?.id));
+      dispatch(getUser(userData.id));
     }
     if (withdrawalState.isError) {
       toast({
@@ -126,7 +155,7 @@ const WithdrawFunds = (props: Props) => {
     withdrawalState.isSuccess,
   ]);
   useEffect(() => {
-    convertDollarToBTC(Number(userInfo?.totalBalance));
+    convertDollarToBTC(Number(userData.totalBalance));
   });
 
   async function convertDollarToBTC(amountInUSD: number) {
@@ -179,7 +208,7 @@ const WithdrawFunds = (props: Props) => {
                   </Flex>
                   <Text color={"#ffd700"} fontSize={[12, 13, 14]}>
                     $
-                    {userInfo?.totalBalance?.toLocaleString("en-US", {
+                    {userData.totalBalance?.toLocaleString("en-US", {
                       style: "decimal",
                     })}
                   </Text>
@@ -328,7 +357,7 @@ const WithdrawFunds = (props: Props) => {
         overlay={overlay}
         isOpen={modal1.isOpen}
         onClose={modal1.onClose}
-        img={userInfo?.picture ? userInfo.picture : "/images.png"}
+        img={userData?.picture ? userData.picture : "/images.png"}
       />
     </>
   );

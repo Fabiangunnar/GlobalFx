@@ -63,12 +63,12 @@ export default function AdminLayout({
     if (user) {
       const run = async () => {
         await dispatch(getUser(user.id));
+        await dispatch(getAllDeposits(user.id));
         await dispatch(getAllNotifications(user.id));
         await dispatch(getAllPendingDeposits(user.id));
         await dispatch(getMyTrades(user.id));
         await dispatch(getMyInvestments(user.id));
         await dispatch(getAdminAccounts());
-        await dispatch(getAllDeposits(user.id));
         await dispatch(setUserInfo(user));
       };
       run();

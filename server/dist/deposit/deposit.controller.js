@@ -49,6 +49,7 @@ let DepositController = class DepositController {
     }
     async createDeposit(deposit) {
         try {
+            console.log(deposit);
             const user = await this.userService.getUser({ id: deposit.userId });
             if (!user)
                 throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
@@ -97,6 +98,7 @@ let DepositController = class DepositController {
     }
     async getMyDepositHistory(userId) {
         try {
+            console.log(userId);
             if (!userId)
                 throw new common_1.HttpException('No User Specified', common_1.HttpStatus.BAD_REQUEST);
             return this.depositService.getMyDepositHistory({ userId });

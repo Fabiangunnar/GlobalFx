@@ -9,12 +9,10 @@ const timeoutInMilliseconds = timeoutInHours * 60 * 60 * 1000;
 //  Auth Register
 export const registerUserApi = async (formData: any) => {
   const { data } = await API.post("/user/register", formData);
-  if (window !== undefined) {
-    localStorage.setItem("user", JSON.stringify(data));
-    setTimeout(() => {
-      localStorage.removeItem("user");
-    }, timeoutInMilliseconds);
-  }
+  localStorage.setItem("user", JSON.stringify(data));
+  setTimeout(() => {
+    localStorage.removeItem("user");
+  }, timeoutInMilliseconds);
   return data;
 };
 export const GetUserApi = async (id: any) => {
@@ -83,6 +81,7 @@ export const GetAllNotifications = async (id: string) => {
 };
 export const GetAllDeposits = async (id: string) => {
   const { data } = await API.get(`/deposit/user/${id}`);
+  localStorage.setItem("deposit", JSON.stringify(data));
 
   return data;
 };
@@ -106,13 +105,14 @@ export const GetMyTrades = async (id: string) => {
 };
 export const MakeDepositApi = async (depositData: any) => {
   const { data } = await API.post(`/deposit`, depositData);
+  localStorage.setItem("all-deposits", JSON.stringify(data));
 
   return data;
 };
 export const MakeWithdrawalApi = async (withdrawData: any) => {
-  const { data } = await API.post(`/withdraw`, withdrawData);
+  const res = await API.post(`/withdraw`, withdrawData);
 
-  return data;
+  return res.data;
 };
 export const MakeInvestmentApi = async (investmentData: any) => {
   const { data } = await API.post(`/investment`, investmentData);

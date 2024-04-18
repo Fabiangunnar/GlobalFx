@@ -57,6 +57,7 @@ export class DepositController {
     @Body() deposit: CreateDepositDto,
   ): Promise<DepositHistory> {
     try {
+      console.log(deposit);
       const user = await this.userService.getUser({ id: deposit.userId });
 
       if (!user)
@@ -117,6 +118,7 @@ export class DepositController {
     @Param('userId') userId: string,
   ): Promise<DepositHistory[]> {
     try {
+      console.log(userId);
       if (!userId)
         throw new HttpException('No User Specified', HttpStatus.BAD_REQUEST);
       return this.depositService.getMyDepositHistory({ userId });

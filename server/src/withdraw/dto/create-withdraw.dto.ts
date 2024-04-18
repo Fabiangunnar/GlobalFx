@@ -10,8 +10,6 @@ export class CreateWithdrawDto {
   userId: string;
   transactionState: any;
   @IsNotEmpty()
-  to: string;
-  @IsNotEmpty()
   walletAddress: string;
   @IsNotEmpty()
   walletCode: any;

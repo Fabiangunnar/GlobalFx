@@ -18,6 +18,8 @@ import { closeNav, setNav } from "@/redux/features/AppSlice";
 import { AdminAccount, getAdminAccounts } from "@/redux/features/HomeAppSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import TidioChat from "./TidioChat";
+import { createStandaloneToast } from "@chakra-ui/react";
+const { ToastContainer } = createStandaloneToast();
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
@@ -204,6 +206,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
           </footer>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };

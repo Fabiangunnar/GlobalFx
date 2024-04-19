@@ -34,7 +34,6 @@ export default function RootLayout({
         // toastOptions={{ defaultOptions: { position: "top-right" } }}
         >
           <body className={poppins.className}>{children}</body>
-          {/* <ToastContainer /> */}
         </ChakraProvider>
       </Providers>
     </html>

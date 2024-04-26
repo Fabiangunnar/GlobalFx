@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Body,
   Controller,
@@ -10,7 +11,7 @@ import {
 import { WithdrawService } from './withdraw.service';
 import { WithdrawalHistory } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
-import { CreateDepositDto } from 'src/deposit/dto/create-deposit.dto';
+import { CreateWithdrawDto } from './dto/create-withdraw.dto';
 
 @Controller('withdraw')
 export class WithdrawController {
@@ -45,19 +46,8 @@ export class WithdrawController {
   }
 
   @Post('/')
-  async makeWithdrawal(@Body() withdraw: CreateDepositDto) {
+  async makeWithdrawal(@Body() withdraw: CreateWithdrawDto) {
     try {
-      if (
-        !withdraw.asset ||
-        !withdraw.amount ||
-        !withdraw.userId ||
-        !withdraw.walletAddress ||
-        !withdraw.walletCode
-      )
-        throw new HttpException(
-          'Input field not complete',
-          HttpStatus.BAD_REQUEST,
-        );
       const user = await this.userService.getUser({ id: withdraw.userId });
       const isWithdrawCode = await this.withdrawService.getWalletCode({
         withdrawalCode: withdraw.walletCode,

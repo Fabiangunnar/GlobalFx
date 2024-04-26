@@ -799,10 +799,10 @@ export const testimonies = [
     testimony: `I have been seeing this post everywhere and lot of people keep saying Riana is the best and trustworthy I try her out as my account manager using this platform and it turn out to be legit I invested $10,000 and I receive over $173,000 in 2 months.  I don’t need a lot of words to prove that you’re a real dealer and may God continue to bless you  because I’ve seen it all Thanks.`,
     name: "MARCUS HANCOCK. ",
     igname: "@marcus_hancock1_",
-    tradeername: "RIANA ALBERTO K.",
-    traderigname: "@cryptowithriana_",
+    tradeername: "RIANA ALBERTO | MAKE MONEY ONLINE",
+    traderigname: "@debtfreewithriana",
     traderimg: "/testimony2.jpg",
-    traderinstagram: "https://instagram.com/cryptowithriana_",
+    traderinstagram: "https://www.instagram.com/debtfreewithriana/",
     instagram: "https://instagram.com/marcus_hancock1_",
   },
   {
@@ -825,10 +825,10 @@ export const testimonies = [
     name: "JACQULINE W SPENCE.",
     instagram: "https://instagram.com/jacquline_w._Spence",
     igname: "@jacquline_w._Spence",
-    tradeername: "DANIELLA MARTHA",
-    traderigname: "@cryptowithmartha",
+    tradeername: "MARILYN KEITH | MAKE MONEY ONLINE",
+    traderigname: "@debtfreewithmarilyn",
     traderimg: "/testimony3.jpg",
-    traderinstagram: "https://instagram.com/cryptowithmartha",
+    traderinstagram: "https://www.instagram.com/debtfreewithmarilyn",
   },
 ];
 export const plaques = [

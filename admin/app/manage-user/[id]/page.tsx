@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styles from "@/app/styles/pages/User.module.scss";
-import { AiTwotoneEdit } from "react-icons/ai";
-import { HiUser } from "react-icons/hi2";
 import { MdAccountBalance, MdArrowDropDown } from "react-icons/md";
 import { RiLuggageDepositFill, RiProfileLine } from "react-icons/ri";
 import { IoNotifications } from "react-icons/io5";
@@ -24,10 +22,6 @@ import {
   Thead,
   Tfoot,
   Flex,
-  Stack,
-  WrapItem,
-  Avatar,
-  Spacer,
   Divider,
   CardBody,
   Card,
@@ -45,21 +39,23 @@ import {
   resetUpdateState,
   resetSendState,
   resetUpdateDepositState,
-  updateUser,
-  userDeposit,
-  changeState,
   updateDeposit,
   deleteDeposit,
 } from "@/redux/features/AppSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { useParams } from "next/navigation";
+import UserInformation from "@/components/UserInformation";
+import UserBalance from "@/components/UserBalance";
+import UserCreateDeposit from "@/components/UserCreateDeposit";
+import UserProfile from "@/components/UserProfile";
+import UserWithdrawMessage from "@/components/UserWithdrawMessage";
+import UserNotifications from "@/components/UserNotifications";
 
 type Props = {};
 
 const ManageUser = (props: Props) => {
   const params = useParams();
   const {
-    userManageData,
     manageUserDeposits,
     updateDepositState,
     sendState,
@@ -68,83 +64,28 @@ const ManageUser = (props: Props) => {
     updateState,
   } = useAppSelector((state) => state.AppSlice);
   const stateBoxRef: any = useRef();
-  const [accountBox, setAccountBox] = useState(false);
   const [formData, setFormData] = useState({
     amount: 0,
   });
   const [isLoading, setisLoading] = useState(false);
   const [isLoading2, setisLoading2] = useState(false);
-  const [balanceFormData, setBalanceFormData] = useState({
-    totalBalance: 0,
-    totalProfit: 0,
-  });
 
-  const [depositFormData, setDepositFormData] = useState({
-    amount: 0,
-  });
   const [postsPerPage, sePostsPerPage] = useState(4);
 
   const [transactionState, setTransactionState] = useState("PENDING");
 
-  const [notifFormData, setNotifFormData] = useState({
-    message: "",
-  });
   const { toast } = createStandaloneToast();
   const dispatch = useAppDispatch();
-  const date = new Date(`${userManageData.createdAt}`);
-  const date2 = new Date(`${userManageData.lastLogin}`);
-  const options: any = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    timeZoneName: "short",
-  };
-  const sumofDeposits = manageUserDeposits.reduce((accumulator, obj) => {
-    return accumulator + obj.amount;
-  }, 0);
-  const formattedDate = `${date.toLocaleDateString("en-US", options)}`;
-  const formattedDate2 = `${date2.toLocaleDateString("en-US", options)}`;
-  const handleChangeAccountState = () => {
-    setAccountBox((prev) => !prev);
-  };
+
   const handleInputChange = (e: any) => {
     setFormData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
-    setNotifFormData((prev: any) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-    setBalanceFormData((prev: any) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-    setDepositFormData((prev: any) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
   };
   const handleTransactionStateChange = (e: any) => {
     if (e.target.value === "") return;
     console.log(132, e.target.value);
     setTransactionState(e.target.value);
   };
-  const handleSendNotifications = (e: any) => {
-    e.preventDefault();
-    dispatch(
-      sendNotification({
-        message: notifFormData.message,
-        userId: params.id,
-      })
-    );
-  };
-  const handleClickOutside = (event: any) => {
-    if (stateBoxRef.current && !stateBoxRef.current.contains(event.target)) {
-      setAccountBox(false);
-    }
-  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexofFirstPost = indexOfLastPost - postsPerPage;
@@ -155,15 +96,6 @@ const ManageUser = (props: Props) => {
   const makeTransactionStateChange = (id: any, transactionstatedata: any) => {
     dispatch(sendTransactionState([id, transactionstatedata]));
   };
-  useEffect(() => {
-    dispatch(getUser(params.id));
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   useEffect(() => {
     if (usersState.isSuccess) {
@@ -201,10 +133,7 @@ const ManageUser = (props: Props) => {
     usersState.isLoading,
     dispatch,
   ]);
-  const [btcEq, setBtcEq] = useState(0);
-  useEffect(() => {
-    convertDollarToBTC(Number(userManageData?.totalBalance));
-  });
+
   useEffect(() => {
     dispatch(getMyUserDeposits(params.id));
   }, []);
@@ -222,10 +151,8 @@ const ManageUser = (props: Props) => {
         dispatch(getMyUserDeposits(params.id));
         dispatch(getUser(params.id));
         setisLoading(false);
-        setNotifFormData({ message: "" });
       };
       x();
-      setBalanceFormData({ totalBalance: 0, totalProfit: 0 });
     }
     if (updateState.isError) {
       toast({
@@ -257,7 +184,6 @@ const ManageUser = (props: Props) => {
       dispatch(getUser(params.id));
       dispatch(getMyUserDeposits(params.id));
       setisLoading(false);
-      setNotifFormData({ message: "" });
     }
     if (sendState.isError) {
       toast({
@@ -312,31 +238,6 @@ const ManageUser = (props: Props) => {
     updateDepositState.isLoading,
   ]);
 
-  async function convertDollarToBTC(amountInUSD: number) {
-    try {
-      const response = await fetch(
-        "https://api.coindesk.com/v1/bpi/currentprice/BTC.json"
-      );
-      const data = await response.json();
-      const exchangeRate = data.bpi.USD.rate_float;
-      const btcValue = amountInUSD / exchangeRate;
-      setBtcEq(btcValue);
-      return btcValue;
-    } catch (error) {
-      console.error("Error fetching exchange rate:", error);
-      return null;
-    }
-  }
-
-  const handleUpdateBalance = async (e: any) => {
-    e.preventDefault();
-    await dispatch(updateUser([params.id, balanceFormData]));
-  };
-  const handleDeposit = (e: any) => {
-    e.preventDefault();
-    dispatch(userDeposit({ userId: params.id, ...depositFormData }));
-  };
-
   return (
     <div className={`${styles.manage_user_block}`}>
       {isLoading && <SpinnerPage />}
@@ -345,353 +246,13 @@ const ManageUser = (props: Props) => {
         <h1>Manage User</h1>
         <small>Dashboard</small>
       </section>
-      <section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <HiUser />
-            <p>
-              {`${userManageData.firstname} ${userManageData.lastname}`}'s
-              Information
-            </p>
-          </div>
-          <Flex p={4} gap={8} justify={"between"} align={"center"}>
-            <WrapItem>
-              <Avatar
-                // onClick={() => {
-                //   setOverlay(<OverlayOne />);
-                //   modal1.onOpen();
-                // }}
-                cursor={"pointer"}
-                size="2xl"
-                name="Kola Tioluwani"
-                src={
-                  userManageData?.picture
-                    ? `${userManageData.picture}`
-                    : "/images.png"
-                }
-              />
-            </WrapItem>
+      <UserInformation />
+      <UserBalance />
+      <UserCreateDeposit />
+      <UserProfile />
+      <UserWithdrawMessage />
+      <UserNotifications />
 
-            <Stack spacing={3} w={"100%"}>
-              <Text fontSize="sm">
-                Available Balance: ${userManageData.totalBalance}
-              </Text>
-              <Text fontSize="sm">Total Deposit: ${sumofDeposits} </Text>
-              <Text fontSize="sm">
-                Total Profit: ${userManageData.totalProfit}{" "}
-              </Text>
-              <Text fontSize="sm">
-                Total Withdrawal: ${userManageData.totalWithdrawal}
-              </Text>
-              <Text fontSize="sm">Total Investment: {btcEq} BTC</Text>
-              {/* <Button
-                fontSize={14}
-                type="submit"
-                w="100%"
-                colorScheme="messenger">
-                Login Account
-              </Button> */}
-            </Stack>
-          </Flex>
-        </div>
-      </section>
-      <section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <MdAccountBalance />
-            <p>
-              Update {`${userManageData.firstname} ${userManageData.lastname}`}
-              's Balance
-            </p>
-          </div>
-          <Box p={2}>
-            <form action="" onSubmit={handleUpdateBalance}>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Total Balance</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  name="totalBalance"
-                  value={balanceFormData.totalBalance}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Total Profit</FormLabel>
-                <Input
-                  type="text"
-                  fontSize={12}
-                  name="totalProfit"
-                  value={balanceFormData.totalProfit}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-
-              <FormControl p={2}>
-                <Button
-                  fontSize={14}
-                  type="submit"
-                  w="100%"
-                  colorScheme="messenger"
-                >
-                  Update
-                </Button>
-              </FormControl>
-            </form>
-          </Box>
-        </div>
-      </section>
-      <section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <MdAccountBalance />
-            <p>
-              Create Deposit for{" "}
-              {`${userManageData.firstname} ${userManageData.lastname}`}
-            </p>
-          </div>
-          <Box p={2}>
-            <form action="" onSubmit={handleDeposit}>
-              <FormControl p={2}>
-                <FormLabel fontSize={11}>Amount</FormLabel>
-                <Input
-                  type="number"
-                  fontSize={12}
-                  required
-                  name="amount"
-                  value={depositFormData.amount}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-
-              <FormControl p={2}>
-                <Button
-                  fontSize={14}
-                  type="submit"
-                  w="100%"
-                  colorScheme="messenger"
-                >
-                  Create
-                </Button>
-              </FormControl>
-            </form>
-          </Box>
-        </div>
-      </section>
-      <section className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <RiProfileLine />
-            <p>
-              {" "}
-              {`${userManageData.firstname} ${userManageData.lastname}`}'s
-              Profile
-            </p>
-          </div>
-          <Flex p={4} gap={1} direction={"column"}>
-            <Box>
-              <Text fontSize="sm">Name:</Text>
-              <Text fontSize={12}>
-                {" "}
-                {`${userManageData.firstname} ${userManageData.lastname}`}
-              </Text>
-            </Box>
-            <Divider />
-            <Box>
-              <Text fontSize="sm">Email:</Text>
-              <Text fontSize={12}>{userManageData.email}</Text>
-            </Box>
-            <Divider colorScheme={"red"} variant={"solid"} />
-            <Box>
-              <Text fontSize="sm">Registered on:</Text>
-              <Text fontSize={12}>{formattedDate}</Text>
-            </Box>
-            <Divider />
-            <Box>
-              <Text fontSize="sm">Referral link:</Text>
-              {/* <Text fontSize={12}>been</Text> */}
-              <Button size={"sm"} fontSize={11} colorScheme="messenger">
-                VIEW REFERRALS
-              </Button>
-            </Box>
-            <Divider colorScheme={"red"} variant={"solid"} />
-            <Box ref={stateBoxRef}>
-              <Text fontSize="sm">Account State:</Text>
-              {userManageData.accountState === "PENDING" ? (
-                <Card>
-                  <CardBody>
-                    <Button
-                      fontSize={12}
-                      colorScheme="red"
-                      onClick={handleChangeAccountState}
-                    >
-                      NOT VERIFIED
-                    </Button>
-                    {accountBox && (
-                      <Card
-                        position={"absolute"}
-                        top={0}
-                        left={"10rem"}
-                        zIndex={4}
-                        border={"1px solid #eaeaea"}
-                        marginTop={2}
-                      >
-                        <CardBody>
-                          <Text fontSize={12} marginBottom={1}>
-                            Set State To:
-                          </Text>
-                          <Button
-                            fontSize={12}
-                            colorScheme="whatsapp"
-                            onClick={() =>
-                              dispatch(
-                                changeState([
-                                  params.id,
-                                  { accountState: "VERIFIED" },
-                                ])
-                              )
-                            }
-                          >
-                            VERIFIED
-                          </Button>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </CardBody>
-                </Card>
-              ) : userManageData.accountState === "BLOCKED" ? (
-                <Card>
-                  <CardBody>
-                    <Button
-                      fontSize={12}
-                      colorScheme="red"
-                      onClick={handleChangeAccountState}
-                    >
-                      BLOCKED
-                    </Button>
-                    {accountBox && (
-                      <Card
-                        position={"absolute"}
-                        top={0}
-                        left={"10rem"}
-                        border={"1px solid #eaeaea"}
-                        zIndex={4}
-                        marginTop={2}
-                      >
-                        <CardBody>
-                          <Text fontSize={12} marginBottom={1}>
-                            Set State To:
-                          </Text>
-                          <Button
-                            fontSize={12}
-                            colorScheme="whatsapp"
-                            onClick={() =>
-                              dispatch(
-                                changeState([
-                                  params.id,
-                                  { accountState: "VERIFIED" },
-                                ])
-                              )
-                            }
-                          >
-                            VERIFIED
-                          </Button>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </CardBody>
-                </Card>
-              ) : (
-                <Card>
-                  <CardBody>
-                    <Button
-                      fontSize={12}
-                      colorScheme="whatsapp"
-                      onClick={handleChangeAccountState}
-                    >
-                      VERIFIED
-                    </Button>
-                    {accountBox && (
-                      <Card
-                        position={"absolute"}
-                        top={0}
-                        left={"10rem"}
-                        border={"1px solid #eaeaea"}
-                        zIndex={4}
-                        marginTop={2}
-                      >
-                        <CardBody>
-                          <Text fontSize={12} marginBottom={1}>
-                            Set State To:
-                          </Text>
-                          <Button
-                            fontSize={12}
-                            colorScheme="red"
-                            onClick={() =>
-                              dispatch(
-                                changeState([
-                                  userManageData.id,
-                                  { accountState: "BLOCKED" },
-                                ])
-                              )
-                            }
-                          >
-                            BLOCKED
-                          </Button>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </CardBody>
-                </Card>
-              )}
-            </Box>
-            <Divider colorScheme={"red"} variant={"solid"} />
-            <Box>
-              <Text fontSize="sm">Last Login Information:</Text>
-              <Text fontSize={12}>{formattedDate2}</Text>
-            </Box>
-            <Divider colorScheme={"red"} variant={"solid"} />
-          </Flex>
-        </div>
-      </section>
-
-      <section id="notifications" className={`${styles.user_block}`}>
-        <div className={`${styles.management_block}`}>
-          <div className={`${styles.management_head}`}>
-            <IoNotifications />
-            <p>Notifications</p>
-          </div>
-
-          <Box p={2}>
-            <form action="" onSubmit={handleSendNotifications}>
-              <FormControl p={2}>
-                <Text mb="8px" fontSize={11}>
-                  Message:{" "}
-                </Text>
-                <Textarea
-                  fontSize={12}
-                  value={notifFormData.message}
-                  required
-                  name="message"
-                  placeholder="What's the message"
-                  onChange={handleInputChange}
-                  size="sm"
-                />
-              </FormControl>
-              <FormControl p={2}>
-                <Button
-                  fontSize={14}
-                  type="submit"
-                  w="100%"
-                  colorScheme="messenger"
-                >
-                  Send
-                </Button>
-              </FormControl>
-            </form>
-          </Box>
-        </div>
-      </section>
       <section className={`${styles.user_block}`}>
         <div className={`${styles.management_block}`}>
           <div className={`${styles.management_head}`}>

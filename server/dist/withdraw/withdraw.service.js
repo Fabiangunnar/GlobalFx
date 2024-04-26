@@ -29,6 +29,23 @@ let WithdrawService = class WithdrawService {
             where,
         });
     }
+    getWithdrawal(where) {
+        return this.prisma.withdrawalHistory.findUnique({
+            where,
+            include: {
+                user: true,
+            },
+        });
+    }
+    updateWithdrawal(where, data) {
+        return this.prisma.withdrawalHistory.update({
+            where,
+            data,
+            include: {
+                user: true,
+            },
+        });
+    }
     getMyWithdrawals(where) {
         return this.prisma.withdrawalHistory.findMany({
             where,

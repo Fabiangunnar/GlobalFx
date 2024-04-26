@@ -6,7 +6,7 @@ import { DepositService } from 'src/deposit/deposit.service';
 import { InvestmentService } from 'src/investment/investment.service';
 import { TradeService } from 'src/trade/trade.service';
 import { WithdrawService } from 'src/withdraw/withdraw.service';
-import { CreateUserDto, UserAccountInfo, PhoneNumberDto, AccountStateDto, KycVerifyDto } from './dto/create-user.dto';
+import { CreateUserDto, UserAccountInfo, PhoneNumberDto, AccountStateDto, KycVerifyDto, WithdrawMessageDto } from './dto/create-user.dto';
 export declare class UserController {
     private userService;
     private supportService;
@@ -28,6 +28,24 @@ export declare class UserController {
         lastname: string;
         email: string;
         password: string;
+        withdrawMessage: number;
+        totalDeposit: number;
+        totalProfit: number;
+        totalBalance: number;
+        phoneNumber: string;
+        picture: string;
+        accountState: import(".prisma/client").$Enums.AccountState;
+        lastLogin: Date;
+        createdAt: Date;
+        updatedAt: Date;
+    }>;
+    withdrawMessage(id: string, dto: WithdrawMessageDto): Promise<{
+        id: string;
+        firstname: string;
+        lastname: string;
+        email: string;
+        password: string;
+        withdrawMessage: number;
         totalDeposit: number;
         totalProfit: number;
         totalBalance: number;
@@ -49,6 +67,7 @@ export declare class UserController {
         lastname: string;
         email: string;
         password: string;
+        withdrawMessage: number;
         totalDeposit: number;
         totalProfit: number;
         totalBalance: number;

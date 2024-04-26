@@ -16,7 +16,7 @@ exports.WithdrawController = void 0;
 const common_1 = require("@nestjs/common");
 const withdraw_service_1 = require("./withdraw.service");
 const user_service_1 = require("../user/user.service");
-const create_deposit_dto_1 = require("../deposit/dto/create-deposit.dto");
+const create_withdraw_dto_1 = require("./dto/create-withdraw.dto");
 let WithdrawController = class WithdrawController {
     constructor(withdrawService, userService) {
         this.withdrawService = withdrawService;
@@ -43,12 +43,6 @@ let WithdrawController = class WithdrawController {
     }
     async makeWithdrawal(withdraw) {
         try {
-            if (!withdraw.asset ||
-                !withdraw.amount ||
-                !withdraw.userId ||
-                !withdraw.walletAddress ||
-                !withdraw.walletCode)
-                throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
             const user = await this.userService.getUser({ id: withdraw.userId });
             const isWithdrawCode = await this.withdrawService.getWalletCode({
                 withdrawalCode: withdraw.walletCode,
@@ -96,7 +90,7 @@ __decorate([
     (0, common_1.Post)('/'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_deposit_dto_1.CreateDepositDto]),
+    __metadata("design:paramtypes", [create_withdraw_dto_1.CreateWithdrawDto]),
     __metadata("design:returntype", Promise)
 ], WithdrawController.prototype, "makeWithdrawal", null);
 exports.WithdrawController = WithdrawController = __decorate([

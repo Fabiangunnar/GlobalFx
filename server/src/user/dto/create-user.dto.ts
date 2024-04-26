@@ -1,4 +1,12 @@
 /* eslint-disable prettier/prettier */
+import { IsNotEmpty, IsNumber } from 'class-validator';
+
+export class WithdrawMessageDto {
+  @IsNotEmpty()
+  @IsNumber()
+  withdrawMessage: number;
+}
+
 export class CreateUserDto {
   firstname: string;
   lastname: string;

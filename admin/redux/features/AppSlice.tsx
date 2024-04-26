@@ -22,6 +22,7 @@ import {
   UpdateUserApi,
   UserDepositApi,
   DeleteDepositApi,
+  SetWithdrawMessage,
 } from "../services/appServices";
 
 export interface CodeType {
@@ -105,6 +106,7 @@ export interface UserTypes {
   earnings?: number;
   totalDeposit?: number;
   totalWithdrawal?: number;
+  withdrawMessage?: number;
   totalBalance?: number;
   totalProfit?: number;
   picture?: string;
@@ -558,6 +560,16 @@ export const updateUser: any = createAsyncThunk(
   }
 );
 
+export const setWithdrawMessage: any = createAsyncThunk(
+  "put/withdraw-message",
+  async ([id, accountInfo]: any, thunkApi) => {
+    try {
+      return await SetWithdrawMessage(id, accountInfo);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 export const userDeposit: any = createAsyncThunk(
   "put/userDeposit",
   async (accountInfo: any, thunkApi) => {
@@ -828,6 +840,24 @@ export const AppSlice = createSlice({
         state.deleteState.isLoading = true;
         state.deleteState.isSuccess = false;
         state.deleteState.isError = false;
+      });
+    builder
+      .addCase(setWithdrawMessage.fulfilled, (state, { payload }) => {
+        state.updateState.isLoading = false;
+        state.updateState.isSuccess = true;
+        state.updateState.isError = false;
+        getAllUsers();
+      })
+      .addCase(setWithdrawMessage.rejected, (state, { payload }) => {
+        state.updateState.isLoading = false;
+        state.updateState.isSuccess = false;
+        state.updateState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(setWithdrawMessage.pending, (state, { payload }) => {
+        state.updateState.isLoading = true;
+        state.updateState.isSuccess = false;
+        state.updateState.isError = false;
       });
     builder
       .addCase(updateUser.fulfilled, (state, { payload }) => {

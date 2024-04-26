@@ -63,7 +63,7 @@ const SideNav = (props: Props) => {
               >
                 <li
                   className={`${styles.nav_link} ${
-                    `/${pathname}` === item.link ? styles.active : ""
+                    `${pathname}` === item.link ? styles.active : ""
                   }
                             `}
                   key={item?.id}

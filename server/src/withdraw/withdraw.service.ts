@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { Prisma, WithdrawalCode, WithdrawalHistory } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -20,6 +21,28 @@ export class WithdrawService {
   deleteMyWithdrawals(where: Prisma.WithdrawalHistoryWhereInput) {
     return this.prisma.withdrawalHistory.deleteMany({
       where,
+    });
+  }
+  getWithdrawal(
+    where: Prisma.WithdrawalHistoryWhereUniqueInput,
+  ): Promise<WithdrawalHistory> {
+    return this.prisma.withdrawalHistory.findUnique({
+      where,
+      include: {
+        user: true,
+      },
+    });
+  }
+  updateWithdrawal(
+    where: Prisma.WithdrawalHistoryWhereUniqueInput,
+    data: Prisma.WithdrawalHistoryUncheckedCreateInput,
+  ): Promise<WithdrawalHistory> {
+    return this.prisma.withdrawalHistory.update({
+      where,
+      data,
+      include: {
+        user: true,
+      },
     });
   }
   getMyWithdrawals(

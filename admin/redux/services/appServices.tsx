@@ -17,6 +17,10 @@ export const GetUserApi = async (id: any) => {
   const { data } = await API.get(`/user/${id}`);
   return data;
 };
+export const SetWithdrawMessage = async (id: any, depositData: any) => {
+  const { data } = await API.put(`/user/withdraw-message/${id}`, depositData);
+  return data;
+};
 export const UserDepositApi = async (depositData: any) => {
   const { data } = await API.post(`/admin-auth/user/deposit`, depositData);
   return data;

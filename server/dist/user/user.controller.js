@@ -129,6 +129,16 @@ let UserController = class UserController {
             throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
         }
     }
+    async withdrawMessage(id, dto) {
+        try {
+            return await this.userService.updateUserInfo({ id }, {
+                withdrawMessage: Number(dto.withdrawMessage),
+            });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
     async updateProfilePicture(profilePictureInfo, id) {
         if (!profilePictureInfo.picture) {
             throw new common_1.HttpException('Input field not complete', common_1.HttpStatus.BAD_REQUEST);
@@ -261,6 +271,14 @@ __decorate([
     __metadata("design:paramtypes", [create_user_dto_1.UserAccountInfo, String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "updateUserAccountInfo", null);
+__decorate([
+    (0, common_1.Put)('/withdraw-message/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, create_user_dto_1.WithdrawMessageDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "withdrawMessage", null);
 __decorate([
     (0, common_1.Put)('/picture/:id'),
     __param(0, (0, common_1.Body)()),

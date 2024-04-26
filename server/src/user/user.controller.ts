@@ -25,6 +25,7 @@ import {
   PhoneNumberDto,
   AccountStateDto,
   KycVerifyDto,
+  WithdrawMessageDto,
 } from './dto/create-user.dto';
 
 @Controller('user')
@@ -175,6 +176,23 @@ export class UserController {
           },
         );
       }
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Put('/withdraw-message/:id')
+  async withdrawMessage(
+    @Param('id') id: string,
+    @Body() dto: WithdrawMessageDto,
+  ) {
+    try {
+      return await this.userService.updateUserInfo(
+        { id },
+        {
+          withdrawMessage: Number(dto.withdrawMessage),
+        },
+      );
     } catch (error) {
       throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
     }

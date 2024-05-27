@@ -105,7 +105,10 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
       </Head> */}
-   <script src="//code.tidio.co/qsqp2myyqwwchzgmosabv6adxgjkybpc.js" async></script>
+      <script
+        src="//code.tidio.co/qsqp2myyqwwchzgmosabv6adxgjkybpc.js"
+        async
+      ></script>
       <NotificationPopup />
       <div className={`app-block  ${styles.home_app_block}`}>
         <header

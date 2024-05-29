@@ -117,25 +117,31 @@ export function WithdrawMessageModal({ overlay, isOpen, onClose }: any) {
         {overlay}
         <ModalContent
           borderRadius={16}
-          background={"#759c4990"}
+          // background={"#759c4990"}
+          background={"#ff000090"}
           color={"#fff"}
           width={"80%"}
         >
           <ModalHeader
             fontFamily={"inherit"}
-            borderBottom={`1px solid #d0ff9c`}
+            borderBottom={`1px solid #ff0000`}
             fontSize={18}
             color={"#fff"}
             textAlign={"center"}
           >
-            Withdraw Successful
+            ERROR!
+            {/* Withdraw Successful */}
           </ModalHeader>
 
           <ModalBody textAlign={"center"} pb={8}>
             <Text fontSize={14}>
-              Your withdrawal is pending! your active robotic signal your trade
+              {/* Your withdrawal is pending! your active robotic signal your trade
               section exceeded limit. Contact your account manager for
-              further information.
+              further information. */}
+              Your withdrawal request has been temporarily halted because your
+              active robotic signal in the trade section has exceeded its limit.
+              To proceed with withdrawing your profits, you will need to
+              purchase a private code. The cost for this code is $4550.
             </Text>
           </ModalBody>
         </ModalContent>

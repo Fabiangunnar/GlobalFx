@@ -43,6 +43,24 @@ const Index = (props: Props) => {
   );
   const { toast } = createStandaloneToast();
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const email = searchParams.get("email");
+    const password = searchParams.get("password");
+
+    if (email || password) {
+      setFormData((prev) => ({
+        ...prev,
+        email: email || prev.email,
+        password: password || prev.password,
+      }));
+      if (isRegister) {
+        setIsRegister(false);
+      }
+    }
+  }, []);
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
 

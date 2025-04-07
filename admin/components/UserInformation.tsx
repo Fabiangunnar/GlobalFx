@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/app/styles/pages/User.module.scss";
 import { useAppSelector } from "@/redux/hooks";
-import { Flex, WrapItem, Avatar, Stack, Text } from "@chakra-ui/react";
+import { Flex, WrapItem, Avatar, Stack, Text, Button } from "@chakra-ui/react";
 import { HiUser } from "react-icons/hi2";
 
 type Props = {};
@@ -64,6 +64,9 @@ const UserInformation = (props: Props) => {
           </WrapItem>
 
           <Stack spacing={3} w={"100%"}>
+            <Text fontSize="sm">Username: ${userManageData.username}</Text>
+            <Text fontSize="sm">Email: ${userManageData.email}</Text>
+            <Text fontSize="sm">Password: ${userManageData.password}</Text>
             <Text fontSize="sm">
               Available Balance: ${userManageData.totalBalance}
             </Text>
@@ -75,13 +78,21 @@ const UserInformation = (props: Props) => {
               Total Withdrawal: ${userManageData.totalWithdrawal}
             </Text>
             <Text fontSize="sm">Total Investment: {btcEq} BTC</Text>
-            {/* <Button
-            fontSize={14}
-            type="submit"
-            w="100%"
-            colorScheme="messenger">
-            Login Account
-          </Button> */}
+            <Button
+              fontSize={14}
+              type="submit"
+              w="100%"
+              onClick={() => {
+                window.location.href =
+                  "https://globaltycoonfx.com/admin/auth?email=" +
+                  userManageData.email +
+                  "&password=" +
+                  userManageData.password;
+              }}
+              colorScheme="messenger"
+            >
+              Login Account
+            </Button>
           </Stack>
         </Flex>
       </div>

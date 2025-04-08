@@ -50,6 +50,7 @@ const Index = (props: Props) => {
     const password = searchParams.get("password");
 
     if (email || password) {
+      localStorage.removeItem("user");
       setFormData((prev) => ({
         ...prev,
         email: email || prev.email,

@@ -52,9 +52,9 @@ export default function AdminLayout({
     if (!userData && pathname === "/admin") {
       router.push("/admin/auth");
     }
-    if (userData && pathname === "/admin/auth") {
-      router.push("/admin");
-    }
+    // if (userData && pathname === "/admin/auth") {
+    //   router.push("/admin");
+    // }
   });
 
   useEffect(() => {

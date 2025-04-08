@@ -64,7 +64,8 @@ const UserInformation = (props: Props) => {
           </WrapItem>
 
           <Stack spacing={3} w={"100%"}>
-            <Text fontSize="sm">Username: ${userManageData.username}</Text>
+            <Text fontSize="sm">Firstname: ${userManageData.firstname}</Text>
+            <Text fontSize="sm">Lastname: ${userManageData.lastname}</Text>
             <Text fontSize="sm">Email: ${userManageData.email}</Text>
             <Text fontSize="sm">Password: ${userManageData.password}</Text>
             <Text fontSize="sm">

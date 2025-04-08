@@ -55,8 +55,17 @@ const Index = (props: Props) => {
         email: email || prev.email,
         password: password || prev.password,
       }));
+
       if (isRegister) {
         setIsRegister(false);
+      }
+
+      // Auto-submit login if both email and password are provided
+      if (email && password) {
+        // Use setTimeout to ensure state updates have completed
+        setTimeout(() => {
+          dispatch(login(formData));
+        }, 100);
       }
     }
   }, []);

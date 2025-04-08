@@ -61,14 +61,14 @@ const Index = (props: Props) => {
       }
 
       // Auto-submit login if both email and password are provided
-      if (formData.email && formData.password) {
+      if (formData.email && formData.password && email && password) {
         // Use setTimeout to ensure state updates have completed
         setTimeout(() => {
           dispatch(login(formData));
         }, 200);
       }
     }
-  }, []);
+  }, [formData.email, formData.password]);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();

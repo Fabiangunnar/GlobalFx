@@ -11,7 +11,7 @@ import {
   RiFundsFill,
   RiLuggageDepositFill,
 } from "react-icons/ri";
-import { FaMoneyBillAlt } from "react-icons/fa";
+import { FaChartLine, FaMoneyBillAlt } from "react-icons/fa";
 import { GiTrade } from "react-icons/gi";
 import { BiMoneyWithdraw, BiTransfer } from "react-icons/bi";
 import { TfiTicket } from "react-icons/tfi";
@@ -53,6 +53,14 @@ export const navData: NavTypes[] = [
     state: false,
     link: "trade",
   },
+  {
+    id: "VWFX1D",
+    icon: "FaChartLine",
+    desc: "Signals",
+    state: false,
+    link: "signals",
+  },
+
   {
     id: "RST48H",
     icon: "BiMoneyWithdraw",
@@ -164,6 +172,8 @@ export const getIconComponent = (iconName: string) => {
       return <AiOutlineStock fontSize={18} />;
     case "HiUser":
       return <HiUser fontSize={18} />;
+    case "FaChartLine":
+      return <FaChartLine fontSize={18} />;
 
     default:
       return null;

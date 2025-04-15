@@ -85,7 +85,7 @@ const SideNav = ({ ref }: any) => {
             );
           })}
           <Divider />
-          {navData.slice(1, 5).map((item: NavTypes) => {
+          {navData.slice(1, 6).map((item: NavTypes) => {
             const icon = getIconComponent(item.icon);
 
             return (
@@ -105,7 +105,7 @@ const SideNav = ({ ref }: any) => {
           })}
           <Divider />
 
-          {navData.slice(5).map((item: NavTypes) => {
+          {navData.slice(6).map((item: NavTypes) => {
             const icon = getIconComponent(item.icon);
             if (item?.submenu) {
               return (

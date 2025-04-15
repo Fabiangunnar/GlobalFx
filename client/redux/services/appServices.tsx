@@ -99,10 +99,16 @@ export const GetAllPendingDeposits = async (id: string) => {
   return data;
 };
 export const GetMyTrades = async (id: string) => {
-  const { data } = await API.get(`/trade/my/${id}`);
+  const { data } = await API.get(`/trade/my/trades/${id}`);
 
   return data;
 };
+
+export const GetMySignals = async (id: string) => {
+  const { data } = await API.get(`/trade/my/signals/${id}`);
+  return data;
+};
+
 export const MakeDepositApi = async (depositData: any) => {
   const { data } = await API.post(`/deposit`, depositData);
   localStorage.setItem("all-deposits", JSON.stringify(data));
@@ -121,6 +127,11 @@ export const MakeInvestmentApi = async (investmentData: any) => {
 };
 export const MakeTrade = async (tradeData: any) => {
   const { data } = await API.post(`/trade`, tradeData);
+
+  return data;
+};
+export const MakeSignal = async (signalData: any) => {
+  const { data } = await API.post(`/trade/signal`, signalData);
 
   return data;
 };

@@ -7,6 +7,8 @@ import { TfiEmail, TfiTicket } from "react-icons/tfi";
 import { IoSettings } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { BsSendCheck } from "react-icons/bs";
+import { FaChartLine } from "react-icons/fa";
+
 export interface NavTypes {
   id: string;
   icon: string;
@@ -44,6 +46,7 @@ export const navData: NavTypes[] = [
     state: false,
     link: "/investments",
   },
+
   {
     id: "LMK26P",
     icon: "RiLuggageDepositFill",
@@ -57,6 +60,13 @@ export const navData: NavTypes[] = [
     desc: "Trades",
     state: false,
     link: "/trades",
+  },
+  {
+    id: "VWFX1D",
+    icon: "FaChartLine",
+    desc: "Signals",
+    state: false,
+    link: "/signals",
   },
   {
     id: "RST48H",
@@ -121,6 +131,8 @@ export const getIconComponent = (iconName: string) => {
       return <IoSettings fontSize={18} />;
     case "CiLogout":
       return <CiLogout fontSize={18} />;
+    case "FaChartLine":
+      return <FaChartLine fontSize={18} />;
 
     default:
       return null;

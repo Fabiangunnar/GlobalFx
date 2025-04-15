@@ -19,14 +19,30 @@ let TradeService = class TradeService {
     createTrade(data) {
         return this.prisma.trades.create({ data });
     }
+    createSignal(data) {
+        return this.prisma.signal.create({ data });
+    }
     getAllTrades() {
         return this.prisma.trades.findMany();
+    }
+    getAllSignals() {
+        return this.prisma.signal.findMany({
+            include: {
+                user: true,
+            },
+        });
     }
     getMyTrades(where) {
         return this.prisma.trades.findMany({ where });
     }
+    getMySignals(where) {
+        return this.prisma.signal.findMany({ where });
+    }
     deleteMyTrades(where) {
         return this.prisma.trades.deleteMany({ where });
+    }
+    deleteMySignals(where) {
+        return this.prisma.signal.deleteMany({ where });
     }
 };
 exports.TradeService = TradeService;

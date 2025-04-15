@@ -8,9 +8,9 @@ import {
   Post,
 } from '@nestjs/common';
 import { TradeService } from './trade.service';
-import { Trades } from '@prisma/client';
+import { Signal, Trades } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
-import { CreateTradeDto } from './dto/create-trade.dto';
+import { CreateSignalDto, CreateTradeDto } from './dto/create-trade.dto';
 
 @Controller('trade')
 export class TradeController {
@@ -50,11 +50,50 @@ export class TradeController {
     return makeTrade;
   }
 
-  @Get('/my/:userId')
+  @Post('signal')
+  async createSignal(@Body() tradeDto: CreateSignalDto): Promise<Signal> {
+    if (
+      !tradeDto.amount ||
+      !tradeDto.name ||
+      !tradeDto.percentage ||
+      !tradeDto.userId ||
+      !tradeDto.description
+    )
+      throw new HttpException('', HttpStatus.BAD_REQUEST);
+    const user = await this.userService.getUser({ id: tradeDto.userId });
+    if (!user)
+      throw new HttpException("User Doesn't exist", HttpStatus.BAD_REQUEST);
+    if (Number(user.totalBalance) < Number(tradeDto.amount))
+      throw new HttpException('Insufficient funds', HttpStatus.FORBIDDEN);
+    const makeTrade = await this.tradeService.createSignal({
+      name: tradeDto.name,
+      amount: Number(tradeDto.amount),
+      percentage: Number(tradeDto.percentage),
+      userId: tradeDto.userId,
+      description: tradeDto.description,
+    });
+
+    await this.userService.updateUserInfo(
+      { id: tradeDto.userId },
+      {
+        totalBalance: user.totalBalance - tradeDto.amount,
+      },
+    );
+
+    return makeTrade;
+  }
+
+  @Get('/my/trades/:userId')
   async getMyTrades(@Param('userId') userId: string): Promise<Trades[]> {
     if (!userId)
       throw new HttpException('Id is undefined', HttpStatus.BAD_REQUEST);
     return this.tradeService.getMyTrades({ userId });
+  }
+  @Get('/my/signals/:userId')
+  async getMySignals(@Param('userId') userId: string): Promise<Signal[]> {
+    if (!userId)
+      throw new HttpException('Id is undefined', HttpStatus.BAD_REQUEST);
+    return this.tradeService.getMySignals({ userId });
   }
 
   @Get('all')
@@ -70,5 +109,9 @@ export class TradeController {
     });
 
     return newTrades;
+  }
+  @Get('all/signals')
+  async getAllSignals(): Promise<Signal[]> {
+    return this.tradeService.getAllSignals();
   }
 }

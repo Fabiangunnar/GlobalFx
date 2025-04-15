@@ -44,10 +44,39 @@ let TradeController = class TradeController {
         });
         return makeTrade;
     }
+    async createSignal(tradeDto) {
+        if (!tradeDto.amount ||
+            !tradeDto.name ||
+            !tradeDto.percentage ||
+            !tradeDto.userId ||
+            !tradeDto.description)
+            throw new common_1.HttpException('', common_1.HttpStatus.BAD_REQUEST);
+        const user = await this.userService.getUser({ id: tradeDto.userId });
+        if (!user)
+            throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.BAD_REQUEST);
+        if (Number(user.totalBalance) < Number(tradeDto.amount))
+            throw new common_1.HttpException('Insufficient funds', common_1.HttpStatus.FORBIDDEN);
+        const makeTrade = await this.tradeService.createSignal({
+            name: tradeDto.name,
+            amount: Number(tradeDto.amount),
+            percentage: Number(tradeDto.percentage),
+            userId: tradeDto.userId,
+            description: tradeDto.description,
+        });
+        await this.userService.updateUserInfo({ id: tradeDto.userId }, {
+            totalBalance: user.totalBalance - tradeDto.amount,
+        });
+        return makeTrade;
+    }
     async getMyTrades(userId) {
         if (!userId)
             throw new common_1.HttpException('Id is undefined', common_1.HttpStatus.BAD_REQUEST);
         return this.tradeService.getMyTrades({ userId });
+    }
+    async getMySignals(userId) {
+        if (!userId)
+            throw new common_1.HttpException('Id is undefined', common_1.HttpStatus.BAD_REQUEST);
+        return this.tradeService.getMySignals({ userId });
     }
     async getAllTrades() {
         const allTrades = await this.tradeService.getAllTrades();
@@ -57,6 +86,9 @@ let TradeController = class TradeController {
             return { ...trades, username: `${firstname} ${lastname}` };
         });
         return newTrades;
+    }
+    async getAllSignals() {
+        return this.tradeService.getAllSignals();
     }
 };
 exports.TradeController = TradeController;
@@ -68,18 +100,38 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "createTrade", null);
 __decorate([
-    (0, common_1.Get)('/my/:userId'),
+    (0, common_1.Post)('signal'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_trade_dto_1.CreateSignalDto]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "createSignal", null);
+__decorate([
+    (0, common_1.Get)('/my/trades/:userId'),
     __param(0, (0, common_1.Param)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "getMyTrades", null);
 __decorate([
+    (0, common_1.Get)('/my/signals/:userId'),
+    __param(0, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "getMySignals", null);
+__decorate([
     (0, common_1.Get)('all'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "getAllTrades", null);
+__decorate([
+    (0, common_1.Get)('all/signals'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "getAllSignals", null);
 exports.TradeController = TradeController = __decorate([
     (0, common_1.Controller)('trade'),
     __metadata("design:paramtypes", [trade_service_1.TradeService,

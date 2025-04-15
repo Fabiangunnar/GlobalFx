@@ -23,6 +23,7 @@ import {
   UserDepositApi,
   DeleteDepositApi,
   SetWithdrawMessage,
+  GetAllSignals,
 } from "../services/appServices";
 
 export interface CodeType {
@@ -152,6 +153,7 @@ let investmentHistory: InvestmentType[] = [];
 
 let supportTicketData: SupportTicketType[] = [];
 const manageUserDeposits: ManageUserDeposits[] = [];
+let signals: SignalDto[] = [];
 
 const userManageData: UserTypes = {
   id: "",
@@ -170,7 +172,15 @@ const userManageData: UserTypes = {
   pictureInfo: "",
   createdAt: "",
 };
-
+export interface SignalDto {
+  id: string;
+  name: string;
+  amount: number;
+  percentage: number;
+  description: string;
+  user: UserTypes;
+  createdAt: Date;
+}
 interface initialTypes {
   adminInfo: AdminType | null;
   userState: {
@@ -232,9 +242,15 @@ interface initialTypes {
     statusCode: number;
     message: string;
   };
+  signalState: {
+    isLoading: boolean;
+    isError: boolean;
+    isSuccess: boolean;
+  };
   users: UserTypes[];
   deposits: DepositsType[];
   withdrawals: WithdrawalType[];
+  signals: SignalDto[];
   supportTicketData: SupportTicketType[];
   notification: NotificationType;
   userManageData: UserTypes;
@@ -257,6 +273,7 @@ const initialState: initialTypes = {
   investmentHistory,
   withdrawalCode,
   trades,
+  signals,
   userState: {
     isLoading: false,
     isError: false,
@@ -308,6 +325,11 @@ const initialState: initialTypes = {
     isSuccess: false,
   },
   adminState3: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+  },
+  signalState: {
     isLoading: false,
     isError: false,
     isSuccess: false,
@@ -455,6 +477,17 @@ export const getAllDeposits: any = createAsyncThunk(
   async (_, thunkApi) => {
     try {
       return await GetAllDepositsApi();
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getAllSignals: any = createAsyncThunk(
+  "get/allSignals",
+  async (_, thunkApi) => {
+    try {
+      return await GetAllSignals();
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.response.data);
     }
@@ -951,6 +984,24 @@ export const AppSlice = createSlice({
         state.getState.isLoading = true;
         state.getState.isSuccess = false;
         state.getState.isError = false;
+      });
+    builder
+      .addCase(getAllSignals.fulfilled, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = true;
+        state.signalState.isError = false;
+        state.signals = payload;
+      })
+      .addCase(getAllSignals.rejected, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(getAllSignals.pending, (state, { payload }) => {
+        state.signalState.isLoading = true;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = false;
       });
     builder
       .addCase(getAllDeposits.fulfilled, (state, { payload }) => {

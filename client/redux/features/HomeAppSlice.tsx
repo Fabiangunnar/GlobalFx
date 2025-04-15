@@ -18,6 +18,8 @@ import {
   MakeWithdrawalApi,
   MakeInvestmentApi,
   MakeTrade,
+  MakeSignal,
+  GetMySignals,
 } from "../services/appServices";
 
 export interface UserTypes {
@@ -56,6 +58,8 @@ export interface DepositDto {
   amount: number;
   userId: string;
   to?: string;
+  name?: string;  
+  percentage?: number;
   transactionState: any;
   createdAt: Date;
   walletAddress?: string;
@@ -90,6 +94,7 @@ interface initialTypes {
   adminAccounts: AdminAccount[];
   depositHistory: DepositDto[];
   withdrawalHistory: DepositDto[];
+  signalHistory: DepositDto[];
   pendingDeposits: PendingDepositDto[];
   investmentHistory: InvestmentType[];
   tradeHistory: TradeDto[];
@@ -119,6 +124,11 @@ interface initialTypes {
     isSuccess: boolean;
   };
   getState: {
+    isLoading: boolean;
+    isError: boolean;
+    isSuccess: boolean;
+  };
+  signalState: {
     isLoading: boolean;
     isError: boolean;
     isSuccess: boolean;
@@ -156,6 +166,7 @@ let adminAccounts: AdminAccount[] = [
 let notifications: NotificationType[] = [];
 let depositHistory: DepositDto[] = [];
 let withdrawalHistory: DepositDto[] = [];
+let signalHistory: DepositDto[] = [];
 let pendingDeposits: PendingDepositDto[] = [];
 let investmentHistory: InvestmentType[] = [];
 let tradeHistory: TradeDto[] = [];
@@ -165,6 +176,7 @@ const initialState: initialTypes = {
   adminAccounts,
   depositHistory,
   withdrawalHistory,
+  signalHistory,
   pendingDeposits,
   investmentHistory,
   tradeHistory,
@@ -198,11 +210,27 @@ const initialState: initialTypes = {
     isError: false,
     isSuccess: false,
   },
+  signalState: {
+    isLoading: false,
+    isError: false,
+    isSuccess: false,
+  },
   errorMessage: {
     statusCode: 0,
     message: "",
   },
 };
+
+export const createSignal: any = createAsyncThunk(
+  "create/signal",
+  async (signalData, thunkApi) => {
+    try {
+      return await MakeSignal(signalData);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 export const login: any = createAsyncThunk(
   "auth/login",
   async (userData, thunkApi) => {
@@ -308,6 +336,16 @@ export const getAllDeposits: any = createAsyncThunk(
   async (userId: any, thunkApi) => {
     try {
       return await GetAllDeposits(userId);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+export const getAllSignals: any = createAsyncThunk(
+  "get/signals",
+  async (userId: any, thunkApi) => {
+    try {
+      return await GetMySignals(userId);
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.response.data);
     }
@@ -524,6 +562,23 @@ export const HomeAppSlice = createSlice({
         state.sendState.isError = false;
       });
     builder
+      .addCase(createSignal.fulfilled, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = true;
+        state.signalState.isError = false;
+      })
+      .addCase(createSignal.rejected, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(createSignal.pending, (state, { payload }) => {
+        state.signalState.isLoading = true;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = false;
+      });
+    builder
       .addCase(kycVerify.fulfilled, (state, { payload }) => {
         state.sendState.isLoading = false;
         state.sendState.isSuccess = true;
@@ -610,6 +665,24 @@ export const HomeAppSlice = createSlice({
         state.sendState.isLoading = true;
         state.sendState.isSuccess = false;
         state.sendState.isError = false;
+      });
+    builder
+      .addCase(getAllSignals.fulfilled, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = true;
+        state.signalState.isError = false;
+        state.signalHistory = payload;
+      })
+      .addCase(getAllSignals.rejected, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(getAllSignals.pending, (state, { payload }) => {
+        state.signalState.isLoading = true;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = false;
       });
     builder
       .addCase(makeWithdrawal.fulfilled, (state, { payload }) => {
@@ -701,6 +774,7 @@ export const HomeAppSlice = createSlice({
         state.getState.isSuccess = false;
         state.getState.isError = false;
       });
+
     builder
       .addCase(getAllWithdrawals.fulfilled, (state, { payload }) => {
         state.getState.isLoading = false;

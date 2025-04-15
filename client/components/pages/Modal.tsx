@@ -41,16 +41,25 @@ import {
   resetSendState,
   updatePhoneNumber,
   updateAccount,
+  createSignal,
 } from "@/redux/features/HomeAppSlice";
 import { resetNav, resetCurrentPage } from "@/redux/features/NavSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { RootState } from "@reduxjs/toolkit/query";
 import { appname } from "@/data/maindata";
+import { SiCoinmarketcap } from "react-icons/si";
 interface ModalProps {
   overlay: any;
   isOpen: boolean;
   onClose: () => void;
   img?: string;
+  signal?: {
+    title: string;
+    price: number;
+    percentage: number;
+    description: string;
+    userId: string;
+  };
 }
 export default function ModalPage({ overlay, isOpen, onClose }: any) {
   const router = useRouter();
@@ -683,6 +692,166 @@ export function EditPasswordInfoModal({
               colorScheme="messenger"
             >
               Update
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
+export function PurchaseSignalModal({
+  overlay,
+  isOpen,
+  onClose,
+  signal,
+}: ModalProps) {
+  const dispatch = useAppDispatch();
+  const { userInfo, signalState, errorMessage } = useAppSelector(
+    (state) => state.HomeAppSlice
+  );
+  const { toast } = createStandaloneToast();
+  const [isLoading, setisLoading] = useState(false);
+
+  useEffect(() => {
+    if (signalState.isSuccess && isOpen) {
+      toast({
+        title: "Success.",
+        description: "Signal subscribed successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+        variant: "subtle",
+      });
+      onClose();
+    }
+    if (signalState.isError) {
+      toast({
+        title: errorMessage.statusCode,
+        description: errorMessage.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        variant: "subtle",
+        position: "top-right",
+      });
+      setisLoading(false);
+    }
+    if (signalState.isLoading) {
+      setisLoading(true);
+    }
+  }, [signalState.isError, signalState.isLoading, signalState.isSuccess]);
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    if (Number(signal?.price) > Number(userInfo?.totalBalance)) {
+      toast({
+        title: "Error.",
+        description: "Insufficient balance",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        variant: "subtle",
+        position: "top-right",
+      });
+      return;
+    }
+    dispatch(
+      createSignal({
+        name: signal?.title,
+        amount: signal?.price,
+        percentage: signal?.percentage,
+        description: signal?.description,
+        userId: userInfo?.id,
+      })
+    );
+  };
+
+  return (
+    <>
+      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+        {overlay}
+        <ModalContent
+          borderRadius={16}
+          background={"#759c4990"}
+          color={"#fff"}
+          width={"80%"}
+        >
+          <ModalHeader
+            fontFamily={"inherit"}
+            borderBottom={`1px solid #d0ff9c`}
+            fontSize={18}
+            color={"#fff"}
+            textAlign={"center"}
+          >
+            <Flex
+              gap={2}
+              align={"center"}
+              className={`${styles.management_head}`}
+            >
+              <SiCoinmarketcap fontSize={24} />{" "}
+              <p>Subscribe to {signal?.title}</p>
+            </Flex>
+          </ModalHeader>
+          <ModalBody>
+            <form onSubmit={handleSubmit}>
+              <Flex gap={4} direction={"column"}>
+                <Flex gap={1} direction={"column"}>
+                  {/* <Text fontSize={14}>Subscribe to {signal?.title} </Text> */}
+                  <Flex direction="column" alignItems="center" w="100%">
+                    <Flex
+                      width="100%"
+                      justifyContent="space-between"
+                      borderTop="1px solid rgba(255,255,255,0.15)"
+                      borderBottom="1px solid rgba(255,255,255,0.15)"
+                      py={3}
+                      px={2}
+                      mb={3}
+                      background="rgba(0,0,0,0.2)"
+                      borderRadius="sm"
+                    >
+                      <Box>
+                        <Text fontSize="xs" color="gray.400">
+                          PRICE
+                        </Text>
+                        <Text fontWeight="bold" fontSize="lg" color={"#64d2b1"}>
+                          ${signal?.price}
+                        </Text>
+                      </Box>
+                      <Box textAlign="right">
+                        <Text fontSize="xs" color="gray.400">
+                          HASH RATE
+                        </Text>
+                        <Text fontWeight="bold" fontSize="lg" color={"#64d2b1"}>
+                          {signal?.percentage}%
+                        </Text>
+                      </Box>
+                    </Flex>
+                  </Flex>
+                  <Text fontSize={14}>{signal?.description}</Text>
+                </Flex>
+                <Divider />
+              </Flex>
+            </form>
+          </ModalBody>
+          <ModalFooter pt={0}>
+            <Button
+              mt={4}
+              size="md"
+              w="100%"
+              _hover={{
+                background: "#64d2b1",
+                transform: "translateY(-1px)",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              }}
+              color={"#fff"}
+              background={"#55b598"}
+              fontWeight="bold"
+              transition="all 0.2s ease"
+              isLoading={isLoading}
+              onClick={handleSubmit}
+            >
+              Proceed
             </Button>
           </ModalFooter>
         </ModalContent>

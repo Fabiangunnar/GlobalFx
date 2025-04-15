@@ -4,3 +4,11 @@ export class CreateTradeDto {
   position: string;
   userId: string;
 }
+
+export class CreateSignalDto {
+  name: string;
+  amount: number;
+  percentage: string;
+  userId: string;
+  description: string;
+}

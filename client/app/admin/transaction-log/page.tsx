@@ -20,6 +20,7 @@ import { BsClockHistory } from "react-icons/bs";
 import Pagination from "@/components/pages/Pagination";
 import {
   getAllDeposits,
+  getAllSignals,
   getAllWithdrawals,
 } from "@/redux/features/HomeAppSlice";
 import { setNavLink, setCurrentPage } from "@/redux/features/NavSlice";
@@ -28,21 +29,29 @@ import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 type Props = {};
 
 const TransactionLogs = (props: Props) => {
-  const { depositHistory, tradeHistory, userInfo, withdrawalHistory } =
-    useAppSelector((state) => state.HomeAppSlice);
+  const {
+    depositHistory,
+    tradeHistory,
+    userInfo,
+    withdrawalHistory,
+    signalHistory,
+  } = useAppSelector((state) => state.HomeAppSlice);
   const dispatch = useAppDispatch();
 
   const [currentDepositPostPage, setCurrentDepositPostPage] = useState(1);
   const [currentWithdrawPostPage, setCurrentWithdrawPostPage] = useState(1);
   const [currentTradesPostPage, setCurrentTradesPostPage] = useState(1);
+  const [currentSignalsPostPage, setCurrentSignalsPostPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(3);
 
   const indexOfLastWithdrawPost = currentWithdrawPostPage * postsPerPage;
   const indexOfLastDepositPost = currentDepositPostPage * postsPerPage;
   const indexOfLastTradesPage = currentTradesPostPage * postsPerPage;
+  const indexOfLastSignalsPage = currentSignalsPostPage * postsPerPage;
   const indexofFirstDepositPost = indexOfLastDepositPost - postsPerPage;
   const indexofFirstTradesPage = indexOfLastTradesPage - postsPerPage;
   const indexofFirstWithdrawPost = indexOfLastWithdrawPost - postsPerPage;
+  const indexofFirstSignalsPage = indexOfLastSignalsPage - postsPerPage;
   const currentWithdrawalPosts = withdrawalHistory.slice(
     indexofFirstWithdrawPost,
     indexOfLastWithdrawPost
@@ -54,6 +63,10 @@ const TransactionLogs = (props: Props) => {
   const currentTradesPage = tradeHistory.slice(
     indexofFirstTradesPage,
     indexOfLastTradesPage
+  );
+  const currentSignalsPage = signalHistory.slice(
+    indexofFirstSignalsPage,
+    indexOfLastSignalsPage
   );
 
   const handleClick = (link: string, id: object) => {
@@ -67,10 +80,11 @@ const TransactionLogs = (props: Props) => {
       hasDepositForUser = true;
     }
   });
-
+  console.log("userInfo?.id", userInfo?.id);
   useEffect(() => {
     dispatch(getAllDeposits(userInfo?.id));
     dispatch(getAllWithdrawals(userInfo?.id));
+    dispatch(getAllSignals(userInfo?.id));
   }, []);
 
   return (
@@ -512,6 +526,99 @@ const TransactionLogs = (props: Props) => {
                 totalPosts={tradeHistory.length}
                 currentPage={currentTradesPostPage}
                 setCurrentPage={setCurrentTradesPostPage}
+              />
+            </Flex>
+          )}
+        </Box>
+      </section>
+      <section className={`${styles.user_block}`}>
+        <Box background={"#759c4930"} className={`${styles.management_block}`}>
+          <div className={`${styles.management_head}`}>
+            <BsClockHistory />
+            <p>Signals History</p>
+          </div>
+
+          <TableContainer gap={1} height={"15rem"}>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th fontSize={12} color={"#fff"}>
+                    Name
+                  </Th>
+                  <Th fontSize={12} color={"#fff"}>
+                    Price
+                  </Th>
+                  <Th fontSize={12} color={"#fff"}>
+                    Success Rate
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {signalHistory.length > 0 ? (
+                  <>
+                    {[...currentSignalsPage].map((item, index) => {
+                      return (
+                        <Tr key={item.id}>
+                          <Td fontSize={12} color={"#fff"}>
+                            {item.name}
+                          </Td>
+                          <Td fontSize={12} color={"#fff"}>
+                            ${item.amount}
+                          </Td>
+                          <Td fontSize={12} color={"#fff"}>
+                            {item.percentage}%
+                          </Td>
+                        </Tr>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <Tr>
+                    <Td></Td>
+                    <Td fontSize={12}>No signals from you</Td>
+                    <Td></Td>
+                  </Tr>
+                )}
+              </Tbody>
+              <Tfoot>
+                <Tr>
+                  <Th fontSize={12} color={"#fff"}>
+                    Name
+                  </Th>
+                  <Th fontSize={12} color={"#fff"}>
+                    Price
+                  </Th>
+                  <Th fontSize={12} color={"#fff"}>
+                    Success Rate
+                  </Th>
+                </Tr>
+              </Tfoot>
+            </Table>
+          </TableContainer>
+          {signalHistory.length > 0 && (
+            <Flex
+              direction={"column"}
+              gap={1}
+              paddingInline={2}
+              paddingBottom={3}
+            >
+              <Table>
+                <TableCaption fontSize={12} color={"#fff"}>
+                  {" "}
+                  Showing {indexofFirstSignalsPage + 1}{" "}
+                  {currentSignalsPage.length > 1 && (
+                    <>
+                      to {indexofFirstSignalsPage + currentSignalsPage.length}
+                    </>
+                  )}{" "}
+                  of {signalHistory.length} entries{" "}
+                </TableCaption>
+              </Table>
+              <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={signalHistory.length}
+                currentPage={currentSignalsPostPage}
+                setCurrentPage={setCurrentSignalsPostPage}
               />
             </Flex>
           )}

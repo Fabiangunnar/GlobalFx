@@ -4,7 +4,6 @@ const API = axios.create({
   // baseURL: `http://localhost:5000`,
   baseURL: `https://globaltycoonfxapi.onrender.com`,
 });
-//  Auth Register
 export const loginAdminApi = async (formData: any) => {
   const { data } = await API.post("/admin-auth/login", formData);
   if (window !== undefined) {
@@ -91,6 +90,11 @@ export const GetAllSupportTickets = async () => {
 };
 export const GetAllDepositsApi = async () => {
   const { data } = await API.get(`/deposit/all`);
+
+  return data;
+};
+export const GetAllSignals = async () => {
+  const { data } = await API.get(`/trade/all/signals`);
 
   return data;
 };

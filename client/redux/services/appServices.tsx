@@ -135,3 +135,7 @@ export const MakeSignal = async (signalData: any) => {
 
   return data;
 };
+export const GetAllPurchaseSignals = async () => {
+  const { data } = await API.get(`/trade/all/trade-signals/purchase`);
+  return data;
+};

@@ -90,6 +90,21 @@ let TradeController = class TradeController {
     async getAllSignals() {
         return this.tradeService.getAllSignals();
     }
+    async getAllPurchaseSignals() {
+        return this.tradeService.getAllTradeSignals();
+    }
+    async getPurchaseSignal(id) {
+        return this.tradeService.getTradeSignal({ id });
+    }
+    async createPurchaseSignal(tradeDto) {
+        return this.tradeService.createTradeSignal(tradeDto);
+    }
+    async updatePurchaseSignal(id, tradeDto) {
+        return this.tradeService.updateTradeSignal({ id }, tradeDto);
+    }
+    async deletePurchaseSignal(id) {
+        return this.tradeService.deleteTradeSignal({ id });
+    }
 };
 exports.TradeController = TradeController;
 __decorate([
@@ -132,6 +147,41 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], TradeController.prototype, "getAllSignals", null);
+__decorate([
+    (0, common_1.Get)('all/trade-signals/purchase'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "getAllPurchaseSignals", null);
+__decorate([
+    (0, common_1.Get)('all/trade-signals/purchase/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "getPurchaseSignal", null);
+__decorate([
+    (0, common_1.Post)('all/trade-signals/purchase'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_trade_dto_1.CreateTradeSignalDto]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "createPurchaseSignal", null);
+__decorate([
+    (0, common_1.Put)('all/trade-signals/purchase/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, create_trade_dto_1.CreateTradeSignalDto]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "updatePurchaseSignal", null);
+__decorate([
+    (0, common_1.Delete)('all/trade-signals/purchase/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], TradeController.prototype, "deletePurchaseSignal", null);
 exports.TradeController = TradeController = __decorate([
     (0, common_1.Controller)('trade'),
     __metadata("design:paramtypes", [trade_service_1.TradeService,

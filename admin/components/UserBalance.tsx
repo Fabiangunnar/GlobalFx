@@ -70,12 +70,7 @@ const UserBalance = (props: Props) => {
             </FormControl>
 
             <FormControl p={2}>
-              <Button
-                fontSize={14}
-                type="submit"
-                w="100%"
-                colorScheme="messenger"
-              >
+              <Button fontSize={14} type="submit" w="100%" colorScheme="blue">
                 Update
               </Button>
             </FormControl>

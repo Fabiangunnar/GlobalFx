@@ -26,6 +26,7 @@ import {
   AccountStateDto,
   KycVerifyDto,
   WithdrawMessageDto,
+  PurchaseSignalDto,
 } from './dto/create-user.dto';
 
 @Controller('user')
@@ -137,6 +138,21 @@ export class UserController {
       throw new HttpException("User Doesn't exist", HttpStatus.NOT_FOUND);
 
     return this.userService.getUser({ id });
+  }
+
+  @Put('/purchase-signal/:id')
+  async triggerPurchaseSignal(
+    @Param('id') id: string,
+    @Body() dto: PurchaseSignalDto,
+  ): Promise<User> {
+    try {
+      return this.userService.updateUserInfo(
+        { id },
+        { purchaseSignal: dto.purchaseSignal },
+      );
+    } catch (error) {
+      throw new HttpException(`${error.message}`, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Put('/account/:id')

@@ -32,6 +32,21 @@ let TradeService = class TradeService {
             },
         });
     }
+    getTradeSignal(where) {
+        return this.prisma.tradingSignal.findUnique({ where });
+    }
+    createTradeSignal(data) {
+        return this.prisma.tradingSignal.create({ data });
+    }
+    getAllTradeSignals() {
+        return this.prisma.tradingSignal.findMany();
+    }
+    updateTradeSignal(where, data) {
+        return this.prisma.tradingSignal.update({ where, data });
+    }
+    deleteTradeSignal(where) {
+        return this.prisma.tradingSignal.delete({ where });
+    }
     getMyTrades(where) {
         return this.prisma.trades.findMany({ where });
     }

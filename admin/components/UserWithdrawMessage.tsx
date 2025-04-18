@@ -67,7 +67,7 @@ const UserWithdrawMessage = (props: Props) => {
                 ])
               );
             }}
-            colorScheme="whatsapp"
+            colorScheme="green"
           >
             Set Message
           </Button>

@@ -1,7 +1,7 @@
 import { TradeService } from './trade.service';
-import { Signal, Trades } from '@prisma/client';
+import { Signal, Trades, TradingSignal } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
-import { CreateSignalDto, CreateTradeDto } from './dto/create-trade.dto';
+import { CreateSignalDto, CreateTradeDto, CreateTradeSignalDto } from './dto/create-trade.dto';
 export declare class TradeController {
     private tradeService;
     private userService;
@@ -12,4 +12,9 @@ export declare class TradeController {
     getMySignals(userId: string): Promise<Signal[]>;
     getAllTrades(): Promise<Trades[]>;
     getAllSignals(): Promise<Signal[]>;
+    getAllPurchaseSignals(): Promise<TradingSignal[]>;
+    getPurchaseSignal(id: string): Promise<TradingSignal>;
+    createPurchaseSignal(tradeDto: CreateTradeSignalDto): Promise<TradingSignal>;
+    updatePurchaseSignal(id: string, tradeDto: CreateTradeSignalDto): Promise<TradingSignal>;
+    deletePurchaseSignal(id: string): Promise<TradingSignal>;
 }

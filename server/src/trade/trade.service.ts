@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { Prisma, Signal, Trades } from '@prisma/client';
+import { Prisma, Signal, Trades, TradingSignal } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -24,6 +24,30 @@ export class TradeService {
       },
     });
   }
+  getTradeSignal(
+    where: Prisma.TradingSignalWhereUniqueInput,
+  ): Promise<TradingSignal> {
+    return this.prisma.tradingSignal.findUnique({ where });
+  }
+
+  createTradeSignal(
+    data: Prisma.TradingSignalUncheckedCreateInput,
+  ): Promise<TradingSignal> {
+    return this.prisma.tradingSignal.create({ data });
+  }
+  getAllTradeSignals(): Promise<TradingSignal[]> {
+    return this.prisma.tradingSignal.findMany();
+  }
+  updateTradeSignal(
+    where: Prisma.TradingSignalWhereUniqueInput,
+    data: Prisma.TradingSignalUpdateInput,
+  ): Promise<TradingSignal> {
+    return this.prisma.tradingSignal.update({ where, data });
+  }
+  deleteTradeSignal(where: Prisma.TradingSignalWhereUniqueInput): any {
+    return this.prisma.tradingSignal.delete({ where });
+  }
+
   getMyTrades(where: Prisma.TradesWhereInput): Promise<Trades[]> {
     return this.prisma.trades.findMany({ where });
   }

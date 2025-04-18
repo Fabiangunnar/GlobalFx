@@ -140,7 +140,7 @@ export default function Home() {
                               fontSize={12}
                               maxW={16}
                               size={"sm"}
-                              colorScheme="messenger"
+                              colorScheme="blue"
                               onClick={() =>
                                 router.push(`/manage-user/${user.id}`)
                               }

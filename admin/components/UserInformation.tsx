@@ -2,17 +2,22 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "@/app/styles/pages/User.module.scss";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Flex, WrapItem, Avatar, Stack, Text, Button } from "@chakra-ui/react";
 import { HiUser } from "react-icons/hi2";
+import { getUser, triggerSignalNotification } from "@/redux/features/AppSlice";
+import { createStandaloneToast } from "@chakra-ui/react";
+import { Divider } from "@chakra-ui/react";
 
 type Props = {};
 
 const UserInformation = (props: Props) => {
   const [btcEq, setBtcEq] = useState(0);
-  const { userManageData, manageUserDeposits } = useAppSelector(
+  const { userManageData, manageUserDeposits, signalState } = useAppSelector(
     (state) => state.AppSlice
   );
+  const dispatch = useAppDispatch();
+  const { toast } = createStandaloneToast();
   useEffect(() => {
     convertDollarToBTC(Number(userManageData?.totalBalance));
   });
@@ -31,7 +36,16 @@ const UserInformation = (props: Props) => {
       return null;
     }
   }
-
+  useEffect(() => {
+    if (signalState.isSuccess) {
+      toast({
+        position: "top-right",
+        title: "Success",
+        description: "Signal notification triggered successfully",
+      });
+      dispatch(getUser(userManageData.id));
+    }
+  }, [signalState.isSuccess]);
   const sumofDeposits = manageUserDeposits.reduce((accumulator, obj) => {
     return accumulator + obj.amount;
   }, 0);
@@ -90,9 +104,25 @@ const UserInformation = (props: Props) => {
                   "&password=" +
                   userManageData.password;
               }}
-              colorScheme="messenger"
+              colorScheme="blue"
             >
               Login Account
+            </Button>
+            <Divider />
+            <Button
+              colorScheme={userManageData.purchaseSignal ? "red" : "blue"}
+              onClick={() => {
+                dispatch(
+                  triggerSignalNotification({
+                    id: userManageData.id,
+                    signalData: !userManageData.purchaseSignal,
+                  })
+                );
+              }}
+            >
+              {userManageData.purchaseSignal
+                ? "Disable Signal Notification"
+                : "Enable Signal Notification"}
             </Button>
           </Stack>
         </Flex>

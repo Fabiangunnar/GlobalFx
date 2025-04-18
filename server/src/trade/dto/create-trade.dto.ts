@@ -12,3 +12,10 @@ export class CreateSignalDto {
   userId: string;
   description: string;
 }
+
+export class CreateTradeSignalDto {
+  title: string;
+  description: string;
+  price: string;
+  percentage: string;
+}

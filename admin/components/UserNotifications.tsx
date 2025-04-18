@@ -63,12 +63,7 @@ const UserNotifications = (props: Props) => {
               />
             </FormControl>
             <FormControl p={2}>
-              <Button
-                fontSize={14}
-                type="submit"
-                w="100%"
-                colorScheme="messenger"
-              >
+              <Button fontSize={14} type="submit" w="100%" colorScheme="blue">
                 Send
               </Button>
             </FormControl>

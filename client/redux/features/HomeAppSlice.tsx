@@ -20,6 +20,7 @@ import {
   MakeTrade,
   MakeSignal,
   GetMySignals,
+  GetAllPurchaseSignals,
 } from "../services/appServices";
 
 export interface UserTypes {
@@ -38,6 +39,7 @@ export interface UserTypes {
   pictureInfo?: string;
   accountState?: string;
   phoneNumber?: string;
+  purchaseSignal?: boolean;
 }
 export interface AdminAccount {
   btc: string;
@@ -58,7 +60,7 @@ export interface DepositDto {
   amount: number;
   userId: string;
   to?: string;
-  name?: string;  
+  name?: string;
   percentage?: number;
   transactionState: any;
   createdAt: Date;
@@ -79,6 +81,13 @@ export interface PendingDepositDto {
   amount: number;
   userId: string;
 }
+export interface TradingSignalDto {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  percentage: number;
+}
 export interface TradeDto {
   id: string;
   username: string;
@@ -97,6 +106,7 @@ interface initialTypes {
   signalHistory: DepositDto[];
   pendingDeposits: PendingDepositDto[];
   investmentHistory: InvestmentType[];
+  tradingSignal: TradingSignalDto[];
   tradeHistory: TradeDto[];
   userState: {
     isLoading: boolean;
@@ -170,6 +180,7 @@ let signalHistory: DepositDto[] = [];
 let pendingDeposits: PendingDepositDto[] = [];
 let investmentHistory: InvestmentType[] = [];
 let tradeHistory: TradeDto[] = [];
+let tradingSignal: TradingSignalDto[] = [];
 const initialState: initialTypes = {
   userInfo,
   notifications,
@@ -180,6 +191,7 @@ const initialState: initialTypes = {
   pendingDeposits,
   investmentHistory,
   tradeHistory,
+  tradingSignal,
   userState: {
     isLoading: false,
     isError: false,
@@ -221,6 +233,16 @@ const initialState: initialTypes = {
   },
 };
 
+export const getAllPurchaseSignals: any = createAsyncThunk(
+  "get/purchase-signals",
+  async (_, thunkApi) => {
+    try {
+      return await GetAllPurchaseSignals();
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 export const createSignal: any = createAsyncThunk(
   "create/signal",
   async (signalData, thunkApi) => {
@@ -506,6 +528,19 @@ export const HomeAppSlice = createSlice({
         state.userState.isLoading = true;
         state.userState.isSuccess = false;
         state.userState.isError = false;
+      });
+    builder
+      .addCase(getAllPurchaseSignals.fulfilled, (state, { payload }) => {
+        state.tradingSignal = payload;
+        state.getState.isLoading = false;
+      })
+      .addCase(getAllPurchaseSignals.rejected, (state, { payload }) => {
+        state.tradingSignal = [];
+        state.getState.isLoading = false;
+      })
+      .addCase(getAllPurchaseSignals.pending, (state, { payload }) => {
+        state.tradingSignal = [];
+        state.getState.isLoading = true;
       });
     builder
       .addCase(getUser.fulfilled, (state, { payload }) => {

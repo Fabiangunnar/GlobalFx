@@ -22,6 +22,7 @@ model User {
   totalBalance          Int?                    @default(0)
   phoneNumber           String                  @default("+1 (555) 555-5555")
   picture               String?
+  purchaseSignal        Boolean?                @default(false)
   accountState          AccountState?           @default(PENDING)
   lastLogin             DateTime?               @default(now())
   createdAt             DateTime                @default(now())
@@ -80,14 +81,23 @@ model Trades {
   user     User?   @relation(fields: [userId], references: [id])
 }
 
+model TradingSignal {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String   @default("No description")
+  price       String   @default("0")
+  percentage  String   @default("0")
+  createdAt   DateTime @default(now())
+}
+
 model Signal {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
-  description String  @default("No description")
-  amount      Int     @default(0)
-  percentage  Int     @default(0)
-  userId      String? @db.ObjectId
-  user        User?   @relation(fields: [userId], references: [id])
+  description String    @default("No description")
+  amount      Int       @default(0)
+  percentage  Int       @default(0)
+  userId      String?   @db.ObjectId
+  user        User?     @relation(fields: [userId], references: [id])
   createdAt   DateTime? @default(now())
 }
 

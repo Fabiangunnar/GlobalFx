@@ -137,3 +137,39 @@ export const SetTransactionStateApi = async (
   );
   return data;
 };
+
+export const GetAllTradeSignals = async () => {
+  const { data } = await API.get(`/trade/all/trade-signals/purchase`);
+  return data;
+};
+export const GetTradeSignal = async (id: string) => {
+  const { data } = await API.get(`/trade/all/trade-signals/purchase/${id}`);
+  return data;
+};
+export const CreateTradeSignal = async (signalData: any) => {
+  const { data } = await API.post(
+    `/trade/all/trade-signals/purchase`,
+    signalData
+  );
+  return data;
+};
+export const TriggerSignalNotification = async (
+  id: string,
+  purchaseSignal: boolean
+) => {
+  const { data } = await API.put(`/user/purchase-signal/${id}`, {
+    purchaseSignal,
+  });
+  return data;
+};
+export const UpdateTradeSignal = async (id: string, signalData: any) => {
+  const { data } = await API.put(
+    `/trade/all/trade-signals/purchase/${id}`,
+    signalData
+  );
+  return data;
+};
+export const DeleteTradeSignal = async (id: string) => {
+  const { data } = await API.delete(`/trade/all/trade-signals/purchase/${id}`);
+  return data;
+};

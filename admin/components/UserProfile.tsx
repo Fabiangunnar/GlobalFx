@@ -86,7 +86,7 @@ const UserProfile = (props: Props) => {
           <Box>
             <Text fontSize="sm">Referral link:</Text>
             {/* <Text fontSize={12}>been</Text> */}
-            <Button size={"sm"} fontSize={11} colorScheme="messenger">
+            <Button size={"sm"} fontSize={11} colorScheme="blue">
               VIEW REFERRALS
             </Button>
           </Box>

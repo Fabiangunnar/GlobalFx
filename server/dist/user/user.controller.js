@@ -101,6 +101,14 @@ let UserController = class UserController {
             throw new common_1.HttpException("User Doesn't exist", common_1.HttpStatus.NOT_FOUND);
         return this.userService.getUser({ id });
     }
+    async triggerPurchaseSignal(id, dto) {
+        try {
+            return this.userService.updateUserInfo({ id }, { purchaseSignal: dto.purchaseSignal });
+        }
+        catch (error) {
+            throw new common_1.HttpException(`${error.message}`, common_1.HttpStatus.BAD_REQUEST);
+        }
+    }
     async updateUserAccountInfo(accountInfo, id) {
         try {
             const { totalBalance, totalProfit } = accountInfo;
@@ -263,6 +271,14 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getUser", null);
+__decorate([
+    (0, common_1.Put)('/purchase-signal/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, create_user_dto_1.PurchaseSignalDto]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "triggerPurchaseSignal", null);
 __decorate([
     (0, common_1.Put)('/account/:id'),
     __param(0, (0, common_1.Body)()),

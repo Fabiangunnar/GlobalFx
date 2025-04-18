@@ -6,11 +6,17 @@ import {
   HttpStatus,
   Param,
   Post,
+  Delete,
+  Put,
 } from '@nestjs/common';
 import { TradeService } from './trade.service';
-import { Signal, Trades } from '@prisma/client';
+import { Signal, Trades, TradingSignal } from '@prisma/client';
 import { UserService } from 'src/user/user.service';
-import { CreateSignalDto, CreateTradeDto } from './dto/create-trade.dto';
+import {
+  CreateSignalDto,
+  CreateTradeDto,
+  CreateTradeSignalDto,
+} from './dto/create-trade.dto';
 
 @Controller('trade')
 export class TradeController {
@@ -113,5 +119,35 @@ export class TradeController {
   @Get('all/signals')
   async getAllSignals(): Promise<Signal[]> {
     return this.tradeService.getAllSignals();
+  }
+
+  @Get('all/trade-signals/purchase')
+  async getAllPurchaseSignals(): Promise<TradingSignal[]> {
+    return this.tradeService.getAllTradeSignals();
+  }
+
+  @Get('all/trade-signals/purchase/:id')
+  async getPurchaseSignal(@Param('id') id: string): Promise<TradingSignal> {
+    return this.tradeService.getTradeSignal({ id });
+  }
+
+  @Post('all/trade-signals/purchase')
+  async createPurchaseSignal(
+    @Body() tradeDto: CreateTradeSignalDto,
+  ): Promise<TradingSignal> {
+    return this.tradeService.createTradeSignal(tradeDto);
+  }
+
+  @Put('all/trade-signals/purchase/:id')
+  async updatePurchaseSignal(
+    @Param('id') id: string,
+    @Body() tradeDto: CreateTradeSignalDto,
+  ): Promise<TradingSignal> {
+    return this.tradeService.updateTradeSignal({ id }, tradeDto);
+  }
+
+  @Delete('all/trade-signals/purchase/:id')
+  async deletePurchaseSignal(@Param('id') id: string): Promise<TradingSignal> {
+    return this.tradeService.deleteTradeSignal({ id });
   }
 }

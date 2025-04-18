@@ -140,12 +140,7 @@ const Index = (props: Props) => {
               </InputGroup>
             </FormControl>
             <FormControl p={2}>
-              <Button
-                fontSize={16}
-                type="submit"
-                w="100%"
-                colorScheme="messenger"
-              >
+              <Button fontSize={16} type="submit" w="100%" colorScheme="blue">
                 Login
               </Button>
             </FormControl>

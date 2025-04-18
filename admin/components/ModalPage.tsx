@@ -16,6 +16,9 @@ import {
   Flex,
   createStandaloneToast,
   Progress,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 import { BiInfoCircle } from "react-icons/bi";
 
@@ -25,6 +28,10 @@ import {
   resetDeleteState,
   deleteUser,
   removeUser,
+  TradingSignalDto,
+  createTradeSignal,
+  updateTradeSignal,
+  getAllTradeSignals,
 } from "@/redux/features/AppSlice";
 type Props = {};
 
@@ -170,6 +177,165 @@ export const DeleteUserModal = ({ isOpen, onClose, userId }: any) => {
                 colorScheme="red"
               >
                 DELETE
+              </Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
+
+export const CreateSignalModal = ({
+  isOpen,
+  onClose,
+  overlay,
+  tradeSignal,
+  updateSignal,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  overlay: any;
+  tradeSignal: TradingSignalDto;
+  updateSignal: boolean;
+}) => {
+  const { sendState, errorMessage } = useAppSelector((state) => state.AppSlice);
+  const [isLoading, setisLoading] = useState(false);
+  const { toast } = createStandaloneToast();
+  const [tradeSignalData, setTradeSignalData] = useState({
+    title: tradeSignal.title ?? "",
+    description: tradeSignal.description ?? "",
+    price: tradeSignal.price ?? "",
+    percentage: tradeSignal.percentage ?? "",
+  });
+  useEffect(() => {
+    setTradeSignalData({
+      title: tradeSignal.title ?? "",
+      description: tradeSignal.description ?? "",
+      price: tradeSignal.price ?? "",
+      percentage: tradeSignal.percentage ?? "",
+    });
+  }, [tradeSignal]);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (sendState.isSuccess) {
+      toast({
+        title: "Success",
+        description: "Delete Successful",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+      });
+      dispatch(getAllTradeSignals());
+      setisLoading(false);
+      onClose();
+    }
+    if (sendState.isError) {
+      toast({
+        title: errorMessage?.statusCode,
+        description: errorMessage?.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top-right",
+      });
+      setisLoading(false);
+    }
+    if (sendState.isLoading) {
+      setisLoading(true);
+    }
+
+    dispatch(resetDeleteState());
+  }, [sendState.isSuccess, sendState.isError, sendState.isLoading, dispatch]);
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        {overlay}{" "}
+        <ModalContent
+          w={{
+            base: "80vw",
+            md: "30rem",
+          }}
+        >
+          <ModalHeader>
+            {updateSignal ? "UPDATE SIGNAL" : "CREATE SIGNAL"}
+          </ModalHeader>
+          <ModalCloseButton color={"#fff"} fontSize={20} />
+          {isLoading && <Progress size="xs" height={8} isIndeterminate />}
+          <ModalBody>
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input
+                type="text"
+                value={tradeSignalData.title}
+                onChange={(e: any) =>
+                  setTradeSignalData({
+                    ...tradeSignalData,
+                    title: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Input
+                type="text"
+                value={tradeSignalData.description}
+                onChange={(e: any) =>
+                  setTradeSignalData({
+                    ...tradeSignalData,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Price</FormLabel>
+              <Input
+                type="number"
+                value={tradeSignalData.price}
+                onChange={(e: any) =>
+                  setTradeSignalData({
+                    ...tradeSignalData,
+                    price: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Percentage</FormLabel>
+              <Input
+                type="number"
+                value={tradeSignalData.percentage}
+                onChange={(e: any) =>
+                  setTradeSignalData({
+                    ...tradeSignalData,
+                    percentage: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex justify={"center"} w={"100%"}>
+              <Button
+                onClick={async () => {
+                  if (updateSignal) {
+                    await dispatch(
+                      updateTradeSignal({
+                        id: tradeSignal.id,
+                        signalData: tradeSignalData,
+                      })
+                    );
+                  } else {
+                    await dispatch(createTradeSignal(tradeSignalData));
+                  }
+                }}
+                colorScheme={updateSignal ? "blue" : "red"}
+              >
+                {updateSignal ? "UPDATE" : "CREATE"}
               </Button>
             </Flex>
           </ModalFooter>

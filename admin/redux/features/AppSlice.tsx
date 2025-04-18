@@ -24,6 +24,12 @@ import {
   DeleteDepositApi,
   SetWithdrawMessage,
   GetAllSignals,
+  CreateTradeSignal,
+  UpdateTradeSignal,
+  GetAllTradeSignals,
+  GetTradeSignal,
+  DeleteTradeSignal,
+  TriggerSignalNotification,
 } from "../services/appServices";
 
 export interface CodeType {
@@ -75,6 +81,14 @@ export interface DepositsType {
   firstname: string;
   lastname: string;
 }
+export interface TradingSignalDto {
+  id?: string;
+  title: string;
+  description: string;
+  price: number;
+  percentage: number;
+  createdAt?: string;
+}
 export interface WithdrawalType {
   firstname: string;
   lastname: string;
@@ -115,6 +129,7 @@ export interface UserTypes {
   createdAt?: string;
   accountState?: string;
   lastLogin?: string;
+  purchaseSignal?: boolean;
 }
 export interface ManageUserDeposits {
   id: string;
@@ -144,6 +159,7 @@ let kycdocuments: KYCDocuments[] = [];
 let deposits: DepositsType[] = [];
 let withdrawals: WithdrawalType[] = [];
 let trades: TradeDto[] = [];
+let tradingSignal: TradingSignalDto[] = [];
 let withdrawalCode: string = "";
 let notification: NotificationType = {
   message: "",
@@ -250,6 +266,7 @@ interface initialTypes {
   users: UserTypes[];
   deposits: DepositsType[];
   withdrawals: WithdrawalType[];
+  tradingSignal: TradingSignalDto[];
   signals: SignalDto[];
   supportTicketData: SupportTicketType[];
   notification: NotificationType;
@@ -267,6 +284,7 @@ const initialState: initialTypes = {
   users,
   userManageData,
   supportTicketData,
+  tradingSignal,
   kycdocuments,
   manageUserDeposits,
   notification,
@@ -340,11 +358,76 @@ const initialState: initialTypes = {
   },
 };
 
+export const triggerSignalNotification: any = createAsyncThunk(
+  "put/trigger-signal-notification",
+  async ({ id, signalData }: { id: string; signalData: boolean }, thunkApi) => {
+    try {
+      return await TriggerSignalNotification(id, signalData);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 export const getAdmin: any = createAsyncThunk(
   "get/admin",
   async (id, thunkApi) => {
     try {
       return await GetAdminApi(id);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createTradeSignal: any = createAsyncThunk(
+  "post/trade-signal",
+  async (signalData: any, thunkApi) => {
+    try {
+      return await CreateTradeSignal(signalData);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateTradeSignal: any = createAsyncThunk(
+  "put/trade-signal",
+  async ({ id, signalData }: { id: string; signalData: any }, thunkApi) => {
+    try {
+      return await UpdateTradeSignal(id, signalData);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getAllTradeSignals: any = createAsyncThunk(
+  "get/purchase-signals",
+  async (_, thunkApi) => {
+    try {
+      return await GetAllTradeSignals();
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getTradeSignal: any = createAsyncThunk(
+  "get/trade-signal",
+  async (id: string, thunkApi) => {
+    try {
+      return await GetTradeSignal(id);
+    } catch (error: any) {
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const deleteTradeSignal: any = createAsyncThunk(
+  "delete/trade-signal",
+  async (id: string, thunkApi) => {
+    try {
+      return await DeleteTradeSignal(id);
     } catch (error: any) {
       return thunkApi.rejectWithValue(error.response.data);
     }
@@ -697,12 +780,23 @@ export const AppSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getCode.fulfilled, (state, { payload }) => {
-        state.getCodeState.isLoading = false;
-        state.getCodeState.isSuccess = true;
-        state.getCodeState.isError = false;
-        state.withdrawalCode = payload.withdrawalCode;
+      .addCase(triggerSignalNotification.fulfilled, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = true;
+        state.signalState.isError = false;
       })
+      .addCase(triggerSignalNotification.rejected, (state, { payload }) => {
+        state.signalState.isLoading = false;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(triggerSignalNotification.pending, (state, { payload }) => {
+        state.signalState.isLoading = true;
+        state.signalState.isSuccess = false;
+        state.signalState.isError = false;
+      });
+    builder
       .addCase(getCode.rejected, (state, { payload }) => {
         state.getCodeState.isLoading = false;
         state.getCodeState.isSuccess = false;
@@ -911,6 +1005,24 @@ export const AppSlice = createSlice({
         state.updateState.isError = false;
       });
     builder
+      .addCase(deleteTradeSignal.fulfilled, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = true;
+        state.sendState.isError = false;
+      })
+      .addCase(deleteTradeSignal.rejected, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(deleteTradeSignal.pending, (state, { payload }) => {
+        state.sendState.isLoading = true;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = false;
+      });
+
+    builder
       .addCase(userDeposit.fulfilled, (state, { payload }) => {
         state.updateState.isLoading = false;
         state.updateState.isSuccess = true;
@@ -1057,6 +1169,59 @@ export const AppSlice = createSlice({
         state.getState.isSuccess = false;
         state.getState.isError = false;
       });
+    builder
+      .addCase(getAllTradeSignals.fulfilled, (state, { payload }) => {
+        state.getState.isLoading = false;
+        state.getState.isSuccess = true;
+        state.getState.isError = false;
+        state.tradingSignal = payload;
+      })
+      .addCase(getAllTradeSignals.rejected, (state, { payload }) => {
+        state.getState.isLoading = false;
+        state.getState.isSuccess = false;
+        state.getState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(getAllTradeSignals.pending, (state, { payload }) => {
+        state.getState.isLoading = true;
+        state.getState.isSuccess = false;
+        state.getState.isError = false;
+      });
+    builder
+      .addCase(createTradeSignal.fulfilled, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = true;
+        state.sendState.isError = false;
+      })
+      .addCase(createTradeSignal.rejected, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(createTradeSignal.pending, (state, { payload }) => {
+        state.sendState.isLoading = true;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = false;
+      });
+    builder
+      .addCase(updateTradeSignal.fulfilled, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = true;
+        state.sendState.isError = false;
+      })
+      .addCase(updateTradeSignal.rejected, (state, { payload }) => {
+        state.sendState.isLoading = false;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = true;
+        state.errorMessage = payload;
+      })
+      .addCase(updateTradeSignal.pending, (state, { payload }) => {
+        state.sendState.isLoading = true;
+        state.sendState.isSuccess = false;
+        state.sendState.isError = false;
+      });
+
     builder
       .addCase(getAllWithdrawals.fulfilled, (state, { payload }) => {
         state.getState.isLoading = false;

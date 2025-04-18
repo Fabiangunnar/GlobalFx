@@ -23,7 +23,11 @@ import { MdArrowDropDown } from "react-icons/md";
 import { GiTrade } from "react-icons/gi";
 import { SiCoinmarketcap } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
-import { makeTrade, resetWithdrawalState } from "@/redux/features/HomeAppSlice";
+import {
+  getAllPurchaseSignals,
+  makeTrade,
+  resetWithdrawalState,
+} from "@/redux/features/HomeAppSlice";
 import { setNavLink, setCurrentPage } from "@/redux/features/NavSlice";
 import { useAppSelector } from "@/redux/hooks";
 import { PurchaseSignalModal } from "@/components/pages/Modal";
@@ -35,6 +39,15 @@ type Props = {};
 const Trade = (props: Props) => {
   const [formData, setFormData] = useState<any>({});
   const modal = useDisclosure();
+  const dispatch = useDispatch();
+  const { tradingSignal, getState } = useAppSelector(
+    (state) => state.HomeAppSlice
+  );
+
+  useEffect(() => {
+    dispatch(getAllPurchaseSignals());
+  }, []);
+
   const OverlayOne = () => (
     <ModalOverlay
       bg="blackAlpha.300"
@@ -42,75 +55,6 @@ const Trade = (props: Props) => {
     />
   );
   const [overlay, setOverlay] = useState(<OverlayOne />);
-  const tradingSignals = [
-    {
-      title: "Momentum Signals",
-      description:
-        "Identify assets with strong price movement and volume trends for potential breakouts.",
-      icon: <GiTrade />,
-      price: 1500,
-      percentage: 63,
-    },
-    {
-      title: "Breakout Signals",
-      description:
-        "Detect assets breaking through key resistance levels with increased volume.",
-      icon: <GiTrade />,
-      price: 3000,
-      percentage: 68.7,
-    },
-    {
-      title: "Buying Oversold",
-      description:
-        "Identify assets that have been oversold and may be due for a reversal.",
-      icon: <GiTrade />,
-      price: 3800,
-      percentage: 75,
-    },
-    {
-      title: "Trend Signals",
-      description:
-        "Follow established market trends with confirmed support and resistance levels.",
-      icon: <GiTrade />,
-      price: 4000,
-      percentage: 78.4,
-    },
-  ];
-
-  const miningHardware = [
-    {
-      title: "BTC Miner Data Circuit",
-      description:
-        "Advanced mining circuit with optimized power consumption and hash rates.",
-      icon: <SiCoinmarketcap />,
-      price: 5000,
-      percentage: 83.4,
-    },
-    {
-      title: "AntMiner S7 4.8TH/s",
-      description:
-        "4.8TH/s hash rate with 1250W power consumption for efficient mining.",
-      icon: <SiCoinmarketcap />,
-      price: 5300,
-      percentage: 85.4,
-    },
-    {
-      title: "S9 Mining Hardware Asic Hash",
-      description:
-        "High-performance ASIC miner with advanced cooling system and power efficiency.",
-      icon: <SiCoinmarketcap />,
-      price: 5500,
-      percentage: 87.4,
-    },
-    {
-      title: "Bitfury B6 Bitcoin 50 TH/s",
-      description:
-        "Industrial-grade Bitcoin miner with 50 TH/s hash rate for professional mining operations.",
-      icon: <SiCoinmarketcap />,
-      price: 7000,
-      percentage: 89.4,
-    },
-  ];
 
   const handleSubmit = (data: any) => {
     setFormData(data);
@@ -133,7 +77,7 @@ const Trade = (props: Props) => {
                 gap={4}
                 justifyContent="space-between"
               >
-                {tradingSignals.map((signal, index) => (
+                {tradingSignal.map((signal, index) => (
                   <Box
                     key={`signal-${index}`}
                     width={["100%", "100%", "48%", "48%", "31%", "23%"]}
@@ -160,7 +104,7 @@ const Trade = (props: Props) => {
                           color={index % 2 === 0 ? "#64d2b1" : "#bdffeb"}
                           mb={2}
                         >
-                          {signal.icon}
+                          <SiCoinmarketcap />
                         </Box>
                         <Text fontWeight="bold" mb={2} textAlign="center">
                           {signal.title}
@@ -222,7 +166,7 @@ const Trade = (props: Props) => {
                   </Box>
                 ))}
               </Flex>
-
+              {/* 
               <Text
                 fontWeight="bold"
                 mt={6}
@@ -346,7 +290,7 @@ const Trade = (props: Props) => {
                     </Box>
                   ))}
                 </Flex>
-              </Box>
+              </Box> */}
             </Box>
           </div>
         </section>

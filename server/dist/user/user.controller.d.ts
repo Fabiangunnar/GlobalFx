@@ -6,7 +6,7 @@ import { DepositService } from 'src/deposit/deposit.service';
 import { InvestmentService } from 'src/investment/investment.service';
 import { TradeService } from 'src/trade/trade.service';
 import { WithdrawService } from 'src/withdraw/withdraw.service';
-import { CreateUserDto, UserAccountInfo, PhoneNumberDto, AccountStateDto, KycVerifyDto, WithdrawMessageDto } from './dto/create-user.dto';
+import { CreateUserDto, UserAccountInfo, PhoneNumberDto, AccountStateDto, KycVerifyDto, WithdrawMessageDto, PurchaseSignalDto } from './dto/create-user.dto';
 export declare class UserController {
     private userService;
     private supportService;
@@ -22,6 +22,7 @@ export declare class UserController {
     getAllKYCDocuments(): Promise<KYCVerification[]>;
     getMyKycDocuments(userId: string): Promise<KYCVerification[]>;
     getUser(id: string): Promise<User>;
+    triggerPurchaseSignal(id: string, dto: PurchaseSignalDto): Promise<User>;
     updateUserAccountInfo(accountInfo: UserAccountInfo, id: string): Promise<{
         id: string;
         firstname: string;
@@ -34,6 +35,7 @@ export declare class UserController {
         totalBalance: number;
         phoneNumber: string;
         picture: string;
+        purchaseSignal: boolean;
         accountState: import(".prisma/client").$Enums.AccountState;
         lastLogin: Date;
         createdAt: Date;
@@ -51,6 +53,7 @@ export declare class UserController {
         totalBalance: number;
         phoneNumber: string;
         picture: string;
+        purchaseSignal: boolean;
         accountState: import(".prisma/client").$Enums.AccountState;
         lastLogin: Date;
         createdAt: Date;
@@ -73,6 +76,7 @@ export declare class UserController {
         totalBalance: number;
         phoneNumber: string;
         picture: string;
+        purchaseSignal: boolean;
         accountState: import(".prisma/client").$Enums.AccountState;
         lastLogin: Date;
         createdAt: Date;

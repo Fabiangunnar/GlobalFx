@@ -38,3 +38,6 @@ export class KycVerifyDto {
   proofOfAddress: any;
   status?: any;
 }
+export class PurchaseSignalDto {
+  purchaseSignal: boolean;
+}

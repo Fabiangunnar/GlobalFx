@@ -53,11 +53,11 @@ export default function Index() {
         <title>About | {appname}</title>
         <meta
           name="description"
-          content="Learn about the powerful globaltycoonfx trading platform."
+          content={`Learn about the powerful ${appname} trading platform.`}
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx about, about globaltycoonfx, about, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content={`globaltycoonfx trading, ${appname}, ${appname} about, about ${appname}, about, ${appname}.com, global tycoon fx, ${appname}, global, tycoon, global fx, ${appname}, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
@@ -71,7 +71,7 @@ export default function Index() {
             className={` ${pagestyles.about_top_head} ${pagestyles.top_head}`}
           >
             <Text fontSize={[28, 32, 38, 42, 52]}>
-              RELIABLE INVESTMENT WITH <br /> GLOBAL TYCOON FX
+              RELIABLE INVESTMENT WITH <br /> {appname}
             </Text>
             <Flex
               direction={"column"}
@@ -99,21 +99,21 @@ export default function Index() {
               className={` ${pagestyles.about_top_text_box}`}
             >
               <Text textAlign={"center"} fontSize={[16, 18, 20, 22, 24]} p={12}>
-                GLOBAL TYCOON FX - PROFESSIONAL TEAM CRYPTO INDUSTRY DEVELOPERS
+                {appname} - PROFESSIONAL TEAM CRYPTO INDUSTRY DEVELOPERS
               </Text>
               <Text fontSize={[12, 14, 15, 16, 18]} textAlign={"justify"}>
                 Our company has been developing stable cryptocurrency income for
-                6 years. Today GLOBAL TYCOON FX employees are leaders in the
+                6 years. Today {appname}employees are leaders in the
                 field of IT technologies. They have created a unique robot that
                 generates daily profit and guesses the steps of the Bitcoin
-                value. That is why the GLOBAL TYCOON FX robot is able to benefit
+                value. That is why the {appname} robot is able to benefit
                 at any stage of the market: both growth and decline. This
                 development is unique in that it is the first in the world.
                 Today, not many people know about this. That is why they are
                 given the chance to receive a stable income for the rest of
                 their lives. Many people will try to fake it in fraudulent ways
                 after the platform is known around the world. But we assure that
-                only our company GLOBAL TYCOON FX IS unique.
+                only our company {appname} IS unique.
               </Text>
             </Flex>
           </Flex>
@@ -217,7 +217,7 @@ export default function Index() {
                       gap={1}
                       fontSize={[20, 22, 24, 26, 28]}
                     >
-                      GLOBAL TYCOON FX - UK LEGAL REGISTRATION {"- "}
+                      {appname} - UK LEGAL REGISTRATION {"- "}
                       <Text
                         cursor={"pointer"}
                         fontSize={[16, 18, 20, 22, 24]}
@@ -261,7 +261,7 @@ export default function Index() {
                     >
                       <Text fontSize={[14, 15, 16, 17, 18]}>Reg name:</Text>
                       <Text fontSize={[12, 13, 14, 15, 16]} color={"gray.400"}>
-                        GLOBAL TYCOON FX LTD
+                        {appname} LTD
                       </Text>
                     </Grid>
                     <Grid
@@ -318,16 +318,16 @@ export default function Index() {
                   fontWeight={400}
                   fontSize={[24, 26, 28, 30, 32]}
                 >
-                  GLOBAL TYCOON FX STATS
+                  {appname} STATS
                 </Heading>
                 <Text fontSize={[12, 14, 15, 16, 18]} textAlign={"justify"}>
                   Here are online statistics of our company. Competent
-                  distribution of investments in the GLOBAL TYCOON FX robot
+                  distribution of investments in the {appname} robot
                   allows you to maximize profits at all stages of the market.
                   Gradual development is a guarantee of world recognition in the
                   market. It is important for us to ensure the protection of our
                   investors, as well as the stability and uninterrupted
-                  operation of the platform. The GLOBAL TYCOON FX robot is fully
+                  operation of the platform. The {appname} robot is fully
                   automated to operate without user intervention.
                 </Text>
               </Flex>

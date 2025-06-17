@@ -52,8 +52,8 @@ export interface NavTypes {
   subnav?: any[];
 }
 
-export const appname = "GLOBAL TYCOON FX";
-export const abbrev_appname = "GTFX";
+export const appname = "PINNACLE PARTNERS FX";
+export const abbrev_appname = "PPFX";
 export const footerData: footerTypes[] = [
   {
     id: "LMK26P",

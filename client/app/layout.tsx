@@ -17,7 +17,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: appname,
   description:
-    "Explore the powerful globaltycoonfx trading platform for seamless FX trade.",
+    "Explore the powerful pinnaclepartnersfx trading platform for seamless FX trade.",
   keywords:
     "globaltycoonfx trading, globaltycoonfx, globaltycoonfx.com,global fx, fx global, tycoon fx , tycoon global, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading",
 };

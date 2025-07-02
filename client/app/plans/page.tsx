@@ -1,30 +1,24 @@
 "use client";
 import Head from "next/head";
-import Image from "next/image";
 import pagestyles from "@/app/styles/home/Main.module.scss";
-import { useDispatch } from "react-redux";
-import { useEffect, useRef } from "react";
 import MainLayout from "../../components/layout/Mainlayout";
 import CryTypo from "@/components/home/CryTypo";
 import { Card, CardBody, Flex, Grid, Text } from "@chakra-ui/react";
-import { investmentPlans } from "@/data/maindata";
+import { appname, investmentPlans } from "@/data/maindata";
 import InvestWithBtn from "@/components/home/InvestWithBtn";
-import { useAppDispatch } from "@/redux/hooks";
-import { setNav } from "@/redux/features/AppSlice";
-import { closeNav } from "@/redux/features/NavSlice";
 
 export default function Index() {
   return (
     <>
       <Head>
-        <title>PLANS | GLOBAL TYCOON FX</title>
+        <title>PLANS | {appname}</title>
         <meta
           name="description"
-          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+          content="Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade."
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx plans, plans globaltycoonfx, plans, plan, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltradezella trading, globaltradezella, globaltradezella plans, plans globaltradezella, plans, plan, globaltradezella.com, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />

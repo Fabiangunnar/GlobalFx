@@ -6,9 +6,9 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 export const metadata: Metadata = {
-  title: "About | GLOBAL TYCOON FX",
+  title: "About | GLOBAL TRADE ZELLA",
   description:
-    "about GLOBAL TYCOON FX,about globaltycoonfx trading,about globaltycoonfx,about globaltycoonfx.com, about global fx, about fx global, tycoon fx , tycoon global, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading",
+    "about GLOBAL TRADE ZELLA,about globaltradezella trading,about globaltradezella,about globaltradezella.com, about global fx, about fx global, trade zella , trade global, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading",
 };
 
 export default function RootLayout({

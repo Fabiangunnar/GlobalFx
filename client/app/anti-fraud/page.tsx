@@ -17,6 +17,7 @@ import {
   navData,
   appname,
   abbrev_appname,
+  website,
 } from "@/data/maindata";
 import LastData from "@/components/home/LastData";
 import IconBoxes from "@/components/home/IconBoxes";
@@ -91,14 +92,14 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>ANTI-FRAUD | GLOBAL TYCOON FX</title>
+        <title>ANTI-FRAUD | GLOBAL TRADE ZELLA</title>
         <meta
           name="description"
-          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+          content="Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade."
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx anti-fraud, anti-fraud globaltycoonfx, antifraud anti fraud, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltradezella trading, globaltradezella, globaltradezella anti-fraud, anti-fraud globaltradezella, antifraud anti fraud, globaltradezella.com, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
@@ -128,7 +129,7 @@ export default function Home() {
                 an {abbrev_appname}
                 website by using similar branding, logos, design or content. To
                 be clear, {abbrev_appname} official website is
-                www.globaltycoon.com. While
+                {website}. While
                 {abbrev_appname} does have additional website domains, it does
                 not have any connection or affiliation with third-party websites
                 and/or companies. Members of the public should be alerted to the

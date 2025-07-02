@@ -28,6 +28,7 @@ import {
   reset,
 } from "@/redux/features/HomeAppSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { appname } from "@/data/maindata";
 
 type Props = {};
 
@@ -173,8 +174,8 @@ const NewInvestments = (props: Props) => {
                 </Box>
                 <Box p={2} w="100%">
                   <Text fontSize={12}>
-                    In GLOBAL TYCOON FX - Your Trusted Crypto Investment Broker,
-                    You will receive profits everyday including weekends.
+                    In {appname} - Your Trusted Crypto Investment Broker, You
+                    will receive profits everyday including weekends.
                   </Text>
                 </Box>
               </div>

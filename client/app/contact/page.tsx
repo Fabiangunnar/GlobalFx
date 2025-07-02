@@ -91,11 +91,11 @@ export default function Index() {
         <title>Contact | {appname}</title>
         <meta
           name="description"
-          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+          content="Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade."
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx contact, contact globaltycoonfx, contact , contact us, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltradezella trading, globaltradezella, globaltradezella contact, contact globaltradezella, contact , contact us, globaltradezella.com, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading"
         />{" "}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
@@ -268,7 +268,6 @@ export default function Index() {
                 <Text fontSize={[14, 15, 16, 17, 18]}>Official address:</Text>
                 <Link
                   target="_blank"
-                  //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}
                   href={`https://www.google.com/maps/search/United+Kingdom+Level+9,+One+Canada+Square,+Canary+Wharf,+E14+5AA,+London,+United+Kingdom/@51.5049697,-0.0221382,17z/data=!3m1!4b1?entry=ttu`}
                 >
                   <Text fontSize={[12, 13, 14, 15, 16]} color={"gray.400"}>
@@ -278,12 +277,12 @@ export default function Index() {
                 </Link>
               </Grid>
               <Flex justify={"space-between"} maxW={"26rem"} w={"100%"}>
-                <Link
+                {/* <Link
                   target="_blank"
                   href={`https://www.instagram.com/globaltycoonfx/`}
                 >
                   <CiInstagram fontSize={42} />
-                </Link>
+                </Link> */}
                 <CiTwitter fontSize={42} />
                 <Link
                   target="_blank"

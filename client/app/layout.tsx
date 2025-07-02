@@ -17,9 +17,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: appname,
   description:
-    "Explore the powerful pinnaclepartnersfx trading platform for seamless FX trade.",
+    "Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade.",
   keywords:
-    "globaltycoonfx trading, globaltycoonfx, globaltycoonfx.com,global fx, fx global, tycoon fx , tycoon global, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading",
+    "global trade zella, globaltradezella, globaltradezella.com, global trade, zella trade, global zella, zella, global, trade, forex, currency exchange, online trading",
 };
 
 export default function RootLayout({

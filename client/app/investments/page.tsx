@@ -19,11 +19,11 @@ export default function Index() {
         <title>Investments</title>
         <meta
           name="description"
-          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+          content="Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade."
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx investments, investments globaltycoonfx, investments, investment, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltradezella trading, globaltradezella, globaltradezella investments, investments globaltradezella, investments, investment, globaltradezella.com, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading"
         />{" "}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />

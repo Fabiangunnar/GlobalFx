@@ -57,7 +57,7 @@ export default function Index() {
         />
         <meta
           name="keywords"
-          content={`globaltycoonfx trading, ${appname}, ${appname} about, about ${appname}, about, ${appname}.com, global tycoon fx, ${appname}, global, tycoon, global fx, ${appname}, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading`}
+          content={`globaltradezella trading, ${appname}, ${appname} about, about ${appname}, about, ${appname}.com, global trade zella, ${appname}, global, trade, global fx, ${appname}, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />
@@ -103,17 +103,17 @@ export default function Index() {
               </Text>
               <Text fontSize={[12, 14, 15, 16, 18]} textAlign={"justify"}>
                 Our company has been developing stable cryptocurrency income for
-                6 years. Today {appname}employees are leaders in the
-                field of IT technologies. They have created a unique robot that
-                generates daily profit and guesses the steps of the Bitcoin
-                value. That is why the {appname} robot is able to benefit
-                at any stage of the market: both growth and decline. This
-                development is unique in that it is the first in the world.
-                Today, not many people know about this. That is why they are
-                given the chance to receive a stable income for the rest of
-                their lives. Many people will try to fake it in fraudulent ways
-                after the platform is known around the world. But we assure that
-                only our company {appname} IS unique.
+                6 years. Today {appname}employees are leaders in the field of IT
+                technologies. They have created a unique robot that generates
+                daily profit and guesses the steps of the Bitcoin value. That is
+                why the {appname} robot is able to benefit at any stage of the
+                market: both growth and decline. This development is unique in
+                that it is the first in the world. Today, not many people know
+                about this. That is why they are given the chance to receive a
+                stable income for the rest of their lives. Many people will try
+                to fake it in fraudulent ways after the platform is known around
+                the world. But we assure that only our company {appname} IS
+                unique.
               </Text>
             </Flex>
           </Flex>
@@ -290,7 +290,6 @@ export default function Index() {
                       </Text>
                       <Link
                         target="_blank"
-                        //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}
                         href={`https://www.google.com/maps/search/United+Kingdom+Level+9,+One+Canada+Square,+Canary+Wharf,+E14+5AA,+London,+United+Kingdom/@51.5049697,-0.0221382,17z/data=!3m1!4b1?entry=ttu`}
                       >
                         <Text
@@ -322,10 +321,10 @@ export default function Index() {
                 </Heading>
                 <Text fontSize={[12, 14, 15, 16, 18]} textAlign={"justify"}>
                   Here are online statistics of our company. Competent
-                  distribution of investments in the {appname} robot
-                  allows you to maximize profits at all stages of the market.
-                  Gradual development is a guarantee of world recognition in the
-                  market. It is important for us to ensure the protection of our
+                  distribution of investments in the {appname} robot allows you
+                  to maximize profits at all stages of the market. Gradual
+                  development is a guarantee of world recognition in the market.
+                  It is important for us to ensure the protection of our
                   investors, as well as the stability and uninterrupted
                   operation of the platform. The {appname} robot is fully
                   automated to operate without user intervention.

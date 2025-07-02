@@ -973,7 +973,6 @@ export default function Home() {
                         </Text>
                         <Link
                           target="_blank"
-                          //   href={`mailto:gtfxcustomerservice@outlook.com?subject=GlobalTycoonFX%20HelpME`}
                           href={`https://www.google.com/maps/place/Times+squared+3015/@40.7583738,-73.9859951,20z/data=!4m15!1m8!3m7!1s0x89c24fa5d33f083b:0xc80b8f06e177fe62!2sNew+York,+NY,+USA!3b1!8m2!3d40.7127753!4d-74.0059728!16zL20vMDJfMjg2!3m5!1s0x89c25979e6171e6b:0xf91539981a366086!8m2!3d40.7583358!4d-73.9854539!16s%2Fg%2F11bw67k630?entry=ttu`}
                         >
                           <Text

@@ -15,9 +15,10 @@ import {
   Select,
   Flex,
 } from "@chakra-ui/react";
-import {MdArrowDropDown} from "react-icons/md";
-import {AiOutlineSelect, AiOutlineToTop} from "react-icons/ai";
-import {TbListDetails} from "react-icons/tb";
+import { MdArrowDropDown } from "react-icons/md";
+import { AiOutlineSelect, AiOutlineToTop } from "react-icons/ai";
+import { TbListDetails } from "react-icons/tb";
+import { appname } from "@/data/maindata";
 type Props = {};
 
 const ReInvest = (props: Props) => {
@@ -52,19 +53,19 @@ const ReInvest = (props: Props) => {
                   icon={<MdArrowDropDown />}
                 >
                   <option
-                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    style={{ background: "rgba(32, 80, 79, 1)" }}
                     value="option1"
                   >
                     Basic Plan
                   </option>
                   <option
-                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    style={{ background: "rgba(32, 80, 79, 1)" }}
                     value="option2"
                   >
                     Standard Plan
                   </option>
                   <option
-                    style={{background: "rgba(32, 80, 79, 1)"}}
+                    style={{ background: "rgba(32, 80, 79, 1)" }}
                     value="option3"
                   >
                     Luxury Plan
@@ -77,8 +78,8 @@ const ReInvest = (props: Props) => {
               </Box>
               <Box p={2} w="100%">
                 <Text fontSize={12}>
-                  In GLOBAL TYCOON FX - Your Trusted Crypto Investment Broker,
-                  You will receive profits everyday including weekends.
+                  In {appname} - Your Trusted Crypto Investment Broker, You will
+                  receive profits everyday including weekends.
                 </Text>
               </Box>
             </form>

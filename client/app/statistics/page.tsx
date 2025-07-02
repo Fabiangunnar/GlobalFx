@@ -1,24 +1,13 @@
 "use client";
 import Head from "next/head";
-import { Inter } from "next/font/google";
-import styles from "@/app/styles/Home.module.scss";
+
 import pagestyles from "@/app/styles/home/Main.module.scss";
-import { useEffect, useRef } from "react";
 
 import { Flex, Text, Button } from "@chakra-ui/react";
 import LastData from "@/components/home/LastData";
 import IconBoxes from "@/components/home/IconBoxes";
 import { useRouter } from "next/navigation";
 import MainLayout from "../../components/layout/Mainlayout";
-import { setNav } from "@/redux/features/AppSlice";
-import {
-  closeNav,
-  resetCurrentPage,
-  resetNav,
-} from "@/redux/features/NavSlice";
-import { useAppDispatch } from "@/redux/hooks";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Index() {
   const router = useRouter();
@@ -29,11 +18,11 @@ export default function Index() {
         <title>Statistics</title>
         <meta
           name="description"
-          content="Explore the powerful globaltycoonfx trading platform for seamless FX trade."
+          content="Explore the powerful GLOBAL TRADE ZELLA trading platform for seamless FX trade."
         />
         <meta
           name="keywords"
-          content="globaltycoonfx trading, globaltycoonfx, globaltycoonfx statistics, statistics globaltycoonfx, statistics, globaltycoonfx.com, global tycoon fx, globaltycoon fx, global, tycoon, global fx, globalfx, tycoonfx, tycoon fx, globalfx,  fx trade, forex, currency exchange, online trading"
+          content="globaltradezella trading, globaltradezella, globaltradezella statistics, statistics globaltradezella, statistics, globaltradezella.com, global trade zella, globaltradezella fx, global, trade, global fx, globalfx, tradezella, trade zella, globalfx,  fx trade, forex, currency exchange, online trading"
         />{" "}
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/logo2-transparent.png" />

@@ -52,8 +52,11 @@ export interface NavTypes {
   subnav?: any[];
 }
 
-export const appname = "PINNACLE PARTNERS FX";
-export const abbrev_appname = "PPFX";
+export const appname = "GLOBAL TRADE ZELLA";
+export const abbrev_appname = "GZ";
+export const appname_lower = "global trade zella";
+export const website = "www.globaltradezella.com";
+
 export const footerData: footerTypes[] = [
   {
     id: "LMK26P",
@@ -796,7 +799,7 @@ export const testimonies = [
   {
     id: "LMK26P",
     img: "/testimony4.jpg",
-    testimony: `I have been seeing this post everywhere and lot of people keep saying Riana is the best and trustworthy I try her out as my account manager using this platform and it turn out to be legit I invested $10,000 and I receive over $173,000 in 2 months.  I don’t need a lot of words to prove that you’re a real dealer and may God continue to bless you  because I’ve seen it all Thanks.`,
+    testimony: `I have been seeing this post everywhere and lot of people keep saying Riana is the best and trustworthy I try her out as my account manager using this platform and it turn out to be legit I invested $10,000 and I receive over $173,000 in 2 months.  I don't need a lot of words to prove that you're a real dealer and may God continue to bless you  because I've seen it all Thanks.`,
     name: "MARCUS HANCOCK. ",
     igname: "@marcus_hancock1_",
     tradeername: "RIANA ALBERTO | MAKE MONEY ONLINE",
@@ -808,7 +811,7 @@ export const testimonies = [
   {
     id: "PAK26P",
     img: "/testimony5.jpg",
-    testimony: `Life is an opportunity but it comes for those who extremely have the zeal to achieve it don’t sit back and watch others earning greatly just give it try now. I’ve traded under this broker with the help of Clifford since December 2017 and It have been success all the way.`,
+    testimony: `Life is an opportunity but it comes for those who extremely have the zeal to achieve it don't sit back and watch others earning greatly just give it try now. I've traded under this broker with the help of Clifford since December 2017 and It have been success all the way.`,
     igname: "@_hannahowens57",
     name: "HANNAH OWENS.",
     instagram: "https://www.instagram.com/_hannahowens57",
@@ -820,8 +823,8 @@ export const testimonies = [
   {
     id: "QRK26P",
     img: "/testimony6.jpg",
-    testimony: `Tears of joy grips my heart knowing how hard I’ve struggled to become debt free. Waking up everyday to see my withdrawals successfully notifications on my mail is the best thing I have ever wished for myself. I advice y’all to stop making predictions and start making good profit with Martha. A manager with so much ambition goals towards is clients,  A woman with love and care for others welfare. You’re magnificent when it comes to investment. 
-    Thank you for making it painless, pleasant and most of all hassle free!  You' saved our business!`,
+    testimony: `Tears of joy grips my heart knowing how hard I've struggled to become debt free. Waking up everyday to see my withdrawals successfully notifications on my mail is the best thing I have ever wished for myself. I advice y'all to stop making predictions and start making good profit with Martha. A manager with so much ambition goals towards is clients,  A woman with love and care for others welfare. You're magnificent when it comes to investment. 
+    Thank you for making it painless, pleasant and most of all hassle free!  You' saved our business!`,
     name: "JACQULINE W SPENCE.",
     instagram: "https://instagram.com/jacquline_w._Spence",
     igname: "@jacquline_w._Spence",

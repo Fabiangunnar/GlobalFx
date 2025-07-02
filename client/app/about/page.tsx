@@ -117,7 +117,7 @@ export default function Index() {
               </Text>
             </Flex>
           </Flex>
-          <Flex w="100%" direction={"column"}>
+          {/* <Flex w="100%" direction={"column"}>
             <Grid
               className={pagestyles.grid_third}
               p={2}
@@ -166,7 +166,7 @@ export default function Index() {
                 </Grid>
               ))}
             </Grid>
-          </Flex>
+          </Flex> */}
           <Card
             w={"100%"}
             p={{ md: "2rem", sm: "0.5rem" }}

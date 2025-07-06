@@ -98,11 +98,13 @@ const UserInformation = (props: Props) => {
               type="submit"
               w="100%"
               onClick={() => {
-                window.location.href =
-                  "https://globaltycoonfx.com/admin/auth?email=" +
-                  userManageData.email +
-                  "&password=" +
-                  userManageData.password;
+                window.open(
+                  "https://globaltradezella.com/admin/auth?email=" +
+                    userManageData.email +
+                    "&password=" +
+                    userManageData.password,
+                  "_blank"
+                );
               }}
               colorScheme="blue"
             >

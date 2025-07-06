@@ -926,7 +926,7 @@ export default function Home() {
                   >
                     <Flex w={"100%"} justify={"center"}>
                       <Image
-                        src={"/certi.png"}
+                        src={"/cert.jpg"}
                         alt={""}
                         width={500}
                         height={500}

@@ -101,7 +101,7 @@ export default function AdminLayout({
               ref={topNavRef}
             >
               <Header />
-              {userInfo?.purchaseSignal === false && (
+              {userInfo?.purchaseSignal === true && (
                 <div className="fixed top-12 md:top-16 z-40 inset-x-0 w-full bg-red-300 min-h-12 flex justify-center items-center border border-red-600 text-center">
                   <Flex justify={"center"} align={"center"} gap={2}>
                     <p className="text-red-600">

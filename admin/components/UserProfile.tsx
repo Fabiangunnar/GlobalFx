@@ -132,7 +132,7 @@ const UserProfile = (props: Props) => {
                 onClick={() =>
                   dispatch(changeState([params.id, { accountState }]))
                 }
-                colorScheme="whatsapp"
+                colorScheme="green"
               >
                 Update
               </Button>
